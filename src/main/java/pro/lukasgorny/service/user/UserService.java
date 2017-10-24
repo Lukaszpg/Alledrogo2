@@ -1,4 +1,4 @@
-package pro.lukasgorny.service.security;
+package pro.lukasgorny.service.user;
 
 import pro.lukasgorny.model.User;
 
@@ -9,4 +9,5 @@ public interface UserService {
 
     void save(User user);
     User findByEmail(String email);
+    void createVerificationToken(User user, String token);
 }

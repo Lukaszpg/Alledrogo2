@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import pro.lukasgorny.enums.RoleEnum;
 import pro.lukasgorny.model.Role;
 import pro.lukasgorny.repository.RoleRepository;
 
@@ -40,8 +41,8 @@ public class Application extends SpringBootServletInitializer {
     @PostConstruct
     private void insertRoles() {
         if (roleRepository.countAll() == 0) {
-            Role admin = new Role("ADMIN");
-            Role user = new Role("USER");
+            Role admin = new Role(RoleEnum.ROLE_ADMIN.name());
+            Role user = new Role(RoleEnum.ROLE_USER.name());
 
             roleRepository.save(admin);
             roleRepository.save(user);

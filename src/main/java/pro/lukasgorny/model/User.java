@@ -1,7 +1,8 @@
 package pro.lukasgorny.model;
 
-import java.util.Set;
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by lukaszgo on 2017-05-25.
@@ -13,7 +14,12 @@ public class User {
     private String email;
     private String password;
     private Boolean enabled;
-    private Set<Role> roles;
+    private Boolean blocked;
+    private Boolean sellingBlocked;
+    private List<Role> roles;
+    private Integer birthdayDay;
+    private Integer birthdayMonth;
+    private Integer birthdayYear;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -51,11 +57,51 @@ public class User {
 
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public Integer getBirthdayDay() {
+        return birthdayDay;
+    }
+
+    public void setBirthdayDay(Integer birthdayDay) {
+        this.birthdayDay = birthdayDay;
+    }
+
+    public Integer getBirthdayMonth() {
+        return birthdayMonth;
+    }
+
+    public void setBirthdayMonth(Integer birthdayMonth) {
+        this.birthdayMonth = birthdayMonth;
+    }
+
+    public Integer getBirthdayYear() {
+        return birthdayYear;
+    }
+
+    public void setBirthdayYear(Integer birthdayYear) {
+        this.birthdayYear = birthdayYear;
+    }
+
+    public Boolean getBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(Boolean blocked) {
+        this.blocked = blocked;
+    }
+
+    public Boolean getSellingBlocked() {
+        return sellingBlocked;
+    }
+
+    public void setSellingBlocked(Boolean sellingBlocked) {
+        this.sellingBlocked = sellingBlocked;
     }
 }

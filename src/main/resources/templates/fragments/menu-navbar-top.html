@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+</head>
+<body>
+<div th:fragment="menu-navbar-top">
+    <ul id="dropdown-menu" class="dropdown-content">
+        <li><a href="#!">one</a></li>
+        <li><a href="#!">two</a></li>
+        <li class="divider"></li>
+        <li><a th:href="@{/register}" class="menu-top-create-account" href="#!" th:text="#{label.create.account}"></a></li>
+        <li><a th:href="@{/login}" class="menu-top-login" href="#!" th:text="#{menu.label.login}"></a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a class="menu-top-login" href="#!" th:text="#{menu.label.admin.panel}"></a></li>
+    </ul>
+</div>
+</body>
+</html>
