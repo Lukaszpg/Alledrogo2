@@ -93,7 +93,6 @@ input[type=search] {
 }
 
 .validation-error {
-    font-family: Open Sans,sans-serif;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     font-size: 12px;
