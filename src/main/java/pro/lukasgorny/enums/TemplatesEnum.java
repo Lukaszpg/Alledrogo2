@@ -4,19 +4,23 @@ package pro.lukasgorny.enums;
  * Created by Łukasz on 24.10.2017.
  */
 public enum TemplatesEnum {
-    REGISTRATION("registration"), EMAIL_ERROR("email-error");
+    REGISTRATION("registration"),
+    EMAIL_ERROR("email-error"),
+    TOKEN_ACTIVATE("activate"),
+    REGISTRATION_SUCCESS("registration-success"),
+    TOKEN_ERROR("token-error");
 
-    TemplatesEnum(String name) {
-        this.name = name;
+    TemplatesEnum(String templateName) {
+        this.templateName = templateName;
     }
 
-    private String name;
+    private String templateName;
 
-    public String getName() {
-        return name;
+    public String getTemplateName() {
+        return templateName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
     }
 }

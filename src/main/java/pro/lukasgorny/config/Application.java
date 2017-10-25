@@ -41,8 +41,8 @@ public class Application extends SpringBootServletInitializer {
     @PostConstruct
     private void insertRoles() {
         if (roleRepository.countAll() == 0) {
-            Role admin = new Role(RoleEnum.ROLE_ADMIN.name());
-            Role user = new Role(RoleEnum.ROLE_USER.name());
+            Role admin = new Role(RoleEnum.ADMIN.name());
+            Role user = new Role(RoleEnum.USER.name());
 
             roleRepository.save(admin);
             roleRepository.save(user);

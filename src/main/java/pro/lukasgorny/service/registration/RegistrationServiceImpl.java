@@ -1,11 +1,17 @@
 package pro.lukasgorny.service.registration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pro.lukasgorny.dto.UserDto;
+import pro.lukasgorny.enums.RoleEnum;
+import pro.lukasgorny.model.Role;
 import pro.lukasgorny.model.User;
+import pro.lukasgorny.repository.RoleRepository;
 import pro.lukasgorny.service.user.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -15,17 +21,20 @@ import java.util.regex.Pattern;
 public class RegistrationServiceImpl implements RegistrationService {
 
     private final UserService userService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public RegistrationServiceImpl(UserService userService) {
+    public RegistrationServiceImpl(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository) {
         this.userService = userService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public User register(UserDto userDto) {
-        User user = createUserModelFromRegistrationForm(userDto);
+        User user = createFromDto(userDto);
         userService.save(user);
-
         return user;
     }
 
@@ -35,13 +44,24 @@ public class RegistrationServiceImpl implements RegistrationService {
         return ptr.matcher(email).matches();
     }
 
-    private User createUserModelFromRegistrationForm(UserDto userDto) {
+    private User createFromDto(UserDto userDto) {
         User user = new User();
         user.setBirthdayDay(Integer.valueOf(userDto.getDay()));
         user.setBirthdayMonth(Integer.valueOf(userDto.getMonth()));
         user.setBirthdayYear(Integer.valueOf(userDto.getYear()));
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
+        user.setBlocked(false);
+        user.setSellingBlocked(false);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setRoles(prepareRoleList());
+        user.setEnabled(false);
         return user;
+    }
+
+    private List<Role> prepareRoleList() {
+        List<Role> results = new ArrayList<>();
+        results.add(roleRepository.findByName(RoleEnum.USER.name()));
+        return results;
     }
 }

@@ -1,6 +1,5 @@
 $(document).ready(function () {
-    $('#password').tooltip(
-        {
+    $('#password').tooltip({
             html: true
         });
 });

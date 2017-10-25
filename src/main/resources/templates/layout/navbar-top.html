@@ -3,12 +3,12 @@
 <head>
 </head>
 <body>
-<div th:fragment="navbarTopFragment">
+<div th:fragment="navbarTopFragment" class="navbar-fixed">
     <nav class="navbar-top">
         <div class="nav-wrapper">
             <div class="row">
                 <div class="col s3">
-                    <a th:href="@{/}"><img class="logo" th:src="@{/img/logo.png}"></a></img>
+                    <a th:href="@{/}"><img class="logo hide-on-med-and-down" th:src="@{/img/logo.png}"></a></img>
                 </div>
                 <form>
                     <div class="col s3">

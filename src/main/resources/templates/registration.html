@@ -7,11 +7,11 @@
 <body th:replace="layout/template :: bodyFragment">
 <div th:fragment="content">
     <script type="text/javascript" th:src="@{/js/registration.js}"></script>
-    <div class="row">
+    <div id="registrationForm" class="row">
         <form action="#" th:action="@{/register}" th:object="${userDto}" method="post"
               class="col s10 offset-s3">
             <div class="row">
-                <h2 th:text="#{label.create.account}"></h2>
+                <h2 th:text="#{page.title.create.account}"></h2>
             </div>
             <div class="row">
                 <div class="input-field col s8">
@@ -23,8 +23,10 @@
             </div>
             <div class="row">
                 <div class="input-field col s8">
-                    <input id="password" th:field="*{password}" data-length="40" th:placeholder="#{placeholder.password}"
-                           type="password" class="tooltipped validate" data-delay="50" th:attr="data-tooltip=#{registration.password.tooltip}"
+                    <input id="password" th:field="*{password}" data-length="40"
+                           th:placeholder="#{placeholder.password.register}"
+                           type="password" class="tooltipped validate" data-delay="50"
+                           th:attr="data-tooltip=#{registration.password.tooltip}"
                            th:classappend="${#fields.hasErrors('email')}  ? 'invalid' : ''" required>
                     <label for="password" th:text="#{label.password}"></label>
                     <div class="validation-error" th:if="${#fields.hasErrors('password')}"
@@ -38,12 +40,14 @@
             </div>
             <div class="row">
                 <div class="col s2">
-                    <input id="birthdayDay" th:field="*{day}" th:placeholder="#{placeholder.day}" data-mask="00" type="text"
+                    <input id="birthdayDay" th:field="*{day}" th:placeholder="#{placeholder.day}" data-mask="00"
+                           type="text"
                            class="validate" required th:classappend="${#fields.hasErrors('day')}  ? 'invalid' : ''">
                     <div class="validation-error" th:if="${#fields.hasErrors('day')}" th:errors="*{day}"></div>
                 </div>
                 <div class="col s4">
-                    <select th:field="*{month}" th:classappend="${#fields.hasErrors('month')}  ? 'invalid' : ''" required>
+                    <select th:field="*{month}" th:classappend="${#fields.hasErrors('month')}  ? 'invalid' : ''"
+                            required>
                         <option th:text="#{placeholder.month}" value="" disabled selected></option>
                         <option th:each="month : ${months}" th:value="${month.monthNumber}"
                                 th:text="${month.translation}"></option>
@@ -51,20 +55,20 @@
                     <div class="validation-error" th:if="${#fields.hasErrors('month')}" th:errors="*{month}"></div>
                 </div>
                 <div class="col s2">
-                    <input id="birthdayMonth" th:field="*{year}" th:placeholder="#{placeholder.year}" data-mask="0000" type="text"
+                    <input id="birthdayMonth" th:field="*{year}" th:placeholder="#{placeholder.year}" data-mask="0000"
+                           type="text"
                            class="validate" th:classappend="${#fields.hasErrors('year')}  ? 'invalid' : ''" required>
                     <div class="validation-error" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
                 </div>
             </div>
             <div class="row">
                 <div class="col s8">
-                    <button class="btn waves-red waves-effect right" type="submit"
+                    <button class="btn waves-light waves-effect right" type="submit"
                             th:text="#{button.create.account}"></button>
                 </div>
             </div>
+        </form>
     </div>
-    </form>
-</div>
 </div>
 </body>
 </html>
