@@ -1,5 +1,6 @@
 package pro.lukasgorny.controller;
 
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
@@ -8,16 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
-import pro.lukasgorny.enums.TemplatesEnum;
+
 import pro.lukasgorny.dto.UserDto;
+import pro.lukasgorny.enums.TemplatesEnum;
 import pro.lukasgorny.event.OnRegistrationCompleteEvent;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.service.helper.HelperServiceImpl;
 import pro.lukasgorny.service.registration.RegistrationService;
-import pro.lukasgorny.service.registration.RegistrationServiceImpl;
 import pro.lukasgorny.service.user.UserService;
-
-import javax.validation.Valid;
 
 /**
  * Created by Łukasz on 24.10.2017.
@@ -31,7 +30,7 @@ public class RegistrationController {
     private final ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    public RegistrationController(UserService userService, HelperServiceImpl helperService, RegistrationServiceImpl registrationService, ApplicationEventPublisher eventPublisher) {
+    public RegistrationController(UserService userService, HelperServiceImpl helperService, RegistrationService registrationService, ApplicationEventPublisher eventPublisher) {
         this.userService = userService;
         this.helperService = helperService;
         this.registrationService = registrationService;
