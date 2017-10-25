@@ -101,3 +101,7 @@ input[type=search] {
     margin-top: -15px;
     color: #e0211b;
 }
+
+.tooltip-left {
+    text-align: left;
+}

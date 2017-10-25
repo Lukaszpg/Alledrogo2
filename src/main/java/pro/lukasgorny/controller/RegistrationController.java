@@ -73,7 +73,7 @@ public class RegistrationController {
                         (user, request.getLocale(), appUrl));
             } catch (Exception me) {
                 me.printStackTrace();
-                return new ModelAndView(TemplatesEnum.EMAIL_ERROR.getName());
+                modelAndView.setViewName(TemplatesEnum.EMAIL_ERROR.getName());
             }
         }
         return modelAndView;
