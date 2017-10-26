@@ -10,7 +10,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import pro.lukasgorny.enums.RoleEnum;
+import pro.lukasgorny.model.Category;
 import pro.lukasgorny.model.Role;
+import pro.lukasgorny.repository.CategoryRepository;
 import pro.lukasgorny.repository.RoleRepository;
 
 import javax.annotation.PostConstruct;
@@ -25,12 +27,15 @@ import javax.annotation.PostConstruct;
 public class Application extends SpringBootServletInitializer {
 
     private final RoleRepository roleRepository;
+    private final CategoryRepository categoryRepository;
+
     private final String version = UUID.randomUUID().toString();
     private final Date compilationDate = new Date();
 
     @Autowired
-    public Application(RoleRepository roleRepository) {
+    public Application(RoleRepository roleRepository, CategoryRepository categoryRepository) {
         this.roleRepository = roleRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -51,6 +56,27 @@ public class Application extends SpringBootServletInitializer {
             roleRepository.save(admin);
             roleRepository.save(user);
         }
+    }
+
+    @PostConstruct
+    private void insertExampleCategories() {
+        Category electronics = new Category();
+        electronics.setName("Elektronika");
+        electronics.setIsLeaf(false);
+
+        Category laptops = new Category();
+        laptops.setName("Laptopy");
+        laptops.setIsLeaf(true);
+
+        electronics.getChildren().add(laptops);
+
+        Category test = new Category();
+        test.setName("Test");
+        electronics.setIsLeaf(false);
+
+        categoryRepository.save(laptops);
+        categoryRepository.save(electronics);
+        categoryRepository.save(test);
     }
 
     public String getVersion() {

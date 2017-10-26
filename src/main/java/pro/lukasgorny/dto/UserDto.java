@@ -16,7 +16,7 @@ public class UserDto {
     private String password;
 
     @NotNull
-    @Size(min = 2, max = 2)
+    @Size(min = 1, max = 2)
     private String day;
 
     @NotNull
