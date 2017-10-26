@@ -6,7 +6,6 @@
 </head>
 <body th:replace="layout/template :: bodyFragment">
 <div th:fragment="content">
-    <script type="text/javascript" th:src="@{/js/registration.js}"></script>
     <div id="registrationForm" class="row">
         <form action="#" th:action="@{/register}" th:object="${userDto}" method="post"
               class="col s10 offset-s3">

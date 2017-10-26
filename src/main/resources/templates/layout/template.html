@@ -13,21 +13,23 @@
 </head>
 <body th:fragment="bodyFragment">
 <script type="text/javascript" th:src="@{/js/jquery-3.2.1.js}"></script>
-<script type="text/javascript" th:src="@{/js/popper.js}"></script>
-<script type="text/javascript" th:src="@{/js/materialize.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/vue.js}"></script>
-<script type="text/javascript" th:src="@{/js/vueTextMask.js}"></script>
+<script type="text/javascript" th:src="@{/js/axios.js}"></script>
+<script type="text/javascript" th:src="@{/js/vue-app.js}"></script>
+<script type="text/javascript" th:src="@{/js/materialize.min.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.growl.js}"></script>
 <script type="text/javascript" th:src="@{/js/jquery.mask.js}"></script>
 <script type="text/javascript" th:src="@{/js/main.js}"></script>
+<script type="text/javascript" th:src="@{/js/registration.js}"></script>
 <header>
     <div th:replace="layout/navbar-top :: navbarTopFragment"></div>
 </header>
-<div class="container page-flexbox-wrapper">
-    <main th:include="this :: content">
-    </main>
+<div id="app">
+    <div class="container page-flexbox-wrapper">
+        <main th:include="this :: content">
+        </main>
+    </div>
+    <div th:replace="layout/footer :: footerFragment"></div>
 </div>
-<div th:replace="layout/footer :: footerFragment"></div>
-</body>
 </body>
 </html>

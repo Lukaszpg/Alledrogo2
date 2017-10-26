@@ -1,5 +1,7 @@
 package pro.lukasgorny.config;
 
+import java.util.Date;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,6 +25,8 @@ import javax.annotation.PostConstruct;
 public class Application extends SpringBootServletInitializer {
 
     private final RoleRepository roleRepository;
+    private final String version = UUID.randomUUID().toString();
+    private final Date compilationDate = new Date();
 
     @Autowired
     public Application(RoleRepository roleRepository) {
@@ -47,5 +51,13 @@ public class Application extends SpringBootServletInitializer {
             roleRepository.save(admin);
             roleRepository.save(user);
         }
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public Date getCompilationDate() {
+        return compilationDate;
     }
 }
