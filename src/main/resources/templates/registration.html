@@ -28,7 +28,7 @@
                            th:attr="data-tooltip=#{registration.password.tooltip}"
                            th:classappend="${#fields.hasErrors('email')}  ? 'invalid' : ''" required>
                     <label for="password" th:text="#{label.password}"></label>
-                    <div class="validation-error" th:if="${#fields.hasErrors('password')}"
+                    <div id="passwordValidationError" class="validation-error" th:if="${#fields.hasErrors('password')}"
                          th:errors="*{password}"></div>
                 </div>
             </div>
