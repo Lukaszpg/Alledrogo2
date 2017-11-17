@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pro.lukasgorny.model.Category;
+import pro.lukasgorny.dto.CategoryDto;
 import pro.lukasgorny.service.category.CategoryService;
 
 import java.util.List;
@@ -26,11 +27,26 @@ public class CategoryRestController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/get-all")
-    public ResponseEntity<List<Category>> getAll() {
-        List<Category> list = categoryService.findByParentIsNull();
-        ResponseEntity<List<Category>> responseEntity = new ResponseEntity<>(list, HttpStatus.OK);
-        return responseEntity;
+    @GetMapping("/get-all-top")
+    public ResponseEntity<List<CategoryDto>> getAllTop() {
+        List<CategoryDto> list = categoryService.getAllTop();
+
+        if(list != null && !list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @GetMapping("/get-children/{id}")
+    public ResponseEntity<List<CategoryDto>> getChildren(@PathVariable Long id) {
+        List<CategoryDto> list = categoryService.getChildrenByParentId(id);
+
+        if(list != null && !list.isEmpty()) {
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

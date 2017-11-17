@@ -59,7 +59,7 @@ public class RegistrationController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("months", helperService.prepareMonthsList());
 
-        User userExists = userService.findByEmail(userDto.getEmail());
+        User userExists = userService.getByEmail(userDto.getEmail());
 
         if (userExists != null) {
             bindingResult.rejectValue("email", "error.user.exists");

@@ -1,6 +1,6 @@
 package pro.lukasgorny.service.category;
 
-import pro.lukasgorny.model.Category;
+import pro.lukasgorny.dto.CategoryDto;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface CategoryService {
 
-    List<Category> findAll();
-
-    List<Category> findByParentIsNull();
+    List<CategoryDto> getAll();
+    List<CategoryDto> getAllTop();
+    List<CategoryDto> getChildrenByParentId(Long parentId);
 }

@@ -30,43 +30,95 @@ window.onload = function () {
     });
 
     Vue.component('category-tree', {
-        data: function () {
-            return {
-                topCategories: '',
-            }
-        },
         template:
-        '<div id="categoryTree" class="row">' +
-            '<div class="col s3 offset-s4">' +
-                '<ul class="collapsible" data-collapsible="accordion">' +
-                    '<li v-for="category in topCategories">' +
-                        '<div class="collapsible-header"><i class="material-icons">filter_drama</i>{{ category.name }}</div>' +
-                        '<div class="collapsible-body">' +
-                            '<ul v-if="category.children !== null" class="collapsible" data-collapsible="accordion">' +
-        '                       <li v-for="child in category.children">' +
-                                    '<div class="collapsible-header"><i class="material-icons">filter_drama</i>{{ child.name }}</div>' +
-                                    '<div class="collapsible-body"></div>' +
-                                '</li>' +
-                            '</ul>' +
+        '<div class="category-picker">' +
+            '<div class="row">' +
+                '<div v-if="parentName != null">{{ parentName }}' +
+                '   <a v-if="shouldShowReturn" class = "category right" @click="goToPrevious">Powrót</a>' +
+                '</div>' +
+                '<hr v-if="parentName != null">' +
+                '<div class="col offset-s5">' +
+                    '<div v-bind:class="{ \'preloader-wrapper\': true, small: true, active: true, hide: !isLoading, \'category-picker-preloader\': true}">' +
+                        '<div class="spinner-layer spinner-yellow-only">' +
+                            '<div class="circle-clipper left">' +
+                                '<div class="circle"></div>' +
+                            '</div>' +
+                            '<div class="gap-patch">' +
+                                '<div class="circle"></div>' +
+                            '</div>' +
+                            '<div class="circle-clipper right">' +
+                                '<div class="circle"></div>' +
+                            '</div>' +
                         '</div>' +
-                    '</li>' +
-                '</ul>' +
+                    '</div>' +
+                '</div>' +
             '</div>' +
+            '<ul v-bind:class="{ \'category-picker-list\': true, hide: isLoading }">' +
+                '<li v-for="category in categories">' +
+                    '<div class = "category" v-bind:class="{leaf: category.leaf}" @click="getChildren(category.id, category.leaf)">{{ category.name }}</div>' +
+                '</li>' +
+            '</ul>' +
         '</div>',
 
         mounted() {
             var vm = this;
-            axios.get('/category-rest/get-all')
-                .then(function (response) {
-                    vm.topCategories = response.data;
-                    $(".collapsible").collapsible();
-                })
-                .catch(function () {
-                    this.errors.push(e)
-                })
+            vm.getTop();
+        },
+
+        data() {
+            return {
+                categories: [],
+                parentName: null,
+                previousId: 0,
+                shouldShowReturn: false,
+                isLoading: false
+            };
         },
 
         methods: {
+            getChildren: function (id, isLeaf) {
+                var vm = this;
+                if (!isLeaf) {
+                    vm.isLoading = true;
+                    axios.get('/category-rest/get-children/' + id)
+                        .then(function (response) {
+                            vm.categories = response.data;
+                            vm.parentName = vm.categories[0].parentName != null ? vm.categories[0].parentName : null;
+                            vm.previousId = vm.categories[0].parentOfParentId != null ? vm.categories[0].parentOfParentId : 0;
+                            vm.shouldShowReturn = true;
+                            vm.isLoading = false;
+                        })
+                        .catch(function () {
+                            this.errors.push(e);
+                            console.log(e);
+                        })
+                } else {
+
+                }
+            },
+            goToPrevious: function () {
+                var vm = this;
+                if (vm.previousId == 0) {
+                    vm.getTop();
+                    vm.shouldShowReturn = false;
+                } else {
+                    vm.getChildren(vm.previousId, false);
+                }
+            },
+            getTop: function () {
+                var vm = this;
+                vm.isLoading = true;
+                axios.get('/category-rest/get-all-top')
+                    .then(function (response) {
+                        vm.parentName = null;
+                        vm.categories = response.data;
+                        vm.isLoading = false;
+                    })
+                    .catch(function () {
+                        this.errors.push(e);
+                        console.log(e);
+                    })
+            }
 
         }
     });

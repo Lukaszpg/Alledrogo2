@@ -66,17 +66,19 @@ public class Application extends SpringBootServletInitializer {
 
         Category laptops = new Category();
         laptops.setName("Laptopy");
-        laptops.setIsLeaf(true);
+        laptops.setIsLeaf(false);
 
         electronics.getChildren().add(laptops);
-
-        Category test = new Category();
-        test.setName("Test");
         electronics.setIsLeaf(false);
 
+        Category test = new Category();
+        test.setName("test");
+        test.setIsLeaf(true);
+        laptops.getChildren().add(test);
+
+        categoryRepository.save(test);
         categoryRepository.save(laptops);
         categoryRepository.save(electronics);
-        categoryRepository.save(test);
     }
 
     public String getVersion() {

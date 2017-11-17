@@ -9,7 +9,7 @@ import pro.lukasgorny.model.VerificationToken;
 public interface UserService {
 
     void save(User user);
-    User findByEmail(String email);
+    User getByEmail(String email);
     void createVerificationToken(User user, String token);
     VerificationToken getVerificationToken(String VerificationToken);
 }

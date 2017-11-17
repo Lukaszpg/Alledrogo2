@@ -29,8 +29,7 @@ public class Category {
         this.id = id;
     }
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "parent_id", insertable = false, updatable = false)
     public Category getParent() {
         return parent;
