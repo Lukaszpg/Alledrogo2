@@ -11,5 +11,5 @@ public interface CategoryService {
 
     List<CategoryDto> getAll();
     List<CategoryDto> getAllTop();
-    List<CategoryDto> getChildrenByParentId(Long parentId);
+    List<CategoryDto> getChildrenByParentId(String parentId);
 }

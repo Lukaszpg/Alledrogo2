@@ -1,7 +1,12 @@
 package pro.lukasgorny.dto;
 
+import pro.lukasgorny.enums.RoleEnum;
+import pro.lukasgorny.model.Role;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Łukasz on 24.10.2017.
@@ -25,6 +30,8 @@ public class UserDto {
     @NotNull
     @Size(min = 4, max = 4)
     private String year;
+
+    private List<RoleEnum> roles = new ArrayList<>();
 
     public String getEmail() {
         return email;
@@ -64,5 +71,13 @@ public class UserDto {
 
     public void setYear(String year) {
         this.year = year;
+    }
+
+    public List<RoleEnum> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleEnum> roles) {
+        this.roles = roles;
     }
 }

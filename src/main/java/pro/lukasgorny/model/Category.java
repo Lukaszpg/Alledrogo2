@@ -1,7 +1,5 @@
 package pro.lukasgorny.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,23 +9,12 @@ import java.util.List;
  */
 @Entity
 @Table(name = "categories")
-public class Category {
+public class Category extends Model {
 
-    private Long id;
-    private Category parent;
     private String name;
-    private List<Category> children = new LinkedList<>();
     private Boolean isLeaf;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Category parent;
+    private List<Category> children = new LinkedList<>();
 
     @ManyToOne
     @JoinColumn(name = "parent_id", insertable = false, updatable = false)

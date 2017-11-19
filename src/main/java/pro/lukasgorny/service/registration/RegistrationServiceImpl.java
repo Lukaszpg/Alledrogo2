@@ -54,14 +54,17 @@ public class RegistrationServiceImpl implements RegistrationService {
         user.setBlocked(false);
         user.setSellingBlocked(false);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(prepareRoleList());
         user.setEnabled(false);
+        user.setDeleted(false);
+        user.setRoles(prepareRoles(userDto));
         return user;
     }
 
-    private List<Role> prepareRoleList() {
+    private List<Role> prepareRoles(UserDto userDto) {
         List<Role> results = new ArrayList<>();
-        results.add(roleRepository.findByName(RoleEnum.USER.name()));
+        userDto.getRoles().forEach(role -> {
+            results.add(roleRepository.findByName(role.name()));
+        });
         return results;
     }
 }

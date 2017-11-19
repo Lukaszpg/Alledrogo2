@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pro.lukasgorny.dto.CategoryDto;
 import pro.lukasgorny.service.category.CategoryService;
+import pro.lukasgorny.service.hash.HashService;
 
 import java.util.List;
 
@@ -21,10 +22,12 @@ import java.util.List;
 public class CategoryRestController {
 
     private final CategoryService categoryService;
+    private final HashService hashService;
 
     @Autowired
-    public CategoryRestController(CategoryService categoryService) {
+    public CategoryRestController(CategoryService categoryService, HashService hashService) {
         this.categoryService = categoryService;
+        this.hashService = hashService;
     }
 
     @GetMapping("/get-all-top")
@@ -39,7 +42,7 @@ public class CategoryRestController {
     }
 
     @GetMapping("/get-children/{id}")
-    public ResponseEntity<List<CategoryDto>> getChildren(@PathVariable Long id) {
+    public ResponseEntity<List<CategoryDto>> getChildren(@PathVariable String id) {
         List<CategoryDto> list = categoryService.getChildrenByParentId(id);
 
         if(list != null && !list.isEmpty()) {

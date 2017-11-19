@@ -8,7 +8,7 @@
         <div class="nav-wrapper">
             <div class="row">
                 <div class="col s3">
-                    <a th:href="@{/}"><img class="logo hide-on-med-and-down" th:src="@{/img/logo.png}"></a></img>
+                    <a th:href="@{/}"><img class="logo hide-on-med-and-down" th:src="@{/img/logo-placeholder.png}"></a></img>
                 </div>
                 <form>
                     <div class="col s3">
@@ -20,12 +20,7 @@
                         </div>
                     </div>
                     <div class="input-field col s2 search-bar-category-select">
-                        <select>
-                            <option value="" disabled selected>Choose your option</option>
-                            <option value="1">Option 1</option>
-                            <option value="2">Option 2</option>
-                            <option value="3">Option 3</option>
-                        </select>
+                        <category-picker-search></category-picker-search>
                     </div>
                     <div class="col s1">
                         <button type="submit" class="btn-flat waves-effect search-bar-button"

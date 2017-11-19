@@ -9,8 +9,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "users")
-public class User {
-    private Long id;
+public class User extends Model {
     private String email;
     private String password;
     private Boolean enabled;
@@ -20,16 +19,6 @@ public class User {
     private Integer birthdayDay;
     private Integer birthdayMonth;
     private Integer birthdayYear;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;

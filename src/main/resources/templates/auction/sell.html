@@ -1,26 +1,85 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/template :: headFragment(#{title.registration})">
+<head th:replace="layout/template :: headFragment(#{title.sell})">
     <title>Index</title>
     <meta charset="utf-8"/>
 </head>
 <body th:replace="layout/template :: bodyFragment">
 <div th:fragment="content">
     <div id="registrationForm" class="row">
-        <form action="#" th:action="@{/auction/sell}" th:object="${auctionDto}" method="post" class="col s10 offset-s3">
+        <form action="#" th:action="@{/auction/sell}" th:object="${auctionDto}" method="post" class="col s10 offset-s2">
             <div class="row">
                 <h2 th:text="#{page.title.create.auction}"></h2>
             </div>
             <div class="row">
-                <div class="input-field col s8">
+                <h5 th:text="#{section.title.title.category}"></h5>
+            </div>
+            <div class="row">
+                <div class="input-field col s10">
                     <input th:field="*{title}" id="auctionTitle" type="text" data-length="50"
+                           th:placeholder="#{placeholder.auction.title}"
                            class="validate" th:classappend="${#fields.hasErrors('title')}  ? 'invalid' : ''" required>
                     <label for="auctionTitle" th:text="#{label.auction.title}"></label>
                     <div class="validation-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
                 </div>
+                <div class="input field col s10">
+                    <label for="categoryPicker" th:text="#{label.category.title}"></label>
+                    <category-tree></category-tree>
+                    <div class="category-picker-error-message validation-error"
+                         th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></div>
+                </div>
             </div>
             <div class="row">
-                <div class="col s8">
+                <h5 th:text="#{section.item.information}"></h5>
+            </div>
+            <div class="row">
+                <div class="input field col s5">
+                    <div id="itemStateWrapper">
+                        <label for="itemStateWrapper" th:text="#{label.state}"></label>
+                        <select th:field="*{isNew}">
+                            <option value="" th:text="#{label.state.pick}" disabled selected></option>
+                            <option value="true" th:text="#{label.new}"></option>
+                            <option value="false" th:text="#{label.used}"></option>
+                        </select>
+                        <div class="validation-error" th:if="${#fields.hasErrors('isNew')}" th:errors="*{isNew}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s10">
+                    <label for="editor" th:text="#{label.item.description}"></label>
+                    <div id="editor"></div>
+                    <input type="hidden" id="editorContent" th:field="*{editorContent}"/>
+                    <div class="validation-error" th:if="${#fields.hasErrors('editorContent')}"
+                         th:errors="*{editorContent}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s10 switch">
+                    <label for="isBid" th:text="#{label.bidding}"></label>
+                    <div class="row switch-margin-left">
+                        <label id="isBid">
+                            nie
+                            <input name="isBid" type="checkbox">
+                            <span class="lever"></span>
+                            tak
+                        </label>
+                    </div>
+                </div>
+                <div class="col s10 switch">
+                    <label for="isBid" th:text="#{label.buyout}"></label>
+                    <div class="row switch-margin-left">
+                        <label>
+                            nie
+                            <input name="isBuyout" type="checkbox">
+                            <span class="lever"></span>
+                            tak
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s10">
                     <button class="btn waves-light waves-effect right" type="submit"
                             th:text="#{button.create.auction}"></button>
                 </div>

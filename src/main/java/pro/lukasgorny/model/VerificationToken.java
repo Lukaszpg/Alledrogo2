@@ -10,17 +10,11 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "verification_token")
-public class VerificationToken {
+public class VerificationToken extends Model {
     private static final int EXPIRATION = 60 * 24;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     private String token;
 
-    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
     private Date expiryDate;
@@ -41,14 +35,6 @@ public class VerificationToken {
         return new Date(cal.getTime().getTime());
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getToken() {
         return token;
     }
@@ -57,6 +43,8 @@ public class VerificationToken {
         this.token = token;
     }
 
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, name = "user_id")
     public User getUser() {
         return user;
     }

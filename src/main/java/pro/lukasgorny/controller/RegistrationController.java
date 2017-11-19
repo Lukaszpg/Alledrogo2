@@ -12,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pro.lukasgorny.dto.UserDto;
+import pro.lukasgorny.enums.RoleEnum;
 import pro.lukasgorny.enums.TemplatesEnum;
 import pro.lukasgorny.event.OnRegistrationCompleteEvent;
 import pro.lukasgorny.model.User;
@@ -72,6 +73,7 @@ public class RegistrationController {
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(TemplatesEnum.REGISTRATION.getTemplateName());
         } else {
+            userDto.getRoles().add(RoleEnum.USER);
             User user = registrationService.register(userDto);
             modelAndView.setViewName(TemplatesEnum.REGISTRATION_SUCCESS.getTemplateName());
             modelAndView.addObject("userDto", userDto);

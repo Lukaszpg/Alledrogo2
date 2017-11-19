@@ -8,7 +8,8 @@ public enum TemplatesEnum {
     EMAIL_ERROR("email-error"),
     TOKEN_ACTIVATE("activate"),
     REGISTRATION_SUCCESS("registration-success"),
-    TOKEN_ERROR("token-error");
+    TOKEN_ERROR("token-error"),
+    SELL("auction/sell");
 
     TemplatesEnum(String templateName) {
         this.templateName = templateName;

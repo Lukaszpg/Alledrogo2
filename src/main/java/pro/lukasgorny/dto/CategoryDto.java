@@ -7,29 +7,13 @@ import java.util.List;
  * Created by Łukasz on 07.11.2017.
  */
 public class CategoryDto {
-    private Long id;
-    private Long parentId;
-    private Long parentOfParentId;
+    private String id;
+    private String parentId;
+    private String parentOfParentId;
     private String parentName;
     private String name;
     private List<CategoryDto> children = new LinkedList<>();
     private Boolean isLeaf;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
-    }
 
     public String getName() {
         return name;
@@ -63,11 +47,27 @@ public class CategoryDto {
         this.parentName = parentName;
     }
 
-    public Long getParentOfParentId() {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentOfParentId() {
         return parentOfParentId;
     }
 
-    public void setParentOfParentId(Long parentOfParentId) {
+    public void setParentOfParentId(String parentOfParentId) {
         this.parentOfParentId = parentOfParentId;
     }
 }

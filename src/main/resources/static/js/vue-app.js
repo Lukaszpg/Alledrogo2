@@ -1,6 +1,6 @@
 window.onload = function () {
     Vue.component('version', {
-        data: function () {
+        data() {
             return {
                 version: '',
                 message: '',
@@ -31,33 +31,44 @@ window.onload = function () {
 
     Vue.component('category-tree', {
         template:
-        '<div class="category-picker">' +
-            '<div class="row">' +
-                '<div v-if="parentName != null">{{ parentName }}' +
-                '   <a v-if="shouldShowReturn" class = "category right" @click="goToPrevious">Powrót</a>' +
-                '</div>' +
-                '<hr v-if="parentName != null">' +
-                '<div class="col offset-s5">' +
-                    '<div v-bind:class="{ \'preloader-wrapper\': true, small: true, active: true, hide: !isLoading, \'category-picker-preloader\': true}">' +
-                        '<div class="spinner-layer spinner-yellow-only">' +
-                            '<div class="circle-clipper left">' +
-                                '<div class="circle"></div>' +
-                            '</div>' +
-                            '<div class="gap-patch">' +
-                                '<div class="circle"></div>' +
-                            '</div>' +
-                            '<div class="circle-clipper right">' +
-                                '<div class="circle"></div>' +
+        '<div id="categoryPicker" @mouseleave="mouseLeave" v-bind:class="{ \'category-picker-error\': isError }" class="category-picker">' +
+            '<div v-if="pickedCategory == null">' +
+                '<div class="row">' +
+                    '<div v-if="parentNames.length > 0" class="br">' +
+                        '<a v-for="parentName in parentNames" class="breadcrumb-category breadcrumb">{{ parentName }}</a>' +
+                    '   <a v-if="showReturn" class="category-previous right" @click="goToPrevious">Powrót</a>' +
+                    '</div>' +
+                    '<hr v-if="parentNames.length > 0">' +
+                    '<div class="col offset-s5">' +
+                        '<div v-bind:class="{ \'preloader-wrapper\': true, small: true, active: true, hide: !isLoading, \'category-picker-preloader\': true}">' +
+                            '<div class="spinner-layer spinner-yellow-only">' +
+                                '<div class="circle-clipper left">' +
+                                    '<div class="circle"></div>' +
+                                '</div>' +
+                                '<div class="gap-patch">' +
+                                    '<div class="circle"></div>' +
+                                '</div>' +
+                                '<div class="circle-clipper right">' +
+                                    '<div class="circle"></div>' +
+                                '</div>' +
                             '</div>' +
                         '</div>' +
                     '</div>' +
                 '</div>' +
+                '<ul id="category-list" v-bind:class="{ \'category-picker-list\': true, hide: isLoading }">' +
+                    '<li v-for="category in categories">' +
+                        '<a class="category" v-bind:class="{leaf: category.leaf}" @click="itemClick(category)">{{ category.name }}</a>' +
+                    '</li>' +
+                '</ul>' +
             '</div>' +
-            '<ul v-bind:class="{ \'category-picker-list\': true, hide: isLoading }">' +
-                '<li v-for="category in categories">' +
-                    '<div class = "category" v-bind:class="{leaf: category.leaf}" @click="getChildren(category.id, category.leaf)">{{ category.name }}</div>' +
-                '</li>' +
-            '</ul>' +
+            '<div class="picked-category" v-if="pickedCategory != null">' +
+                '<div class="row">' +
+                    '<div> Wybrana kategoria: {{ pickedCategory.name }}' +
+                        '<a v-if="showChange" class="category right" @click="changeChoice">Zmień</a>' +
+                        '<input type="hidden" name="categoryId" :value="pickedCategory.id">' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
         '</div>',
 
         mounted() {
@@ -68,39 +79,66 @@ window.onload = function () {
         data() {
             return {
                 categories: [],
-                parentName: null,
                 previousId: 0,
-                shouldShowReturn: false,
-                isLoading: false
+                showReturn: false,
+                showChange: false,
+                isLoading: false,
+                pickedCategory: null,
+                parentNames: [],
+                isError:false
             };
         },
 
         methods: {
-            getChildren: function (id, isLeaf) {
+            mouseLeave: function () {
+              vm = this;
+              if(vm.pickedCategory === null) {
+                  vm.isError = true;
+              }
+            },
+            changeChoice: function() {
+                vm = this;
+                vm.showChange = false;
+                vm.pickedCategory = null;
+                vm.getTop();
+            },
+            itemClick: function(category) {
                 var vm = this;
-                if (!isLeaf) {
-                    vm.isLoading = true;
-                    axios.get('/category-rest/get-children/' + id)
-                        .then(function (response) {
-                            vm.categories = response.data;
-                            vm.parentName = vm.categories[0].parentName != null ? vm.categories[0].parentName : null;
-                            vm.previousId = vm.categories[0].parentOfParentId != null ? vm.categories[0].parentOfParentId : 0;
-                            vm.shouldShowReturn = true;
-                            vm.isLoading = false;
-                        })
-                        .catch(function () {
-                            this.errors.push(e);
-                            console.log(e);
-                        })
+                if(category.leaf) {
+                    vm.pickedCategory = category;
+                    vm.showChange = true;
+                    vm.isError = false;
                 } else {
-
+                    this.getChildren(category.id);
                 }
+            },
+            getChildren: function (id) {
+                var vm = this;
+                vm.isLoading = true;
+                axios.get('/category-rest/get-children/' + id)
+                    .then(function (response) {
+                        vm.categories = response.data;
+                        vm.previousId = vm.categories[0].parentOfParentId !== null ? vm.categories[0].parentOfParentId : 0;
+                        vm.showReturn = true;
+                        vm.isLoading = false;
+                        vm.addParentNameToArray();
+                    })
+                    .catch(function () {
+                        this.errors.push(e);
+                        console.log(e);
+                    })
+            },
+            addParentNameToArray: function() {
+                var vm = this;
+                vm.parentNames.push(vm.categories[0].parentName !== null ? vm.categories[0].parentName : null);
             },
             goToPrevious: function () {
                 var vm = this;
-                if (vm.previousId == 0) {
+                vm.parentNames = [];
+                vm.breadCrumbs = null;
+                if (vm.previousId === 0) {
                     vm.getTop();
-                    vm.shouldShowReturn = false;
+                    vm.showReturn = false;
                 } else {
                     vm.getChildren(vm.previousId, false);
                 }
@@ -110,7 +148,7 @@ window.onload = function () {
                 vm.isLoading = true;
                 axios.get('/category-rest/get-all-top')
                     .then(function (response) {
-                        vm.parentName = null;
+                        vm.parentNames = [];
                         vm.categories = response.data;
                         vm.isLoading = false;
                     })
