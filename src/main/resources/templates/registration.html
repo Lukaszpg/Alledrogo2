@@ -39,25 +39,25 @@
             </div>
             <div class="row">
                 <div class="col s2">
-                    <input id="birthdayDay" th:field="*{day}" th:placeholder="#{placeholder.day}" data-mask="00"
+                    <input id="birthdayDay" th:field="*{birthdayDay}" th:placeholder="#{placeholder.day}" data-mask="00"
                            type="text"
-                           class="validate" required th:classappend="${#fields.hasErrors('day')}  ? 'invalid' : ''">
-                    <div class="validation-error" th:if="${#fields.hasErrors('day')}" th:errors="*{day}"></div>
+                           class="validate" required th:classappend="${#fields.hasErrors('birthdayDay')}  ? 'invalid' : ''">
+                    <div class="validation-error" th:if="${#fields.hasErrors('birthdayDay')}" th:errors="*{birthdayDay}"></div>
                 </div>
                 <div class="col s4">
-                    <select th:field="*{month}" th:classappend="${#fields.hasErrors('month')}  ? 'invalid' : ''"
+                    <select th:field="*{birthdayMonth}" th:classappend="${#fields.hasErrors('birthdayMonth')}  ? 'invalid' : ''"
                             required>
                         <option th:text="#{placeholder.month}" value="" disabled selected></option>
                         <option th:each="month : ${months}" th:value="${month.monthNumber}"
                                 th:text="${month.translation}"></option>
                     </select>
-                    <div class="validation-error" th:if="${#fields.hasErrors('month')}" th:errors="*{month}"></div>
+                    <div class="validation-error" th:if="${#fields.hasErrors('birthdayMonth')}" th:errors="*{birthdayMonth}"></div>
                 </div>
                 <div class="col s2">
-                    <input id="birthdayMonth" th:field="*{year}" th:placeholder="#{placeholder.year}" data-mask="0000"
+                    <input id="birthdayMonth" th:field="*{birthdayYear}" th:placeholder="#{placeholder.year}" data-mask="0000"
                            type="text"
-                           class="validate" th:classappend="${#fields.hasErrors('year')}  ? 'invalid' : ''" required>
-                    <div class="validation-error" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
+                           class="validate" th:classappend="${#fields.hasErrors('birthdayYear')}  ? 'invalid' : ''" required>
+                    <div class="validation-error" th:if="${#fields.hasErrors('birthdayYear')}" th:errors="*{birthdayYear}"></div>
                 </div>
             </div>
             <div class="row">

@@ -27,6 +27,12 @@ public class AuctionDto {
     @NotNull
     private Boolean isBid;
 
+    @NotNull
+    private Double price;
+
+    @NotNull
+    private Integer amount;
+
     public String getTitle() {
         return title;
     }
@@ -73,5 +79,21 @@ public class AuctionDto {
 
     public void setIsBid(Boolean bid) {
         isBid = bid;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 }

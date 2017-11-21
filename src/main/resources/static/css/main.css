@@ -208,3 +208,7 @@ input[type=search] {
 .switch-margin-left {
     margin-left: 0px !important;
 }
+
+.ql-editor {
+    min-height: 250px;
+}

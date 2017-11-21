@@ -1,7 +1,6 @@
 package pro.lukasgorny.dto;
 
 import pro.lukasgorny.enums.RoleEnum;
-import pro.lukasgorny.model.Role;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -22,14 +21,14 @@ public class UserDto {
 
     @NotNull
     @Size(min = 1, max = 2)
-    private String day;
+    private String birthdayDay;
 
     @NotNull
-    private String month;
+    private String birthdayMonth;
 
     @NotNull
     @Size(min = 4, max = 4)
-    private String year;
+    private String birthdayYear;
 
     private List<RoleEnum> roles = new ArrayList<>();
 
@@ -49,28 +48,28 @@ public class UserDto {
         this.password = password;
     }
 
-    public String getMonth() {
-        return month;
+    public String getBirthdayMonth() {
+        return birthdayMonth;
     }
 
-    public void setMonth(String month) {
-        this.month = month;
+    public void setBirthdayMonth(String birthdayMonth) {
+        this.birthdayMonth = birthdayMonth;
     }
 
-    public String getDay() {
-        return day;
+    public String getBirthdayDay() {
+        return birthdayDay;
     }
 
-    public void setDay(String day) {
-        this.day = day;
+    public void setBirthdayDay(String birthdayDay) {
+        this.birthdayDay = birthdayDay;
     }
 
-    public String getYear() {
-        return year;
+    public String getBirthdayYear() {
+        return birthdayYear;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public void setBirthdayYear(String birthdayYear) {
+        this.birthdayYear = birthdayYear;
     }
 
     public List<RoleEnum> getRoles() {

@@ -59,11 +59,11 @@ public class Application extends SpringBootServletInitializer {
     @PostConstruct
     private void insertRoles() {
         if (roleRepository.countAll() == 0) {
-            Role admin = new Role(RoleEnum.ADMIN.name());
-            Role user = new Role(RoleEnum.USER.name());
-
-            roleRepository.save(admin);
-            roleRepository.save(user);
+            for(int i = 0; i < RoleEnum.values().length; i++) {
+                Role toInsert = new Role(RoleEnum.values()[i].name());
+                toInsert.setDeleted(false);
+                roleRepository.save(toInsert);
+            }
         }
     }
 
@@ -96,9 +96,9 @@ public class Application extends SpringBootServletInitializer {
         userDto.setEmail("lukasz.p.gorny@gmail.com");
         userDto.setPassword("adminadmin");
         userDto.getRoles().add(RoleEnum.ADMIN);
-        userDto.setDay("20");
-        userDto.setMonth("4");
-        userDto.setYear("1992");
+        userDto.setBirthdayDay("20");
+        userDto.setBirthdayMonth("4");
+        userDto.setBirthdayYear("1992");
         registrationService.register(userDto);
 
         User user = userService.getByEmail("lukasz.p.gorny@gmail.com");

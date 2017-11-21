@@ -1,10 +1,10 @@
 package pro.lukasgorny.service.registration;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pro.lukasgorny.dto.UserDto;
-import pro.lukasgorny.enums.RoleEnum;
 import pro.lukasgorny.model.Role;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.RoleRepository;
@@ -23,17 +23,20 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RoleRepository roleRepository;
+    private final ModelMapper modelmapper;
 
     @Autowired
-    public RegistrationServiceImpl(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository) {
+    public RegistrationServiceImpl(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder,
+                                   RoleRepository roleRepository, ModelMapper modelmapper) {
         this.userService = userService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.roleRepository = roleRepository;
+        this.modelmapper = modelmapper;
     }
 
     @Override
     public User register(UserDto userDto) {
-        User user = createFromDto(userDto);
+        User user = createEntityFromDto(userDto);
         userService.save(user);
         return user;
     }
@@ -44,27 +47,22 @@ public class RegistrationServiceImpl implements RegistrationService {
         return ptr.matcher(email).matches();
     }
 
-    private User createFromDto(UserDto userDto) {
-        User user = new User();
-        user.setBirthdayDay(Integer.valueOf(userDto.getDay()));
-        user.setBirthdayMonth(Integer.valueOf(userDto.getMonth()));
-        user.setBirthdayYear(Integer.valueOf(userDto.getYear()));
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
+    private User createEntityFromDto(UserDto userDto) {
+        User user = modelmapper.map(userDto, User.class);
         user.setBlocked(false);
         user.setSellingBlocked(false);
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
         user.setEnabled(false);
         user.setDeleted(false);
         user.setRoles(prepareRoles(userDto));
+
         return user;
+
     }
 
     private List<Role> prepareRoles(UserDto userDto) {
         List<Role> results = new ArrayList<>();
-        userDto.getRoles().forEach(role -> {
-            results.add(roleRepository.findByName(role.name()));
-        });
+        userDto.getRoles().forEach(role -> results.add(roleRepository.findByName(role.name())));
         return results;
     }
 }

@@ -45,6 +45,16 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findByParentId(decodedId).stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
+    @Override
+        public Category getById(String id) {
+        return categoryRepository.findOne(getEncodedId(id));
+    }
+
+    @Override
+    public Category getById(Long id) {
+        return categoryRepository.findOne(id);
+    }
+
     private CategoryDto convertToDto(Category category) {
         CategoryDto categoryDto = modelMapper.map(category, CategoryDto.class);
         categoryDto.setId(getEncodedId(category));
@@ -52,6 +62,10 @@ public class CategoryServiceImpl implements CategoryService {
         categoryDto.setParentOfParentId(getEncodedParentOfParentId(category));
         categoryDto.setParentName(category.getParent() != null ? category.getParent().getName() : null);
         return categoryDto;
+    }
+
+    private Long getEncodedId(String id) {
+        return hashService.decode(id);
     }
 
     private String getEncodedId(Category category) {
