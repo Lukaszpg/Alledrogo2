@@ -29,10 +29,10 @@
                          th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}"></div>
                 </div>
             </div>
-            <div class="row">
+            <div class="auction-extend row">
                 <h5 th:text="#{section.item.information}"></h5>
             </div>
-            <div class="row">
+            <div class="auction-extend row">
                 <div class="col s5">
                     <div id="itemStateWrapper">
                         <label for="itemStateWrapper" th:text="#{label.state}"></label>
@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="auction-extend row">
                 <div class="col s10">
                     <label for="editor" th:text="#{label.item.description}"></label>
                     <div id="editor"></div>
@@ -54,10 +54,10 @@
                          th:errors="*{editorContent}"></div>
                 </div>
             </div>
-            <div class="row">
+            <div class="auction-extend row">
                 <h5 th:text="#{section.item.offer.conditions}"></h5>
             </div>
-            <div class="row">
+            <div class="auction-extend row">
                 <div class="col s10 switch">
                     <label for="isBid" th:text="#{label.bidding}"></label>
                     <div class="row switch-margin-left">
@@ -79,20 +79,22 @@
                             tak
                         </label>
                     </div>
+                    <div class="validation-error" th:if="${#fields.hasErrors('isBuyout')}"
+                         th:errors="*{isBuyout}"></div>
                 </div>
             </div>
-            <div class="row">
+            <div class="auction-extend row">
                 <div class="col s5 input-field">
                     <input th:field="*{price}" id="price" type="text" th:placeholder="#{label.price}"
-                           class="validate money" th:classappend="${#fields.hasErrors('price')}  ? 'invalid' : ''" required>
+                           class="validate money" th:classappend="${#fields.hasErrors('price')}  ? 'invalid' : ''">
                     <label for="price" th:text="#{label.price}"></label>
                     <div class="validation-error" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
                 </div>
             </div>
-            <div class="row">
+            <div class="auction-extend row">
                 <div class="col s5 input-field">
                     <input th:field="*{amount}" id="amount" type="text" th:placeholder="#{label.amount}"
-                           class="validate amount" th:classappend="${#fields.hasErrors('amount')}  ? 'invalid' : ''" required>
+                           class="validate amount" th:classappend="${#fields.hasErrors('amount')}  ? 'invalid' : ''">
                     <label for="amount" th:text="#{label.amount}"></label>
                     <div class="validation-error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
                 </div>

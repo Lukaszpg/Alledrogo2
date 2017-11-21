@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:if="${auctionDto == null}" th:replace="layout/template :: headFragment(#{title.auction.not.found})">
+    <title>Index</title>
+    <meta charset="utf-8"/>
+</head>
+<head th:if="${auctionDto != null}" th:replace="layout/template :: headFragment(#{title.index})">
+    <title>Index</title>
+    <meta charset="utf-8"/>
+</head>
+<body th:replace="layout/template :: bodyFragment">
+<div th:fragment="content">
+    <div class="row">
+        <div class="col s8 offset-s2">
+            <div th:if="${auctionDto != null}" }>
+                <div th:utext="${auctionDto.editorContent}"></div>
+            </div>
+            <div th:if="${auctionDto == null}" }>
+                <h2 th:text="#{page.title.auction.not.found}"></h2>
+                <div th:text="#{error.auction.not.found}"></div>
+                <a class="right btn waves-light waves-effect" th:text="#{button.home.goto}" th:href="@{'/'}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

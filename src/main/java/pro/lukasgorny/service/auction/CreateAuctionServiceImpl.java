@@ -26,14 +26,22 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
     }
 
     @Override
-    public void create(AuctionDto auctionDto) {
+    public Auction create(AuctionDto auctionDto) {
         Auction auction = createEntityFromDto(auctionDto);
-        auctionRepository.save(auction);
+        return auctionRepository.save(auction);
     }
 
     private Auction createEntityFromDto(AuctionDto auctionDto) {
-        Auction auction = modelMapper.map(auctionDto, Auction.class);
+        Auction auction = new Auction();
         auction.setCategory(categoryService.getById(auctionDto.getCategoryId()));
+        auction.setTitle(auctionDto.getTitle());
+        auction.setNew(auctionDto.getIsNew());
+        auction.setEditorContent(auctionDto.getEditorContent());
+        auction.setBuyout(auctionDto.getIsBuyout());
+        auction.setBid(auctionDto.getIsBid());
+        auction.setPrice(auctionDto.getPrice());
+        auction.setAmount(auctionDto.getAmount());
+        auction.setDeleted(false);
         return auction;
     }
 }

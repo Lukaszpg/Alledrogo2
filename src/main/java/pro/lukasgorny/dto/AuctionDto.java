@@ -1,5 +1,7 @@
 package pro.lukasgorny.dto;
 
+import pro.lukasgorny.model.Category;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -7,6 +9,8 @@ import javax.validation.constraints.Size;
  * Created by Łukasz on 26.10.2017.
  */
 public class AuctionDto {
+
+    private String id;
 
     @NotNull
     @Size(max = 50)
@@ -16,22 +20,22 @@ public class AuctionDto {
     private String categoryId;
 
     @NotNull
-    private String isNew;
+    private Boolean isNew;
 
     @NotNull
     private String editorContent;
-
-    @NotNull
-    private Boolean isBuyout;
-
-    @NotNull
-    private Boolean isBid;
 
     @NotNull
     private Double price;
 
     @NotNull
     private Integer amount;
+
+    private Boolean isBuyout;
+
+    private Boolean isBid;
+
+    private Category category;
 
     public String getTitle() {
         return title;
@@ -47,14 +51,6 @@ public class AuctionDto {
 
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public String getIsNew() {
-        return isNew;
-    }
-
-    public void setIsNew(String isNew) {
-        this.isNew = isNew;
     }
 
     public String getEditorContent() {
@@ -95,5 +91,29 @@ public class AuctionDto {
 
     public void setAmount(Integer amount) {
         this.amount = amount;
+    }
+
+    public Boolean getIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(Boolean aNew) {
+        isNew = aNew;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pro.lukasgorny.dto.UserDto;
 import pro.lukasgorny.enums.RoleEnum;
-import pro.lukasgorny.enums.TemplatesEnum;
+import pro.lukasgorny.enums.Templates;
 import pro.lukasgorny.event.OnRegistrationCompleteEvent;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.model.VerificationToken;
@@ -51,7 +51,7 @@ public class RegistrationController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("userDto", new UserDto());
         modelAndView.addObject("months", helperService.prepareMonthsList());
-        modelAndView.setViewName(TemplatesEnum.REGISTRATION.getTemplateName());
+        modelAndView.setViewName(Templates.REGISTRATION);
         return modelAndView;
     }
 
@@ -71,11 +71,11 @@ public class RegistrationController {
         }
 
         if (bindingResult.hasErrors()) {
-            modelAndView.setViewName(TemplatesEnum.REGISTRATION.getTemplateName());
+            modelAndView.setViewName(Templates.REGISTRATION);
         } else {
             userDto.getRoles().add(RoleEnum.USER);
             User user = registrationService.register(userDto);
-            modelAndView.setViewName(TemplatesEnum.REGISTRATION_SUCCESS.getTemplateName());
+            modelAndView.setViewName(Templates.REGISTRATION_SUCCESS);
             modelAndView.addObject("userDto", userDto);
 
             try {
@@ -84,7 +84,7 @@ public class RegistrationController {
                         (user, request.getLocale(), appUrl));
             } catch (Exception me) {
                 me.printStackTrace();
-                modelAndView.setViewName(TemplatesEnum.EMAIL_ERROR.getTemplateName());
+                modelAndView.setViewName(Templates.EMAIL_ERROR);
             }
         }
 
@@ -118,7 +118,7 @@ public class RegistrationController {
     @GetMapping("/token-error")
     public ModelAndView tokenError(@ModelAttribute("message") String message) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName(TemplatesEnum.TOKEN_ERROR.getTemplateName());
+        modelAndView.setViewName(Templates.TOKEN_ERROR);
         modelAndView.addObject("message", message);
         return modelAndView;
     }
