@@ -63,6 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register").permitAll()
                 .antMatchers("/activate/**").permitAll()
                 .antMatchers("/token-error").permitAll()
+                .antMatchers("/register-success").permitAll()
                 .antMatchers("/version").permitAll()
                 .antMatchers("/category-rest/**").permitAll()
                 .antMatchers("/auction/item/**").permitAll()

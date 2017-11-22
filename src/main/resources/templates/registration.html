@@ -22,12 +22,12 @@
             </div>
             <div class="row">
                 <div class="input-field col s8">
-                    <input id="password" th:field="*{password}" data-length="40"
+                    <input id="registrationPassword" th:field="*{password}" data-length="40"
                            th:placeholder="#{placeholder.password.register}"
                            type="password" class="tooltipped validate" data-delay="50"
                            th:attr="data-tooltip=#{registration.password.tooltip}"
                            th:classappend="${#fields.hasErrors('email')}  ? 'invalid' : ''" required>
-                    <label for="password" th:text="#{label.password}"></label>
+                    <label for="registrationPassword" th:text="#{label.password}"></label>
                     <div id="passwordValidationError" class="validation-error" th:if="${#fields.hasErrors('password')}"
                          th:errors="*{password}"></div>
                 </div>

@@ -3,10 +3,10 @@ package pro.lukasgorny.service.auction;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pro.lukasgorny.dto.AuctionDto;
+import pro.lukasgorny.dto.auction.AuctionSaveDto;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.repository.AuctionRepository;
-import pro.lukasgorny.service.category.CategoryService;
+import pro.lukasgorny.service.category.GetCategoryService;
 
 /**
  * Created by Łukasz on 20.11.2017.
@@ -16,31 +16,31 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
 
     private final ModelMapper modelMapper;
     private final AuctionRepository auctionRepository;
-    private final CategoryService categoryService;
+    private final GetCategoryService getCategoryService;
 
     @Autowired
-    public CreateAuctionServiceImpl(ModelMapper modelMapper, AuctionRepository auctionRepository, CategoryService categoryService) {
+    public CreateAuctionServiceImpl(ModelMapper modelMapper, AuctionRepository auctionRepository, GetCategoryService getCategoryService) {
         this.modelMapper = modelMapper;
         this.auctionRepository = auctionRepository;
-        this.categoryService = categoryService;
+        this.getCategoryService = getCategoryService;
     }
 
     @Override
-    public Auction create(AuctionDto auctionDto) {
-        Auction auction = createEntityFromDto(auctionDto);
+    public Auction create(AuctionSaveDto auctionSaveDto) {
+        Auction auction = createEntityFromDto(auctionSaveDto);
         return auctionRepository.save(auction);
     }
 
-    private Auction createEntityFromDto(AuctionDto auctionDto) {
+    private Auction createEntityFromDto(AuctionSaveDto auctionSaveDto) {
         Auction auction = new Auction();
-        auction.setCategory(categoryService.getById(auctionDto.getCategoryId()));
-        auction.setTitle(auctionDto.getTitle());
-        auction.setNew(auctionDto.getIsNew());
-        auction.setEditorContent(auctionDto.getEditorContent());
-        auction.setBuyout(auctionDto.getIsBuyout());
-        auction.setBid(auctionDto.getIsBid());
-        auction.setPrice(auctionDto.getPrice());
-        auction.setAmount(auctionDto.getAmount());
+        auction.setCategory(getCategoryService.getById(auctionSaveDto.getCategoryId()));
+        auction.setTitle(auctionSaveDto.getTitle());
+        auction.setNew(auctionSaveDto.getIsNew());
+        auction.setEditorContent(auctionSaveDto.getEditorContent());
+        auction.setBuyout(auctionSaveDto.getIsBuyout());
+        auction.setBid(auctionSaveDto.getIsBid());
+        auction.setPrice(auctionSaveDto.getPrice());
+        auction.setAmount(auctionSaveDto.getAmount());
         auction.setDeleted(false);
         return auction;
     }

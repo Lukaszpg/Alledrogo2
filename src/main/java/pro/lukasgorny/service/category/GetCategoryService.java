@@ -1,6 +1,6 @@
 package pro.lukasgorny.service.category;
 
-import pro.lukasgorny.dto.CategoryDto;
+import pro.lukasgorny.dto.category.CategoryDto;
 import pro.lukasgorny.model.Category;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Łukasz on 26.10.2017.
  */
-public interface CategoryService {
+public interface GetCategoryService {
 
     List<CategoryDto> getAll();
     List<CategoryDto> getAllTop();

@@ -3,9 +3,11 @@ package pro.lukasgorny.service.category;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pro.lukasgorny.dto.CategoryDto;
+
+import pro.lukasgorny.dto.category.CategoryDto;
 import pro.lukasgorny.model.Category;
 import pro.lukasgorny.repository.CategoryRepository;
+import pro.lukasgorny.service.AbstractGetService;
 import pro.lukasgorny.service.hash.HashService;
 
 import java.util.List;
@@ -16,17 +18,16 @@ import java.util.stream.Collectors;
  */
 
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class GetCategoryServiceImpl extends AbstractGetService implements GetCategoryService {
 
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
-    private final HashService hashService;
 
     @Autowired
-    public CategoryServiceImpl(CategoryRepository categoryRepository, ModelMapper modelMapper, HashService hashService) {
+    public GetCategoryServiceImpl(CategoryRepository categoryRepository, ModelMapper modelMapper, HashService hashService) {
+        super(hashService);
         this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
-        this.hashService = hashService;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-        public Category getById(String id) {
+    public Category getById(String id) {
         return categoryRepository.findOne(getEncodedId(id));
     }
 
@@ -73,7 +74,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private String getEncodedParentId(Category category) {
-        if(category.getParent() != null) {
+        if (category.getParent() != null) {
             return hashService.encode(category.getParent().getId());
         }
 
@@ -81,7 +82,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private String getEncodedParentOfParentId(Category category) {
-        if(category.getParent() != null && category.getParent().getParent() != null) {
+        if (category.getParent() != null && category.getParent().getParent() != null) {
             return hashService.encode(category.getParent().getParent().getId());
         }
 

@@ -1,4 +1,4 @@
-package pro.lukasgorny.dto;
+package pro.lukasgorny.dto.category;
 
 import java.util.LinkedList;
 import java.util.List;

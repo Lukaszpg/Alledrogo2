@@ -1,0 +1,50 @@
+package pro.lukasgorny.service.auction;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import pro.lukasgorny.dto.auction.AuctionResultDto;
+import pro.lukasgorny.model.Auction;
+import pro.lukasgorny.repository.AuctionRepository;
+import pro.lukasgorny.service.AbstractGetService;
+import pro.lukasgorny.service.hash.HashService;
+
+/**
+ * Created by Łukasz on 21.11.2017.
+ */
+@Service
+public class GetAuctionServiceImpl extends AbstractGetService implements GetAuctionService {
+
+    private final AuctionRepository auctionRepository;
+
+    @Autowired
+    public GetAuctionServiceImpl(AuctionRepository auctionRepository, HashService hashService) {
+        super(hashService);
+        this.auctionRepository = auctionRepository;
+    }
+
+    @Override
+    public AuctionResultDto getOne(String id) {
+        Auction auction = auctionRepository.findOne(hashService.decode(id));
+
+        if(auction != null) {
+            return createDtoFromEntity(auction);
+        }
+
+        return null;
+    }
+
+    private AuctionResultDto createDtoFromEntity(Auction auction) {
+        AuctionResultDto auctionResultDto = new AuctionResultDto();
+        auctionResultDto.setTitle(auction.getTitle());
+        auctionResultDto.setEditorContent(auction.getEditorContent());
+        auctionResultDto.setIsBuyout(auction.getBuyout());
+        auctionResultDto.setIsBid(auction.getBid());
+        auctionResultDto.setPrice(auction.getPrice());
+        auctionResultDto.setAmount(auction.getAmount());
+        auctionResultDto.setIsNew(auction.getNew());
+        auctionResultDto.setCategory(auction.getCategory());
+
+        return auctionResultDto;
+    }
+}

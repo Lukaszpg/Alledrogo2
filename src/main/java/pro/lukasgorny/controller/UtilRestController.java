@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pro.lukasgorny.config.Application;
 import pro.lukasgorny.dto.VersionDto;
+import pro.lukasgorny.util.Urls;
 
 /**
  * Created by lukaszgo on 2017-10-26.
@@ -28,7 +29,7 @@ public class UtilRestController {
         this.messageSource = messageSource;
     }
 
-    @GetMapping("/version")
+    @GetMapping(Urls.Util.VERSION)
     public ResponseEntity<VersionDto> version() {
         VersionDto versionDto = new VersionDto();
         versionDto.setVersion(application.getVersion());

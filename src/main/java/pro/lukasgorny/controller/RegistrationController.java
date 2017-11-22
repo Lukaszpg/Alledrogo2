@@ -5,6 +5,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,14 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pro.lukasgorny.dto.UserDto;
 import pro.lukasgorny.enums.RoleEnum;
-import pro.lukasgorny.enums.Templates;
+import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.event.OnRegistrationCompleteEvent;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.model.VerificationToken;
 import pro.lukasgorny.service.helper.HelperServiceImpl;
 import pro.lukasgorny.service.registration.RegistrationService;
 import pro.lukasgorny.service.user.UserService;
+import pro.lukasgorny.util.Urls;
 
 import javax.validation.Valid;
 
@@ -46,7 +48,7 @@ public class RegistrationController {
         this.messageSource = messageSource;
     }
 
-    @GetMapping("/register")
+    @GetMapping(Urls.Registration.REGISTER)
     public ModelAndView registration() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("userDto", new UserDto());
@@ -55,7 +57,7 @@ public class RegistrationController {
         return modelAndView;
     }
 
-    @PostMapping("/register")
+    @PostMapping(Urls.Registration.REGISTER)
     public ModelAndView createNewUser(@Valid UserDto userDto, BindingResult bindingResult, WebRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("months", helperService.prepareMonthsList());
@@ -75,8 +77,8 @@ public class RegistrationController {
         } else {
             userDto.getRoles().add(RoleEnum.USER);
             User user = registrationService.register(userDto);
-            modelAndView.setViewName(Templates.REGISTRATION_SUCCESS);
-            modelAndView.addObject("userDto", userDto);
+            ModelMap modelMap = new ModelMap();
+            modelMap.addAttribute("email", userDto.getEmail());
 
             try {
                 String appUrl = request.getContextPath();
@@ -84,22 +86,24 @@ public class RegistrationController {
                         (user, request.getLocale(), appUrl));
             } catch (Exception me) {
                 me.printStackTrace();
-                modelAndView.setViewName(Templates.EMAIL_ERROR);
+                modelAndView.setViewName(Urls.Registration.EMAIL_ERROR_REDIRECT);
             }
+
+            return new ModelAndView(Urls.Registration.REGISTER_SUCCESS_REDIRECT, modelMap);
         }
 
         return modelAndView;
     }
 
-    @GetMapping("/activate")
+    @GetMapping(Urls.Registration.ACTIVATE)
     public ModelAndView activate(@RequestParam("token") String token, RedirectAttributes redirectAttributes) {
         VerificationToken verificationToken = userService.getVerificationToken(token);
         if (verificationToken == null || token == null) {
             redirectAttributes.addAttribute("message", messageSource.getMessage("error.message.invalid.token", null, LocaleContextHolder.getLocale()));
-            return new ModelAndView("redirect:/token-error");
+            return new ModelAndView(Urls.Registration.TOKEN_ERROR_REDIRECT);
         }
 
-        ModelAndView modelAndView = new ModelAndView("activation-success");
+        ModelAndView modelAndView = new ModelAndView(Templates.ACTIVATION_SUCCESS);
         User user = verificationToken.getUser();
 
         /*Calendar cal = Calendar.getInstance();
@@ -115,11 +119,19 @@ public class RegistrationController {
         return modelAndView;
     }
 
-    @GetMapping("/token-error")
+    @GetMapping(Urls.Registration.TOKEN_ERROR)
     public ModelAndView tokenError(@ModelAttribute("message") String message) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Templates.TOKEN_ERROR);
         modelAndView.addObject("message", message);
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.Registration.REGISTER_SUCCESS)
+    public ModelAndView registerSuccess(@ModelAttribute("email") String email) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(Templates.REGISTRATION_SUCCESS);
+        modelAndView.addObject("email", email);
         return modelAndView;
     }
 
@@ -129,9 +141,9 @@ public class RegistrationController {
 
         if (name.equals("token")) {
             redirectAttributes.addAttribute("message", messageSource.getMessage("error.message.invalid.token", null, LocaleContextHolder.getLocale()));
-            return "redirect:/token-error";
+            return Urls.Registration.TOKEN_ERROR_REDIRECT;
         }
 
-        return "redirect:/login";
+        return Urls.Login.LOGIN_REDIRECT;
     }
 }

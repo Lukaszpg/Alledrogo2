@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pro.lukasgorny.dto.CategoryDto;
-import pro.lukasgorny.service.category.CategoryService;
+import pro.lukasgorny.dto.category.CategoryDto;
+import pro.lukasgorny.service.category.GetCategoryService;
 import pro.lukasgorny.service.hash.HashService;
+import pro.lukasgorny.util.Urls;
 
 import java.util.List;
 
@@ -18,21 +19,19 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/category-rest")
+@RequestMapping(Urls.CategoryRest.MAIN)
 public class CategoryRestController {
 
-    private final CategoryService categoryService;
-    private final HashService hashService;
+    private final GetCategoryService getCategoryService;
 
     @Autowired
-    public CategoryRestController(CategoryService categoryService, HashService hashService) {
-        this.categoryService = categoryService;
-        this.hashService = hashService;
+    public CategoryRestController(GetCategoryService getCategoryService) {
+        this.getCategoryService = getCategoryService;
     }
 
-    @GetMapping("/get-all-top")
+    @GetMapping(Urls.CategoryRest.GET_ALL_TOP)
     public ResponseEntity<List<CategoryDto>> getAllTop() {
-        List<CategoryDto> list = categoryService.getAllTop();
+        List<CategoryDto> list = getCategoryService.getAllTop();
 
         if(list != null && !list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);
@@ -41,9 +40,9 @@ public class CategoryRestController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/get-children/{id}")
+    @GetMapping(Urls.CategoryRest.GET_CHILDREN)
     public ResponseEntity<List<CategoryDto>> getChildren(@PathVariable String id) {
-        List<CategoryDto> list = categoryService.getChildrenByParentId(id);
+        List<CategoryDto> list = getCategoryService.getChildrenByParentId(id);
 
         if(list != null && !list.isEmpty()) {
             return new ResponseEntity<>(list, HttpStatus.OK);

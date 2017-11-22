@@ -3,7 +3,7 @@ $(document).ready(function () {
             html: true
         });
 
-    $('#password').password({
+    $('#registrationPassword').password({
         shortPass: 'Hasło jest za krótkie',
         badPass: 'Spróbuj dodać liczby',
         goodPass: 'Spróbuj dodać znaki specjalne',

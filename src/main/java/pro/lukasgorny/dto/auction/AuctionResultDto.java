@@ -1,40 +1,20 @@
-package pro.lukasgorny.dto;
+package pro.lukasgorny.dto.auction;
 
 import pro.lukasgorny.model.Category;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * Created by Łukasz on 26.10.2017.
  */
-public class AuctionDto {
+public class AuctionResultDto {
 
     private String id;
-
-    @NotNull
-    @Size(max = 50)
     private String title;
-
-    @NotNull
-    private String categoryId;
-
-    @NotNull
     private Boolean isNew;
-
-    @NotNull
     private String editorContent;
-
-    @NotNull
     private Double price;
-
-    @NotNull
     private Integer amount;
-
     private Boolean isBuyout;
-
     private Boolean isBid;
-
     private Category category;
 
     public String getTitle() {
@@ -43,14 +23,6 @@ public class AuctionDto {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
     }
 
     public String getEditorContent() {

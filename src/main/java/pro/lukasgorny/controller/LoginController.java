@@ -4,6 +4,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import pro.lukasgorny.util.Templates;
+import pro.lukasgorny.util.Urls;
+
 /**
  * Created by lukaszgo on 2017-05-25.
  */
@@ -11,10 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginController {
 
-    @GetMapping("/login")
+    @GetMapping(Urls.Login.LOGIN)
     public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
+        modelAndView.setViewName(Templates.LOGIN);
         return modelAndView;
     }
 }
