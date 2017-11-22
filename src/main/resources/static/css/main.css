@@ -98,13 +98,48 @@ input[type=search] {
     font-weight: 600;
 }
 
-.validation-error {
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    font-size: 12px;
-    line-height: 16px;
-    margin-top: -15px;
-    color: #e0211b;
+div.validation-error {
+    padding: 6px;
+    color: #fff;
+    background-color: #DA362A;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    width: 100%;
+    margin: 13px 13px 13px 0px;
+}
+
+div.validation-error:before {
+    content: ' ';
+    height: 0;
+    position: relative;
+    width: 0;
+    left: 20px;
+    border: 10px solid transparent;
+    border-bottom-color: #DA362A;
+    bottom: 34px;
+}
+
+div.validation-error-input {
+    padding: 6px;
+    color: #fff;
+    background-color: #DA362A;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    width: 100%;
+    margin: 0px 13px 13px 0px;
+}
+
+div.validation-error-input:before {
+    content: ' ';
+    height: 0;
+    position: relative;
+    width: 0;
+    left: 20px;
+    border: 10px solid transparent;
+    border-bottom-color: #DA362A;
+    bottom: 34px;
 }
 
 .tooltip-left {
@@ -132,8 +167,8 @@ input[type=search] {
     margin: auto;
 }
 
-.leaf {
-    font-weight: 600;
+.category-previous, .change-choice {
+    font-weight: bold;
 }
 
 .category, .category-previous {
@@ -215,4 +250,8 @@ input[type=search] {
 
 .ql-editor {
     min-height: 250px;
+}
+
+.toolbar-custom {
+    margin-top: 10px;
 }

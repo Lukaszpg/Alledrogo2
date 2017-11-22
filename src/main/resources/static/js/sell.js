@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    enableMaterializeSelect();
     initializeRichTextEditor();
     initializeInputMasks();
     initializeCheckboxChangeEvent();
@@ -11,6 +12,10 @@ var initializeTitleInputChangeEvent = function () {
             unhideExtendedAuction();
         }
     });
+};
+
+var enableMaterializeSelect = function() {
+    $("#itemStateSelect").material_select();
 };
 
 var isTitleNotNull = function () {
@@ -28,6 +33,7 @@ var initializeRichTextEditor = function () {
 
     if (container.length) {
         var quill = new Quill('#editor', {
+            modules: { toolbar: '#toolbar-container' },
             theme: 'snow'
         });
         quill.on('text-change', function (delta, oldDelta, source) {

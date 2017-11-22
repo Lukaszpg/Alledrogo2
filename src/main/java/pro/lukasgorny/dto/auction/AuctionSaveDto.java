@@ -2,6 +2,7 @@ package pro.lukasgorny.dto.auction;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Created by Łukasz on 26.10.2017.
@@ -10,7 +11,7 @@ public class AuctionSaveDto {
 
     private String id;
 
-    @NotNull
+    @NotBlank
     @Size(max = 50)
     private String title;
 
@@ -20,7 +21,7 @@ public class AuctionSaveDto {
     @NotNull
     private Boolean isNew;
 
-    @NotNull
+    @NotBlank
     private String editorContent;
 
     @NotNull

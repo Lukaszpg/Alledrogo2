@@ -6,20 +6,20 @@ import org.springframework.stereotype.Service;
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.repository.AuctionRepository;
-import pro.lukasgorny.service.AbstractGetService;
 import pro.lukasgorny.service.hash.HashService;
 
 /**
  * Created by Łukasz on 21.11.2017.
  */
 @Service
-public class GetAuctionServiceImpl extends AbstractGetService implements GetAuctionService {
+public class GetAuctionServiceImpl implements GetAuctionService {
 
+    private final HashService hashService;
     private final AuctionRepository auctionRepository;
 
     @Autowired
     public GetAuctionServiceImpl(AuctionRepository auctionRepository, HashService hashService) {
-        super(hashService);
+        this.hashService = hashService;
         this.auctionRepository = auctionRepository;
     }
 

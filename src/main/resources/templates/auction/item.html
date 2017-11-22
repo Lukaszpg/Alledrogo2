@@ -6,12 +6,15 @@
 </head>
 <body th:replace="layout/template :: bodyFragment">
 <div th:fragment="content">
-    <div class="row">
-        <div class="col s8 offset-s2">
-            <div th:if="${auctionDto != null}" }>
-                <div th:utext="${auctionDto.editorContent}"></div>
+    <div th:if="${auctionDto != null}" }>
+        <div class="row">
+            <div class="col s10 offset-s2">
             </div>
-            <div th:if="${auctionDto == null}" }>
+        </div>
+    </div>
+    <div th:if="${auctionDto == null}" }>
+        <div class="row">
+            <div class="col s8 offset-s2">
                 <h2 th:text="#{page.title.auction.not.found}"></h2>
                 <div th:text="#{error.auction.not.found}"></div>
                 <a class="right btn waves-light waves-effect" th:text="#{button.home.goto}" th:href="@{'/'}"></a>

@@ -57,14 +57,14 @@ window.onload = function () {
                 '</div>' +
                 '<ul id="category-list" v-bind:class="{ \'category-picker-list\': true, hide: isLoading }">' +
                     '<li v-for="category in categories">' +
-                        '<a class="category" v-bind:class="{leaf: category.leaf}" @click="itemClick(category)">{{ category.name }}</a>' +
+                        '<a class="category" @click="itemClick(category)">{{ category.name }}</a>' +
                     '</li>' +
                 '</ul>' +
             '</div>' +
             '<div class="picked-category" v-if="pickedCategory != null">' +
                 '<div class="row">' +
                     '<div> Wybrana kategoria: {{ pickedCategory.name }}' +
-                        '<a v-if="showChange" class="category right" @click="changeChoice">Zmień</a>' +
+                        '<a v-if="showChange" class="category right change-choice" @click="changeChoice">Zmień</a>' +
                         '<input type="hidden" name="categoryId" :value="pickedCategory.id">' +
                     '</div>' +
                 '</div>' +

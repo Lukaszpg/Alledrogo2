@@ -40,7 +40,7 @@ public class AuctionController {
     @GetMapping(Urls.Auction.SELL)
     public ModelAndView sell() {
         ModelAndView modelAndView = new ModelAndView(Templates.AuctionTemplates.SELL);
-        modelAndView.addObject("auctionDto", new AuctionSaveDto());
+        modelAndView.addObject("auctionSaveDto", new AuctionSaveDto());
         return modelAndView;
     }
 

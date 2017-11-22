@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import pro.lukasgorny.dto.category.CategoryDto;
 import pro.lukasgorny.model.Category;
 import pro.lukasgorny.repository.CategoryRepository;
-import pro.lukasgorny.service.AbstractGetService;
 import pro.lukasgorny.service.hash.HashService;
 
 import java.util.List;
@@ -18,14 +17,15 @@ import java.util.stream.Collectors;
  */
 
 @Service
-public class GetCategoryServiceImpl extends AbstractGetService implements GetCategoryService {
+public class GetCategoryServiceImpl implements GetCategoryService {
 
+    private final HashService hashService;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
     public GetCategoryServiceImpl(CategoryRepository categoryRepository, ModelMapper modelMapper, HashService hashService) {
-        super(hashService);
+        this.hashService = hashService;
         this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
     }

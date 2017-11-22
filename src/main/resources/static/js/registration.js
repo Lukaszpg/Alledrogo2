@@ -1,7 +1,16 @@
 $(document).ready(function () {
-    $('#password').tooltip({
-            html: true
-        });
+    initializePasswordField();
+    initializeMonthsSelect();
+});
+
+var initializeMonthsSelect = function() {
+    $("#months").material_select();
+};
+
+var initializePasswordField = function() {
+    $('#registrationPassword').tooltip({
+        html: true
+    });
 
     $('#registrationPassword').password({
         shortPass: 'Hasło jest za krótkie',
@@ -19,7 +28,7 @@ $(document).ready(function () {
         minimumLength: 8 // minimum password length (below this threshold, the score is 0)
     });
 
-    $('#password').focusin(function() {
+    $('#registrationPassword').focusin(function() {
         $('#passwordValidationError').addClass("hide");
     });
-});
+};

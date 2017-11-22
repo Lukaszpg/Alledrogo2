@@ -15,9 +15,9 @@
             <div class="row">
                 <div class="input-field col s8">
                     <input th:field="*{email}" th:placeholder="#{placeholder.email}" id="email" type="email"
-                           class="validate" th:classappend="${#fields.hasErrors('email')}  ? 'invalid' : ''" required>
+                           class="validate" th:classappend="${#fields.hasErrors('email')}  ? 'invalid' : ''">
                     <label for="email" th:text="#{label.email}"></label>
-                    <div class="validation-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    <div class="validation-error-input" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                 </div>
             </div>
             <div class="row">
@@ -26,9 +26,9 @@
                            th:placeholder="#{placeholder.password.register}"
                            type="password" class="tooltipped validate" data-delay="50"
                            th:attr="data-tooltip=#{registration.password.tooltip}"
-                           th:classappend="${#fields.hasErrors('email')}  ? 'invalid' : ''" required>
+                           th:classappend="${#fields.hasErrors('email')}  ? 'invalid' : ''">
                     <label for="registrationPassword" th:text="#{label.password}"></label>
-                    <div id="passwordValidationError" class="validation-error" th:if="${#fields.hasErrors('password')}"
+                    <div id="passwordValidationError" class="validation-error-input" th:if="${#fields.hasErrors('password')}"
                          th:errors="*{password}"></div>
                 </div>
             </div>
@@ -41,13 +41,12 @@
                 <div class="col s2">
                     <input id="birthdayDay" th:field="*{birthdayDay}" th:placeholder="#{placeholder.day}" data-mask="00"
                            type="text"
-                           class="validate" required th:classappend="${#fields.hasErrors('birthdayDay')}  ? 'invalid' : ''">
-                    <div class="validation-error" th:if="${#fields.hasErrors('birthdayDay')}" th:errors="*{birthdayDay}"></div>
+                           class="validate" th:classappend="${#fields.hasErrors('birthdayDay')}  ? 'invalid' : ''">
+                    <div class="validation-error-input" th:if="${#fields.hasErrors('birthdayDay')}" th:errors="*{birthdayDay}"></div>
                 </div>
                 <div class="col s4">
-                    <select th:field="*{birthdayMonth}" th:classappend="${#fields.hasErrors('birthdayMonth')}  ? 'invalid' : ''"
-                            required>
-                        <option th:text="#{placeholder.month}" value="" disabled selected></option>
+                    <select id="months" name="birthdayMonth" th:classappend="${#fields.hasErrors('birthdayMonth')}  ? 'invalid' : ''">
+                        <option th:text="#{placeholder.month}" value="" th:disabled="disabled" th:selected="selected"></option>
                         <option th:each="month : ${months}" th:value="${month.monthNumber}"
                                 th:text="${month.translation}"></option>
                     </select>
@@ -56,8 +55,8 @@
                 <div class="col s2">
                     <input id="birthdayMonth" th:field="*{birthdayYear}" th:placeholder="#{placeholder.year}" data-mask="0000"
                            type="text"
-                           class="validate" th:classappend="${#fields.hasErrors('birthdayYear')}  ? 'invalid' : ''" required>
-                    <div class="validation-error" th:if="${#fields.hasErrors('birthdayYear')}" th:errors="*{birthdayYear}"></div>
+                           class="validate" th:classappend="${#fields.hasErrors('birthdayYear')}  ? 'invalid' : ''">
+                    <div class="validation-error-input" th:if="${#fields.hasErrors('birthdayYear')}" th:errors="*{birthdayYear}"></div>
                 </div>
             </div>
             <div class="row">

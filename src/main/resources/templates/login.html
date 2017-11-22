@@ -13,14 +13,14 @@
             </div>
             <div class="row">
                 <div class="input-field col s8">
-                    <input th:placeholder="#{placeholder.email}" id="email" th:name="email" type="email" class="validate" required>
+                    <input th:placeholder="#{placeholder.email}" id="email" th:name="email" type="email" class="validate">
                     <label for="email" th:text="#{label.email}"></label>
-                    <div class="validation-error" th:if="${param.error}" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}"></div>
+                    <div class="validation-error-input" th:if="${param.error}" th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}"></div>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s8">
-                    <input id="password" th:placeholder="#{placeholder.password}" th:name="password" type="password" class="validate" required>
+                    <input id="password" th:placeholder="#{placeholder.password}" th:name="password" type="password" class="validate">
                     <label for="password" th:text="#{label.password}"></label>
                 </div>
             </div>

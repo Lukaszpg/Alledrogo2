@@ -14,13 +14,11 @@ import pro.lukasgorny.service.category.GetCategoryService;
 @Service
 public class CreateAuctionServiceImpl implements CreateAuctionService {
 
-    private final ModelMapper modelMapper;
     private final AuctionRepository auctionRepository;
     private final GetCategoryService getCategoryService;
 
     @Autowired
-    public CreateAuctionServiceImpl(ModelMapper modelMapper, AuctionRepository auctionRepository, GetCategoryService getCategoryService) {
-        this.modelMapper = modelMapper;
+    public CreateAuctionServiceImpl(AuctionRepository auctionRepository, GetCategoryService getCategoryService) {
         this.auctionRepository = auctionRepository;
         this.getCategoryService = getCategoryService;
     }
