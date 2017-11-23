@@ -2,6 +2,8 @@ package pro.lukasgorny.dto.auction;
 
 import pro.lukasgorny.model.Category;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Łukasz on 26.10.2017.
  */
@@ -11,11 +13,13 @@ public class AuctionResultDto {
     private String title;
     private Boolean isNew;
     private String editorContent;
-    private Double price;
+    private BigDecimal price;
+    private BigDecimal bidStartingPrice;
     private Integer amount;
     private Boolean isBuyout;
     private Boolean isBid;
     private Category category;
+    private String endDate;
 
     public String getTitle() {
         return title;
@@ -49,14 +53,6 @@ public class AuctionResultDto {
         isBid = bid;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public Integer getAmount() {
         return amount;
     }
@@ -87,5 +83,29 @@ public class AuctionResultDto {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getBidStartingPrice() {
+        return bidStartingPrice;
+    }
+
+    public void setBidStartingPrice(BigDecimal bidStartingPrice) {
+        this.bidStartingPrice = bidStartingPrice;
     }
 }

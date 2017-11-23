@@ -8,6 +8,9 @@ import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.repository.AuctionRepository;
 import pro.lukasgorny.service.hash.HashService;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * Created by Łukasz on 21.11.2017.
  */
@@ -44,7 +47,14 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setAmount(auction.getAmount());
         auctionResultDto.setIsNew(auction.getNew());
         auctionResultDto.setCategory(auction.getCategory());
+        auctionResultDto.setBidStartingPrice(auction.getBidStartingPrice());
+        auctionResultDto.setEndDate(parseDate(auction));
 
         return auctionResultDto;
+    }
+
+    private String parseDate(Auction auction) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        return auction.getEndDate().format(formatter);
     }
 }

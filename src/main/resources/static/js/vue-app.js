@@ -104,6 +104,7 @@ window.onload = function () {
             },
             itemClick: function(category) {
                 var vm = this;
+                $(".category-picker-error-message").addClass("hide");
                 if(category.leaf) {
                     vm.pickedCategory = category;
                     vm.showChange = true;

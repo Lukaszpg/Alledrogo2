@@ -4,6 +4,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Łukasz on 26.10.2017.
  */
@@ -25,7 +27,11 @@ public class AuctionSaveDto {
     private String editorContent;
 
     @NotNull
-    private Double price;
+    private BigDecimal price;
+
+    private BigDecimal bidStartingPrice;
+
+    private BigDecimal bidMinimalPrice;
 
     @NotNull
     private Integer amount;
@@ -33,6 +39,9 @@ public class AuctionSaveDto {
     private Boolean isBuyout;
 
     private Boolean isBid;
+
+    @NotNull
+    private Long auctionDuration;
 
     public String getTitle() {
         return title;
@@ -74,14 +83,6 @@ public class AuctionSaveDto {
         isBid = bid;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public Integer getAmount() {
         return amount;
     }
@@ -104,5 +105,37 @@ public class AuctionSaveDto {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Long getAuctionDuration() {
+        return auctionDuration;
+    }
+
+    public void setAuctionDuration(Long auctionDuration) {
+        this.auctionDuration = auctionDuration;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getBidStartingPrice() {
+        return bidStartingPrice;
+    }
+
+    public void setBidStartingPrice(BigDecimal bidStartingPrice) {
+        this.bidStartingPrice = bidStartingPrice;
+    }
+
+    public BigDecimal getBidMinimalPrice() {
+        return bidMinimalPrice;
+    }
+
+    public void setBidMinimalPrice(BigDecimal bidMinimalPrice) {
+        this.bidMinimalPrice = bidMinimalPrice;
     }
 }

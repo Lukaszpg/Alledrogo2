@@ -1,9 +1,11 @@
 package pro.lukasgorny.model;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import pro.lukasgorny.model.converter.Bid;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Created by Łukasz on 20.11.2017.
@@ -22,11 +24,19 @@ public class Auction extends Model {
 
     private Boolean isBuyout;
 
-    private Double price;
+    private BigDecimal price;
+
+    private BigDecimal bidStartingPrice;
+
+    private BigDecimal bidMinimalPrice;
 
     private Integer amount;
 
     private Category category;
+
+    private LocalDateTime endDate;
+
+    private List<Bid> bids;
 
     public String getTitle() {
         return title;
@@ -44,6 +54,7 @@ public class Auction extends Model {
         isNew = aNew;
     }
 
+    @Lob
     public String getEditorContent() {
         return editorContent;
     }
@@ -68,14 +79,6 @@ public class Auction extends Model {
         isBuyout = buyout;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public Integer getAmount() {
         return amount;
     }
@@ -92,5 +95,46 @@ public class Auction extends Model {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    @OneToMany(mappedBy="auction")
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public BigDecimal getBidStartingPrice() {
+        return bidStartingPrice;
+    }
+
+    public void setBidStartingPrice(BigDecimal bidStartingPrice) {
+        this.bidStartingPrice = bidStartingPrice;
+    }
+
+    public BigDecimal getBidMinimalPrice() {
+        return bidMinimalPrice;
+    }
+
+    public void setBidMinimalPrice(BigDecimal bidMinimalPrice) {
+        this.bidMinimalPrice = bidMinimalPrice;
     }
 }

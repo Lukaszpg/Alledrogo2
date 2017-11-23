@@ -101,7 +101,7 @@ input[type=search] {
 div.validation-error {
     padding: 6px;
     color: #fff;
-    background-color: #DA362A;
+    background-color: #ff5252;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -116,14 +116,14 @@ div.validation-error:before {
     width: 0;
     left: 20px;
     border: 10px solid transparent;
-    border-bottom-color: #DA362A;
+    border-bottom-color: #ff5252;
     bottom: 34px;
 }
 
 div.validation-error-input {
     padding: 6px;
     color: #fff;
-    background-color: #DA362A;
+    background-color: #ff5252;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -138,7 +138,7 @@ div.validation-error-input:before {
     width: 0;
     left: 20px;
     border: 10px solid transparent;
-    border-bottom-color: #DA362A;
+    border-bottom-color: #ff5252;
     bottom: 34px;
 }
 
@@ -254,4 +254,17 @@ div.validation-error-input:before {
 
 .toolbar-custom {
     margin-top: 10px;
+}
+
+.observe-button {
+    margin-top: 25px;
+}
+
+.auction-divider {
+    margin-bottom: 20px;
+}
+
+.auction-price {
+    font-size: 20px;
+    font-weight: bold;
 }

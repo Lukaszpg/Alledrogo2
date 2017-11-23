@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.AuctionSaveDto;
+import pro.lukasgorny.dto.auction.OfferDto;
 import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.service.auction.GetAuctionService;
@@ -40,7 +41,10 @@ public class AuctionController {
     @GetMapping(Urls.Auction.SELL)
     public ModelAndView sell() {
         ModelAndView modelAndView = new ModelAndView(Templates.AuctionTemplates.SELL);
-        modelAndView.addObject("auctionSaveDto", new AuctionSaveDto());
+        AuctionSaveDto auctionSaveDto = new AuctionSaveDto();
+        auctionSaveDto.setIsBid(false);
+        auctionSaveDto.setIsBuyout(true);
+        modelAndView.addObject("auctionSaveDto", auctionSaveDto);
         return modelAndView;
     }
 
@@ -50,6 +54,10 @@ public class AuctionController {
 
         if(auctionSaveDto.getIsBid() == null && auctionSaveDto.getIsBuyout() == null) {
             bindingResult.rejectValue("isBuyout", "error.pick.auction.type");
+        }
+
+        if(auctionSaveDto.getIsBid() != null && auctionSaveDto.getBidStartingPrice() == null) {
+            bindingResult.rejectValue("bidStartingPrice", "error.bid.price");
         }
 
         if (bindingResult.hasErrors()) {
@@ -76,6 +84,7 @@ public class AuctionController {
         ModelAndView modelAndView = new ModelAndView(Templates.AuctionTemplates.ITEM);
         AuctionResultDto auctionResultDto = getAuctionService.getOne(id);
         modelAndView.addObject("auctionDto", auctionResultDto);
+        modelAndView.addObject("offerDto", new OfferDto());
 
         return modelAndView;
     }
