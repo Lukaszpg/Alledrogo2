@@ -12,11 +12,15 @@ public class Templates {
     public static final String ACTIVATION_SUCCESS = "activation-success";
     public static final String LOGIN = "login";
     public static final String INDEX = "index";
+    public static final String ERROR_404 = "error/404";
+    public static final String ERROR_405 = "error/405";
+    public static final String ERROR_500 = "error/500";
 
     public class AuctionTemplates {
-        public static final String prefix = "auction/";
-        public static final String SELL = prefix + "sell";
-        public static final String CREATE_SUCCESS = prefix + "create-success";
-        public static final String ITEM = prefix + "item";
+        public static final String PREFIX = "auction/";
+        public static final String SELL = PREFIX + "sell";
+        public static final String CREATE_SUCCESS = PREFIX + "create-success";
+        public static final String ITEM = PREFIX + "item";
+        public static final String BID_SUCCESS = PREFIX + "bid-success";
     }
 }

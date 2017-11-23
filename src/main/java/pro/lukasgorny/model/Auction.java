@@ -1,7 +1,5 @@
 package pro.lukasgorny.model;
 
-import pro.lukasgorny.model.converter.Bid;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -15,28 +13,18 @@ import java.util.List;
 public class Auction extends Model {
 
     private String title;
-
     private Boolean isNew;
-
     private String editorContent;
-
     private Boolean isBid;
-
     private Boolean isBuyout;
-
     private BigDecimal price;
-
     private BigDecimal bidStartingPrice;
-
     private BigDecimal bidMinimalPrice;
-
     private Integer amount;
-
     private Category category;
-
     private LocalDateTime endDate;
-
     private List<Bid> bids;
+    private User user;
 
     public String getTitle() {
         return title;
@@ -136,5 +124,15 @@ public class Auction extends Model {
 
     public void setBidMinimalPrice(BigDecimal bidMinimalPrice) {
         this.bidMinimalPrice = bidMinimalPrice;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

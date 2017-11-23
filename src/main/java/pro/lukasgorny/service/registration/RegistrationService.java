@@ -8,6 +8,7 @@ import pro.lukasgorny.model.User;
  */
 public interface RegistrationService {
 
-    User register(UserDto userDto);
+    User register();
     boolean validateEmail(String email);
+    void setUserDto(UserDto userDto);
 }

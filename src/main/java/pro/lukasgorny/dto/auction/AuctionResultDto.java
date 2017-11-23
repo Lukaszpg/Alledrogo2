@@ -15,11 +15,14 @@ public class AuctionResultDto {
     private String editorContent;
     private BigDecimal price;
     private BigDecimal bidStartingPrice;
+    private BigDecimal bidMinimalPrice;
     private Integer amount;
     private Boolean isBuyout;
     private Boolean isBid;
     private Category category;
     private String endDate;
+    private String nickname;
+    private BidDto winningBid;
 
     public String getTitle() {
         return title;
@@ -107,5 +110,29 @@ public class AuctionResultDto {
 
     public void setBidStartingPrice(BigDecimal bidStartingPrice) {
         this.bidStartingPrice = bidStartingPrice;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public BidDto getWinningBid() {
+        return winningBid;
+    }
+
+    public void setWinningBid(BidDto winningBid) {
+        this.winningBid = winningBid;
+    }
+
+    public BigDecimal getBidMinimalPrice() {
+        return bidMinimalPrice;
+    }
+
+    public void setBidMinimalPrice(BigDecimal bidMinimalPrice) {
+        this.bidMinimalPrice = bidMinimalPrice;
     }
 }

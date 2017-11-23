@@ -99,7 +99,8 @@ public class Application extends SpringBootServletInitializer {
         userDto.setBirthdayDay("20");
         userDto.setBirthdayMonth("4");
         userDto.setBirthdayYear("1992");
-        registrationService.register(userDto);
+        registrationService.setUserDto(userDto);
+        registrationService.register();
 
         User user = userService.getByEmail("lukasz.p.gorny@gmail.com");
         user.setEnabled(true);

@@ -103,11 +103,6 @@ var initializeRichTextEditor = function () {
     }
 };
 
-var initializeInputMasks = function () {
-    $('.money').mask('###0.00', {reverse: true});
-    $('.amount').mask('#####0');
-};
-
 var initializeCheckboxChangeEvent = function () {
     var isBidCheckbox = $("#isBidCheckbox");
     var isBuyoutCheckbox = $("#isBuyoutCheckbox");

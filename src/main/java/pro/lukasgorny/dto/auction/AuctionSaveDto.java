@@ -3,6 +3,7 @@ package pro.lukasgorny.dto.auction;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
+import pro.lukasgorny.model.User;
 
 import java.math.BigDecimal;
 
@@ -39,6 +40,8 @@ public class AuctionSaveDto {
     private Boolean isBuyout;
 
     private Boolean isBid;
+
+    private User user;
 
     @NotNull
     private Long auctionDuration;
@@ -137,5 +140,13 @@ public class AuctionSaveDto {
 
     public void setBidMinimalPrice(BigDecimal bidMinimalPrice) {
         this.bidMinimalPrice = bidMinimalPrice;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -1,13 +1,10 @@
-package pro.lukasgorny.model.converter;
-
-import pro.lukasgorny.model.Auction;
-import pro.lukasgorny.model.Model;
-import pro.lukasgorny.model.User;
+package pro.lukasgorny.model;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 
 /**
  * Created by Łukasz on 22.11.2017.
@@ -16,7 +13,7 @@ import javax.persistence.Table;
 @Table(name = "bids")
 public class Bid extends Model {
 
-    private Double amount;
+    private BigDecimal amount;
     private Boolean isWinning;
     private Auction auction;
     private User user;
@@ -39,14 +36,6 @@ public class Bid extends Model {
         isWinning = winning;
     }
 
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
     @ManyToOne
     @JoinColumn(name="user_id")
     public User getUser() {
@@ -55,5 +44,13 @@ public class Bid extends Model {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/template :: headFragment(#{title.auction.create.success})">
+<head th:replace="layout/template :: headFragment(#{title.auction.bid.success})">
     <title>Index</title>
     <meta charset="utf-8"/>
 </head>
@@ -8,8 +8,8 @@
 <div th:fragment="content">
     <div class="row">
        <div class="col s8 offset-s2">
-           <h2 th:text="#{page.title.auction.create.success}"></h2>
-           <p th:text="#{auction.create.success}"></p>
+           <h2 th:text="#{page.title.bid.create.success}"></h2>
+           <p th:text="#{bid.create.success}"></p>
            <a class="right btn waves-light waves-effect" th:text="#{button.auction.goto}" th:href="@{'/auction/get/' + ${auctionId}}"></a>
        </div>
     </div>

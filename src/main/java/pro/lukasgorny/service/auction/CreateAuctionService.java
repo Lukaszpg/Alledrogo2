@@ -7,5 +7,6 @@ import pro.lukasgorny.model.Auction;
  * Created by Łukasz on 20.11.2017.
  */
 public interface CreateAuctionService {
-    Auction create(AuctionSaveDto auctionSaveDto);
+    Auction create();
+    void setAuctionSaveDto(AuctionSaveDto auctionSaveDto);
 }

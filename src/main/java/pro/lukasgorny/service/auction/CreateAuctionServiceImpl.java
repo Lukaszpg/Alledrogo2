@@ -18,6 +18,8 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
     private final AuctionRepository auctionRepository;
     private final GetCategoryService getCategoryService;
 
+    private AuctionSaveDto auctionSaveDto;
+
     @Autowired
     public CreateAuctionServiceImpl(AuctionRepository auctionRepository, GetCategoryService getCategoryService) {
         this.auctionRepository = auctionRepository;
@@ -25,12 +27,12 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
     }
 
     @Override
-    public Auction create(AuctionSaveDto auctionSaveDto) {
-        Auction auction = createEntityFromDto(auctionSaveDto);
+    public Auction create() {
+        Auction auction = createEntityFromDto();
         return auctionRepository.save(auction);
     }
 
-    private Auction createEntityFromDto(AuctionSaveDto auctionSaveDto) {
+    private Auction createEntityFromDto() {
         Auction auction = new Auction();
         auction.setCategory(getCategoryService.getById(auctionSaveDto.getCategoryId()));
         auction.setTitle(auctionSaveDto.getTitle());
@@ -42,16 +44,22 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
         auction.setAmount(auctionSaveDto.getAmount());
         auction.setBidMinimalPrice(auctionSaveDto.getBidMinimalPrice());
         auction.setBidStartingPrice(auctionSaveDto.getBidStartingPrice());
-        auction.setEndDate(calculateEndDate(auctionSaveDto));
+        auction.setEndDate(calculateEndDate());
+        auction.setUser(auctionSaveDto.getUser());
         auction.setDeleted(false);
         return auction;
     }
 
-    private LocalDateTime calculateEndDate(AuctionSaveDto auctionSaveDto) {
+    private LocalDateTime calculateEndDate() {
         return LocalDateTime.now().plusDays(auctionSaveDto.getAuctionDuration());
     }
 
     private Boolean calculateBooleanFieldValue(Boolean field) {
         return field != null;
+    }
+
+    @Override
+    public void setAuctionSaveDto(AuctionSaveDto auctionSaveDto) {
+        this.auctionSaveDto = auctionSaveDto;
     }
 }

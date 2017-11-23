@@ -5,6 +5,7 @@ $(document).ready(function () {
     searchBarOnFocusIn();
     searchBarOnFocusOut();
     setAxiosBaseURL();
+    initializeInputMasks();
 });
 
 var enableSelectValidation = function() {
@@ -35,5 +36,10 @@ var searchClearIconFadeout = function () {
 
 var setAxiosBaseURL = function() {
     axios.defaults.baseURL = 'http://localhost:8080';
+};
+
+var initializeInputMasks = function () {
+    $('.money').mask('###0.00', {reverse: true});
+    $('.amount').mask('#####0');
 };
 

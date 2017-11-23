@@ -4,13 +4,20 @@ package pro.lukasgorny.util;
  * Created by lukaszgo on 2017-11-22.
  */
 public class Urls {
+    public static final String ERROR_404 = "/error/404";
+    public static final String ERROR_405 = "/error/405";
+    public static final String ERROR_500 = "/error/500";
+
     public class Auction {
         public static final String PREFIX = "auction";
         public static final String MAIN = "/" + PREFIX;
         public static final String CREATE_SUCCESS_REDIRECT = "redirect:/" + PREFIX + "/create-success";
         public static final String SELL = "/sell";
         public static final String CREATE_SUCCESS = "/create-success";
-        public static final String ITEM = "/item/{id}";
+        public static final String GET = "/get/{id}";
+        public static final String BID = "/bid/{id}";
+        public static final String BID_SUCCESS_REDIRECT = "redirect:/" + PREFIX + "/bid-success/%s";
+        public static final String BID_SUCCESS = "/bid-success/{id}";
     }
 
     public class Login {

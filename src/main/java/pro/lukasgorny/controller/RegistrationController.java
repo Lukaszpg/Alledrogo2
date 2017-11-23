@@ -76,7 +76,9 @@ public class RegistrationController {
             modelAndView.setViewName(Templates.REGISTRATION);
         } else {
             userDto.getRoles().add(RoleEnum.USER);
-            User user = registrationService.register(userDto);
+            registrationService.setUserDto(userDto);
+
+            User user = registrationService.register();
             ModelMap modelMap = new ModelMap();
             modelMap.addAttribute("email", userDto.getEmail());
 
