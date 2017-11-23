@@ -268,3 +268,11 @@ div.validation-error-input:before {
     font-size: 20px;
     font-weight: bold;
 }
+
+.shipping-icon {
+    margin-top: -5px;
+}
+
+.shipping-text {
+    margin-left: 35px;
+}
