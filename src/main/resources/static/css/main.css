@@ -276,3 +276,21 @@ div.validation-error-input:before {
 .shipping-text {
     margin-left: 35px;
 }
+
+.auction-ended {
+    margin-top: 0px;
+    font-weight: bold;
+}
+
+.observe-button {
+    margin-top: 32px;
+    margin-left: 22px;
+}
+
+.toast-success {
+    background-color: #00C853;
+}
+
+.toast-error {
+    background-color: #ff5252;
+}

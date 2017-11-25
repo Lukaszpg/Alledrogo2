@@ -27,7 +27,6 @@ public class AuctionSaveDto {
     @NotBlank
     private String editorContent;
 
-    @NotNull
     private BigDecimal price;
 
     private BigDecimal bidStartingPrice;

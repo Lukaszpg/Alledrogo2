@@ -12,6 +12,8 @@ import pro.lukasgorny.repository.BidRepository;
 import pro.lukasgorny.service.hash.HashService;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Łukasz on 21.11.2017.
@@ -32,10 +34,16 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     }
 
     @Override
+    public List<AuctionResultDto> getTopAuctions() {
+        List<Auction> auctions = auctionRepository.findTop10ByHasEndedIsFalse();
+        return createDtoListFromEntityList(auctions);
+    }
+
+    @Override
     public AuctionResultDto getOne(String id) {
         Auction auction = auctionRepository.findOne(hashService.decode(id));
 
-        if(auction != null) {
+        if (auction != null) {
             return createDtoFromEntity(auction);
         }
 
@@ -50,6 +58,19 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     @Override
     public Boolean auctionExists(String id) {
         return getOne(id) != null;
+    }
+
+    @Override
+    public Auction getObservingByUserId(Long id) {
+        return auctionRepository.findByUsersObserving_Id(id);
+    }
+
+    private List<AuctionResultDto> createDtoListFromEntityList(List<Auction> auctions) {
+        List<AuctionResultDto> results = new ArrayList<>();
+        if (auctions != null && !auctions.isEmpty()) {
+            auctions.forEach(auction -> results.add(createDtoFromEntity(auction)));
+        }
+        return results;
     }
 
     private AuctionResultDto createDtoFromEntity(Auction auction) {
@@ -68,6 +89,7 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setEndDate(parseDate(auction));
         auctionResultDto.setNickname(auction.getUser().getEmail());
         auctionResultDto.setWinningBid(getWinningBid(auctionResultDto.getId()));
+        auctionResultDto.setHasEnded(auction.getHasEnded());
 
         return auctionResultDto;
     }
@@ -75,9 +97,10 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     private BidDto getWinningBid(String id) {
         Bid bid = bidRepository.findByAuctionIdAndWinningIsTrue(hashService.decode(id));
 
-        if(bid != null) {
+        if (bid != null) {
             BidDto bidDto = new BidDto();
             bidDto.setAmount(bid.getAmount());
+            bidDto.setUsername(bid.getUser().getEmail());
 
             return bidDto;
         }

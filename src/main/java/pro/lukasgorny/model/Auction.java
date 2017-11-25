@@ -17,6 +17,7 @@ public class Auction extends Model {
     private String editorContent;
     private Boolean isBid;
     private Boolean isBuyout;
+    private Boolean hasEnded;
     private BigDecimal price;
     private BigDecimal bidStartingPrice;
     private BigDecimal bidMinimalPrice;
@@ -25,6 +26,7 @@ public class Auction extends Model {
     private LocalDateTime endDate;
     private List<Bid> bids;
     private User user;
+    private List<User> usersObserving;
 
     public String getTitle() {
         return title;
@@ -134,5 +136,23 @@ public class Auction extends Model {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Boolean getHasEnded() {
+        return hasEnded;
+    }
+
+    public void setHasEnded(Boolean hasEnded) {
+        this.hasEnded = hasEnded;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "auction_user_observing", joinColumns = @JoinColumn(name = "auction_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    public List<User> getUsersObserving() {
+        return usersObserving;
+    }
+
+    public void setUsersObserving(List<User> usersObserving) {
+        this.usersObserving = usersObserving;
     }
 }

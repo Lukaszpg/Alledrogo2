@@ -20,34 +20,39 @@ public class BidServiceImpl implements BidService {
     private final BidRepository bidRepository;
     private final GetAuctionService getAuctionService;
     private final UserService userService;
+    private final AuctionService auctionService;
 
     private BidDto bidDto;
 
     @Autowired
     public BidServiceImpl(HashService hashService, BidRepository bidRepository,
-                          GetAuctionService getAuctionService, UserService userService) {
+                          GetAuctionService getAuctionService, UserService userService, AuctionService auctionService) {
         this.hashService = hashService;
         this.bidRepository = bidRepository;
         this.getAuctionService = getAuctionService;
         this.userService = userService;
-    }
-
-    @Override
-    public Boolean checkIsBiddingUserAuctionCreator() {
-        AuctionResultDto auction = getAuctionService.getOne(bidDto.getAuctionId());
-        return auction.getNickname().equals(bidDto.getUsername());
+        this.auctionService = auctionService;
     }
 
     @Override
     public Boolean checkOfferLowerThanCurrentPrice() {
-        Bid bid = getOneByAuctionIdAndWinningIsTrue(bidDto.getAuctionId());
+        if (bidDto.getAmount() != null) {
+            Bid bid = getOneByAuctionIdAndWinningIsTrue(bidDto.getAuctionId());
 
-        if (bid != null) {
-            return MathHelper.bigDecimalLessOrEqualToFirstValue(bid.getAmount(), bidDto.getAmount());
-        } else {
-            AuctionResultDto auction = getAuctionService.getOne(bidDto.getAuctionId());
-            return MathHelper.bigDecimalLessOrEqualToFirstValue(auction.getBidStartingPrice(), bidDto.getAmount());
+            if (bid != null) {
+                return MathHelper.bigDecimalLessOrEqualToFirstValue(bid.getAmount(), bidDto.getAmount());
+            } else {
+                AuctionResultDto auction = getAuctionService.getOne(bidDto.getAuctionId());
+                return MathHelper.bigDecimalLessOrEqualToFirstValue(auction.getBidStartingPrice(), bidDto.getAmount());
+            }
         }
+
+        return false;
+    }
+
+    @Override
+    public Boolean checkHasAuctionEnded() {
+        return getAuctionService.getOne(bidDto.getAuctionId()).getHasEnded();
     }
 
     public void setBidDto(BidDto bidDto) {
@@ -74,7 +79,7 @@ public class BidServiceImpl implements BidService {
     private void setLastWinningBidToFalse() {
         Bid bid = getOneByAuctionIdAndWinningIsTrue(bidDto.getAuctionId());
 
-        if(bid != null) {
+        if (bid != null) {
             bid.setWinning(false);
             bidRepository.save(bid);
         }

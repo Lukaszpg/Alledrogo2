@@ -1,6 +1,5 @@
 package pro.lukasgorny.dto.auction;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 /**
@@ -8,7 +7,6 @@ import java.math.BigDecimal;
  */
 public class BidDto {
 
-    @NotNull
     private BigDecimal amount;
     private String auctionId;
     private String username;

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head th:replace="layout/template :: headFragment(${auctionDto != null} ? #{title.item(${auctionDto.title})} : #{title.auction.not.found})">
     <title>Index</title>
     <meta charset="utf-8"/>
@@ -8,10 +9,11 @@
 <div th:fragment="content">
     <div class="auction-container" th:if="${auctionDto != null}">
         <div class="row">
-            <div class="col s7">
+            <div class="col s9">
                 <h3 th:text="${auctionDto.title}"></h3>
             </div>
-            <div class="col s1 right">
+            <div sec:authorize="isAuthenticated()" class="col s3">
+                <auction-observe></auction-observe>
             </div>
         </div>
         <div class="row">
@@ -23,7 +25,7 @@
                 </div>
             </div>
             <div class="col s6">
-                <div th:if="${auctionDto.isBuyout}" class="row">
+                <div th:if="${auctionDto.isBid}" class="row">
                     <form action="#" th:action="@{'/auction/bid/' + ${auctionDto.id}}" th:object="${bidDto}"
                           method="post">
                         <div class="row">
@@ -31,11 +33,13 @@
                                 <label for="bidStartingPrice" th:text="#{label.current.price}"></label>
                                 <div id="bidStartingPrice" class="auction-price"
                                      th:text="#{label.money.amount(${auctionDto.winningBid != null ? auctionDto.winningBid.amount : auctionDto.bidStartingPrice})}"></div>
-                                <label th:if="${auctionDto.winningBid != null ? auctionDto.winningBid.amount
+                                <div th:if="${!auctionDto.hasEnded}">
+                                    <label th:if="${auctionDto.winningBid != null ? auctionDto.winningBid.amount
                                 <= auctionDto.bidMinimalPrice : auctionDto.bidStartingPrice <= auctionDto.bidMinimalPrice}"
-                                     th:text="#{label.minimum.price.not.met}"></label>
+                                           th:text="#{label.minimum.price.not.met}"></label>
+                                </div>
                             </div>
-                            <div class="input-field col s2">
+                            <div th:if="${!auctionDto.hasEnded}" class="input-field col s2">
                                 <input th:field="*{amount}" id="offer" type="text" th:placeholder="#{label.offer}"
                                        class="validate money"
                                        th:classappend="${#fields.hasErrors('amount')}  ? 'invalid' : ''">
@@ -43,14 +47,19 @@
                                 <div class="validation-error-input" th:if="${#fields.hasErrors('amount')}"
                                      th:errors="*{amount}"></div>
                             </div>
-                            <div class="col s4 offset-s3">
+                            <div th:if="${auctionDto.hasEnded}" class="col s8">
+                                <p class="auction-ended" th:if="${auctionDto.winningBid == null}" th:text="#{auction.ended.no.bids}"></p>
+                                <p class="auction-ended" th:if="${auctionDto.winningBid != null}" th:text="#{auction.ended.winner(${auctionDto.winningBid.username})}"></p>
+                            </div>
+                            <div th:if="${!auctionDto.hasEnded}" class="col s4 offset-s3">
                                 <label class="right" for="endCountdown" th:text="#{label.auction.to.end}"></label>
                                 <div id="endCountdown" class="right"></div>
                                 <input type="hidden" id="auctionEndDate" th:value="${auctionDto.endDate}">
                             </div>
                         </div>
                         <div class="row right">
-                            <button class="btn waves-light waves-effect right" type="submit"
+                            <button th:if="${!auctionDto.hasEnded}" class="btn waves-light waves-effect right"
+                                    type="submit"
                                     th:text="#{button.bid}"></button>
                         </div>
                     </form>
@@ -59,7 +68,7 @@
                      class="row">
                     <div class="divider"></div>
                 </div>
-                <div th:if="${auctionDto.isBid}" class="row">
+                <div th:if="${auctionDto.isBuyout}" class="row">
                     <div class="row">
                         <div class="col s12">
                             <label for="buyoutPrice" th:text="#{label.buyout.price}"></label>
@@ -68,7 +77,7 @@
                         </div>
                     </div>
                     <div class="row right">
-                        <button class="btn waves-light waves-effect right" type="submit"
+                        <button th:if="${!auctionDto.hasEnded}" class="btn waves-light waves-effect right" type="submit"
                                 th:text="#{button.buyout}"></button>
                     </div>
                 </div>

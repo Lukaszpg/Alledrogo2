@@ -17,7 +17,17 @@ public class Urls {
         public static final String GET = "/get/{id}";
         public static final String BID = "/bid/{id}";
         public static final String BID_SUCCESS_REDIRECT = "redirect:/" + PREFIX + "/bid-success/%s";
+        public static final String AUCTION_ENDED_REDIRECT = "redirect:/" + PREFIX + "/auction-ended";
         public static final String BID_SUCCESS = "/bid-success/{id}";
+        public static final String AUCTION_ENDED = "/auction-ended";
+    }
+
+    public class AuctionRest {
+        public static final String PREFIX = "auction-rest";
+        public static final String MAIN = "/" + PREFIX;
+        public static final String OBSERVE = "/observe/{id}";
+        public static final String UNOBSERVE = "/unobserve/{id}";
+        public static final String IS_OBSERVING = "/is-observing/{id}";
     }
 
     public class Login {

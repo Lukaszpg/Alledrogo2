@@ -19,6 +19,7 @@ public class AuctionResultDto {
     private Integer amount;
     private Boolean isBuyout;
     private Boolean isBid;
+    private Boolean hasEnded;
     private Category category;
     private String endDate;
     private String nickname;
@@ -134,5 +135,13 @@ public class AuctionResultDto {
 
     public void setBidMinimalPrice(BigDecimal bidMinimalPrice) {
         this.bidMinimalPrice = bidMinimalPrice;
+    }
+
+    public Boolean getHasEnded() {
+        return hasEnded;
+    }
+
+    public void setHasEnded(Boolean hasEnded) {
+        this.hasEnded = hasEnded;
     }
 }

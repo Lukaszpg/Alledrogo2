@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import pro.lukasgorny.dto.auction.AuctionSaveDto;
 import pro.lukasgorny.dto.auction.BidDto;
+import pro.lukasgorny.service.auction.AuctionService;
 import pro.lukasgorny.service.auction.BidService;
 import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.Templates;
@@ -34,16 +35,18 @@ public class AuctionController {
     private final CreateAuctionService createAuctionService;
     private final HashService hashService;
     private final BidService bidService;
+    private final AuctionService auctionService;
 
     @Autowired
     public AuctionController(UserService userService, GetAuctionService getAuctionService,
                              CreateAuctionService createAuctionService,
-                             HashService hashService, BidService bidService) {
+                             HashService hashService, BidService bidService, AuctionService auctionService) {
         this.userService = userService;
         this.getAuctionService = getAuctionService;
         this.createAuctionService = createAuctionService;
         this.hashService = hashService;
         this.bidService = bidService;
+        this.auctionService = auctionService;
     }
 
     @GetMapping(Urls.Auction.SELL)
@@ -65,7 +68,11 @@ public class AuctionController {
         }
 
         if(auctionSaveDto.getIsBid() != null && auctionSaveDto.getBidStartingPrice() == null) {
-            bindingResult.rejectValue("bidStartingPrice", "error.bid.price");
+            bindingResult.rejectValue("bidStartingPrice", "error.bid.starting.price");
+        }
+
+        if(auctionSaveDto.getIsBuyout() != null && auctionSaveDto.getPrice() == null) {
+            bindingResult.rejectValue("price", "error.buyout.price");
         }
 
         if (bindingResult.hasErrors()) {
@@ -112,12 +119,20 @@ public class AuctionController {
             return modelAndView;
         }
 
-        if(bidService.checkOfferLowerThanCurrentPrice()) {
-            bindingResult.rejectValue("amount", "error.bid.price.lower");
+        if(bidService.checkHasAuctionEnded()) {
+            modelAndView.setViewName(Urls.Auction.AUCTION_ENDED_REDIRECT);
         }
 
-        if(bidService.checkIsBiddingUserAuctionCreator()) {
+        if(auctionService.checkIsBiddingUserAuctionCreator(bidDto.getAuctionId(), bidDto.getUsername())) {
             bindingResult.rejectValue("amount","error.bid.same.user");
+        } else {
+            if(bidDto.getAmount() == null) {
+                bindingResult.rejectValue("amount", "NotNull.bidDto.amount");
+            }
+
+            if(bidService.checkOfferLowerThanCurrentPrice()) {
+                bindingResult.rejectValue("amount", "error.bid.price.lower");
+            }
         }
 
         if (bindingResult.hasErrors()) {
@@ -137,5 +152,10 @@ public class AuctionController {
         ModelAndView modelAndView = new ModelAndView(Templates.AuctionTemplates.BID_SUCCESS);
         modelAndView.addObject("auctionId", id);
         return modelAndView;
+    }
+
+    @GetMapping(Urls.Auction.AUCTION_ENDED)
+    public ModelAndView auctionEnded() {
+        return new ModelAndView(Templates.AuctionTemplates.AUCTION_ENDED);
     }
 }

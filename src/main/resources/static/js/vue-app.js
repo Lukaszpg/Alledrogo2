@@ -29,6 +29,80 @@ window.onload = function () {
         }
     });
 
+    Vue.component('auction-observe', {
+        template:
+        '<a v-if="!isUserObserving" @click="observe" class="right observe-button waves-effect waves-teal btn-flat">' +
+        '<i class="material-icons right">star_border</i>Obserwuj</a>' +
+        '<a v-else-if="isUserObserving" @click="unobserve" class="right observe-button waves-effect waves-teal btn-flat">' +
+        '<i class="material-icons right">star</i>Obserwujesz</a>',
+
+        data() {
+            return {
+                isUserObserving: false,
+                auctionId: null
+            }
+        },
+
+        mounted() {
+            var vm = this;
+            vm.getAuctionId();
+            vm.checkIsObserving();
+        },
+
+        methods: {
+            checkIsObserving: function() {
+                var vm = this;
+                var id = vm.auctionId;
+                axios.get('/auction-rest/is-observing/' + id)
+                    .then(function (response) {
+                        vm.isUserObserving = response.data;
+                    })
+                    .catch(function () {
+                        this.errors.push(e);
+                        console.log(e);
+                    })
+            },
+            observe: function() {
+                var vm = this;
+                var id = vm.auctionId;
+                axios.get('/auction-rest/observe/' + id)
+                    .then(function (response) {
+                        if(response.data) {
+                            vm.isUserObserving = true;
+                            Materialize.toast('Pomyślnie dodano aukcję do obserwowanych.', 3000, 'toast-success')
+                        }
+                    })
+                    .catch(function () {
+                        Materialize.toast('Nie możesz obserwować własnej aukcji.', 3000, 'toast-error')
+                        this.errors.push(e);
+                        console.log(e);
+                    })
+            },
+            unobserve: function() {
+                var vm = this;
+                var id = vm.auctionId;
+                axios.get('/auction-rest/unobserve/' + id)
+                    .then(function (response) {
+                        if(response.data) {
+                            vm.isUserObserving = false;
+                            Materialize.toast('Aukcja usunięta z obserwowanych.', 3000, 'toast-success')
+                        }
+                    })
+                    .catch(function () {
+                        Materialize.toast('Nie udało się usunąć aukcji z obserwowanych.', 3000, 'toast-error')
+                        this.errors.push(e);
+                        console.log(e);
+                    })
+            },
+            getAuctionId: function() {
+                var vm = this;
+                var slashIndex = window.location.href.lastIndexOf('/');
+                var result= window.location.href.substring(slashIndex  + 1);
+                vm.auctionId = result;
+            }
+        }
+    });
+
     Vue.component('category-tree', {
         template:
         '<div id="categoryPicker" @mouseleave="mouseLeave" v-bind:class="{ \'category-picker-error\': isError }" class="category-picker">' +

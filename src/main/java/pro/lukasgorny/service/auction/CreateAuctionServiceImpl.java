@@ -47,6 +47,7 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
         auction.setEndDate(calculateEndDate());
         auction.setUser(auctionSaveDto.getUser());
         auction.setDeleted(false);
+        auction.setHasEnded(false);
         return auction;
     }
 

@@ -1,12 +1,44 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="layout/template :: headFragment(#{title.index})">
     <title>Index</title>
     <meta charset="utf-8"/>
 </head>
 <body th:replace="layout/template :: bodyFragment">
 <div th:fragment="content">
+    <div class="row">
+        <h4 th:text="#{page.title.products.for.you}"></h4>
+    </div>
+
+    <div class="row">
+        <div th:if="${#lists.isEmpty(auctions)}" class="col s4 offset-s6">
+            <h5 th:text="#{label.no.auctions}"></h5>
+        </div>
+        <div th:each="auction : ${auctions}">
+            <div class="col s4">
+                <div class="card">
+                    <div class="card-image waves-effect waves-block waves-light">
+                        <img class="activator" th:src="@{/img/placeholder.png}">
+                    </div>
+                    <div class="card-content">
+                        <span class="truncate card-title activator grey-text text-darken-4"
+                              th:text="${auction.title}"><i
+                                class="material-icons right">more_vert</i></span>
+                        <p th:if="${auction.price != null}" th:utext="#{label.buyout.amount(${auction.price})}"></p>
+                        <div th:if="${auction.winningBid != null}">
+                            <p th:utext="#{label.current.price.amount(${auction.winningBid.amount})}"></p>
+                        </div>
+                        <div th:if="${auction.winningBid == null}">
+                            <p th:utext="#{label.current.price.amount(${auction.bidStartingPrice})}"></p>
+                        </div>
+                    </div>
+                    <div class="card-action">
+                        <a th:text="#{button.auction.goto}" th:href="@{/auction/get/{id}(id=${auction.id})}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -22,5 +22,6 @@ public class Templates {
         public static final String CREATE_SUCCESS = PREFIX + "create-success";
         public static final String ITEM = PREFIX + "item";
         public static final String BID_SUCCESS = PREFIX + "bid-success";
+        public static final String AUCTION_ENDED = PREFIX + "auction-ended";
     }
 }
