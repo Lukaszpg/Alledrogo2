@@ -70,10 +70,12 @@ window.onload = function () {
                         if(response.data) {
                             vm.isUserObserving = true;
                             Materialize.toast('Pomyślnie dodano aukcję do obserwowanych.', 3000, 'toast-success')
+                        } else {
+                            Materialize.toast('Nie możesz obserwować własnej aukcji.', 3000, 'toast-error')
                         }
                     })
                     .catch(function () {
-                        Materialize.toast('Nie możesz obserwować własnej aukcji.', 3000, 'toast-error')
+                        Materialize.toast('Wystąpił błąd podczas dodawania aukcji do obserwowanych.', 3000, 'toast-error')
                         this.errors.push(e);
                         console.log(e);
                     })

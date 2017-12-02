@@ -80,21 +80,38 @@ public class Application extends SpringBootServletInitializer {
         electronics.getChildren().add(laptops);
         electronics.setIsLeaf(false);
 
-        Category test = new Category();
-        test.setName("Lenovo");
-        test.setIsLeaf(true);
-        laptops.getChildren().add(test);
+        Category lenovo = new Category();
+        lenovo.setName("Lenovo");
+        lenovo.setIsLeaf(true);
+        laptops.getChildren().add(lenovo);
 
-        categoryRepository.save(test);
+        Category dell = new Category();
+        dell.setName("Dell");
+        dell.setIsLeaf(true);
+        laptops.getChildren().add(dell);
+
+        Category cars = new Category();
+        cars.setName("Samochody");
+        cars.setIsLeaf(false);
+
+        Category audi = new Category();
+        audi.setName("Audi");
+        audi.setIsLeaf(true);
+        cars.getChildren().add(audi);
+
+        categoryRepository.save(audi);
+        categoryRepository.save(dell);
+        categoryRepository.save(lenovo);
         categoryRepository.save(laptops);
         categoryRepository.save(electronics);
+        categoryRepository.save(cars);
     }
 
     @PostConstruct
     private void createAdminAccount() {
         UserDto userDto = new UserDto();
-        userDto.setEmail("lukasz.p.gorny@gmail.com");
-        userDto.setPassword("adminadmin");
+        userDto.setEmail("admin@alledrogo.pl");
+        userDto.setPassword("admin");
         userDto.getRoles().add(RoleEnum.ADMIN);
         userDto.setBirthdayDay("20");
         userDto.setBirthdayMonth("4");
@@ -102,7 +119,27 @@ public class Application extends SpringBootServletInitializer {
         registrationService.setUserDto(userDto);
         registrationService.register();
 
-        User user = userService.getByEmail("lukasz.p.gorny@gmail.com");
+        User user = userService.getByEmail("admin@alledrogo.pl");
+        user.setEnabled(true);
+        user.setSellingBlocked(false);
+        user.setBlocked(false);
+
+        userService.save(user);
+    }
+
+    @PostConstruct
+    private void createUserDemoAccount() {
+        UserDto userDto = new UserDto();
+        userDto.setEmail("user@alledrogo.pl");
+        userDto.setPassword("user");
+        userDto.getRoles().add(RoleEnum.USER);
+        userDto.setBirthdayDay("20");
+        userDto.setBirthdayMonth("4");
+        userDto.setBirthdayYear("1992");
+        registrationService.setUserDto(userDto);
+        registrationService.register();
+
+        User user = userService.getByEmail("user@alledrogo.pl");
         user.setEnabled(true);
         user.setSellingBlocked(false);
         user.setBlocked(false);

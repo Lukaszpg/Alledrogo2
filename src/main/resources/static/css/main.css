@@ -294,3 +294,11 @@ div.validation-error-input:before {
 .toast-error {
     background-color: #ff5252;
 }
+
+.menu-left-no-shadow {
+    box-shadow: none;
+}
+
+.account-top-margin {
+    margin-top: 15px;
+}

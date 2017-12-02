@@ -1,4 +1,4 @@
-package pro.lukasgorny.controller;
+package pro.lukasgorny.controller.register;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pro.lukasgorny.controller.register.validator.UserDtoValidator;
 import pro.lukasgorny.dto.UserDto;
 import pro.lukasgorny.enums.RoleEnum;
 import pro.lukasgorny.util.Templates;
@@ -62,39 +63,38 @@ public class RegistrationController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("months", helperService.prepareMonthsList());
 
-        User userExists = userService.getByEmail(userDto.getEmail());
-
-        if (userExists != null) {
-            bindingResult.rejectValue("email", "error.user.exists");
-        }
-
-        if (!registrationService.validateEmail(userDto.getEmail())) {
-            bindingResult.rejectValue("email", "error.email.invalid.format");
-        }
+        new UserDtoValidator(userService, registrationService).validate(userDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.REGISTRATION);
         } else {
-            userDto.getRoles().add(RoleEnum.USER);
-            registrationService.setUserDto(userDto);
-
-            User user = registrationService.register();
-            ModelMap modelMap = new ModelMap();
-            modelMap.addAttribute("email", userDto.getEmail());
+            User user = registerUser(userDto);
 
             try {
-                String appUrl = request.getContextPath();
-                eventPublisher.publishEvent(new OnRegistrationCompleteEvent
-                        (user, request.getLocale(), appUrl));
-            } catch (Exception me) {
-                me.printStackTrace();
+                sendActivationEmail(user, request);
+            } catch (Exception e) {
                 modelAndView.setViewName(Urls.Registration.EMAIL_ERROR_REDIRECT);
+                e.printStackTrace();
             }
 
+            ModelMap modelMap = new ModelMap();
+            modelMap.addAttribute("email", userDto.getEmail());
             return new ModelAndView(Urls.Registration.REGISTER_SUCCESS_REDIRECT, modelMap);
         }
 
         return modelAndView;
+    }
+
+    private User registerUser(UserDto userDto) {
+        userDto.getRoles().add(RoleEnum.USER);
+        registrationService.setUserDto(userDto);
+        return registrationService.register();
+    }
+
+    private void sendActivationEmail(User user, WebRequest request) throws Exception {
+        String appUrl = request.getContextPath();
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent
+                (user, request.getLocale(), appUrl));
     }
 
     @GetMapping(Urls.Registration.ACTIVATE)

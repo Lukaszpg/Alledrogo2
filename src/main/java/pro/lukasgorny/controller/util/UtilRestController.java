@@ -1,4 +1,4 @@
-package pro.lukasgorny.controller;
+package pro.lukasgorny.controller.util;
 
 import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;

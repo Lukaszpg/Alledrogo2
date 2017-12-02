@@ -81,7 +81,7 @@
                                    th:classappend="${#fields.hasErrors('bidStartingPrice')}  ? 'invalid' : ''">
                             <label for="price" th:text="#{label.bid.starting.price}"></label>
                             <div class="validation-error-input" th:if="${#fields.hasErrors('bidStartingPrice')}"
-                                 th:errors="*{price}"></div>
+                                 th:errors="*{bidStartingPrice}"></div>
                         </div>
                     </div>
                     <div class="row auction-bid-input hide">

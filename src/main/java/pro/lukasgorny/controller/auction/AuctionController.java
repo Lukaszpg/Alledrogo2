@@ -1,4 +1,4 @@
-package pro.lukasgorny.controller;
+package pro.lukasgorny.controller.auction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,10 +7,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import pro.lukasgorny.controller.auction.validator.AuctionSaveDtoValidator;
+import pro.lukasgorny.controller.auction.validator.BidDtoValidator;
 import pro.lukasgorny.dto.auction.AuctionSaveDto;
 import pro.lukasgorny.dto.auction.BidDto;
 import pro.lukasgorny.service.auction.AuctionService;
-import pro.lukasgorny.service.auction.BidService;
+import pro.lukasgorny.service.auction.CreateBidService;
 import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.model.Auction;
@@ -34,18 +36,18 @@ public class AuctionController {
     private final GetAuctionService getAuctionService;
     private final CreateAuctionService createAuctionService;
     private final HashService hashService;
-    private final BidService bidService;
+    private final CreateBidService createBidService;
     private final AuctionService auctionService;
 
     @Autowired
     public AuctionController(UserService userService, GetAuctionService getAuctionService,
                              CreateAuctionService createAuctionService,
-                             HashService hashService, BidService bidService, AuctionService auctionService) {
+                             HashService hashService, CreateBidService createBidService, AuctionService auctionService) {
         this.userService = userService;
         this.getAuctionService = getAuctionService;
         this.createAuctionService = createAuctionService;
         this.hashService = hashService;
-        this.bidService = bidService;
+        this.createBidService = createBidService;
         this.auctionService = auctionService;
     }
 
@@ -63,17 +65,7 @@ public class AuctionController {
     public ModelAndView createAuction(@Valid AuctionSaveDto auctionSaveDto, BindingResult bindingResult, Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
 
-        if(auctionSaveDto.getIsBid() == null && auctionSaveDto.getIsBuyout() == null) {
-            bindingResult.rejectValue("isBuyout", "error.pick.auction.type");
-        }
-
-        if(auctionSaveDto.getIsBid() != null && auctionSaveDto.getBidStartingPrice() == null) {
-            bindingResult.rejectValue("bidStartingPrice", "error.bid.starting.price");
-        }
-
-        if(auctionSaveDto.getIsBuyout() != null && auctionSaveDto.getPrice() == null) {
-            bindingResult.rejectValue("price", "error.buyout.price");
-        }
+        new AuctionSaveDtoValidator().validate(auctionSaveDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.AuctionTemplates.SELL);
@@ -112,28 +104,19 @@ public class AuctionController {
 
         bidDto.setUsername(principal.getName());
         bidDto.setAuctionId(id);
-        bidService.setBidDto(bidDto);
+        createBidService.setBidDto(bidDto);
 
         if(!getAuctionService.auctionExists(id)) {
             modelAndView.setViewName(Templates.AuctionTemplates.ITEM);
             return modelAndView;
         }
 
-        if(bidService.checkHasAuctionEnded()) {
+        if(createBidService.checkHasAuctionEnded()) {
             modelAndView.setViewName(Urls.Auction.AUCTION_ENDED_REDIRECT);
+            return modelAndView;
         }
 
-        if(auctionService.checkIsBiddingUserAuctionCreator(bidDto.getAuctionId(), bidDto.getUsername())) {
-            bindingResult.rejectValue("amount","error.bid.same.user");
-        } else {
-            if(bidDto.getAmount() == null) {
-                bindingResult.rejectValue("amount", "NotNull.bidDto.amount");
-            }
-
-            if(bidService.checkOfferLowerThanCurrentPrice()) {
-                bindingResult.rejectValue("amount", "error.bid.price.lower");
-            }
-        }
+        new BidDtoValidator(auctionService, createBidService).validate(bidDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("auctionDto", getAuctionService.getOne(id));
@@ -141,9 +124,9 @@ public class AuctionController {
             return modelAndView;
         }
 
-        bidService.createBid();
-
+        createBidService.createBid();
         modelAndView.setViewName(String.format(Urls.Auction.BID_SUCCESS_REDIRECT, id));
+
         return modelAndView;
     }
 

@@ -1,4 +1,4 @@
-package pro.lukasgorny.controller;
+package pro.lukasgorny.controller.auction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

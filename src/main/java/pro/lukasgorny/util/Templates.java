@@ -24,4 +24,9 @@ public class Templates {
         public static final String BID_SUCCESS = PREFIX + "bid-success";
         public static final String AUCTION_ENDED = PREFIX + "auction-ended";
     }
+
+    public class UserTemplates {
+        public static final String PREFIX = "user/";
+        public static final String ACCOUNT = PREFIX + "account";
+    }
 }

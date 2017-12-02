@@ -11,7 +11,7 @@
     </div>
 
     <div class="row">
-        <div th:if="${#lists.isEmpty(auctions)}" class="col s4 offset-s6">
+        <div th:if="${#lists.isEmpty(auctions)}" class="col s4 offset-s5">
             <h5 th:text="#{label.no.auctions}"></h5>
         </div>
         <div th:each="auction : ${auctions}">
@@ -28,7 +28,7 @@
                         <div th:if="${auction.winningBid != null}">
                             <p th:utext="#{label.current.price.amount(${auction.winningBid.amount})}"></p>
                         </div>
-                        <div th:if="${auction.winningBid == null}">
+                        <div th:if="${auction.winningBid == null && auction.isBid}">
                             <p th:utext="#{label.current.price.amount(${auction.bidStartingPrice})}"></p>
                         </div>
                     </div>

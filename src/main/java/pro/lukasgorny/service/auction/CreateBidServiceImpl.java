@@ -14,40 +14,34 @@ import pro.lukasgorny.util.MathHelper;
  * Created by Łukasz on 23.11.2017.
  */
 @Service
-public class BidServiceImpl implements BidService {
+public class CreateBidServiceImpl implements CreateBidService {
 
     private final HashService hashService;
     private final BidRepository bidRepository;
     private final GetAuctionService getAuctionService;
     private final UserService userService;
-    private final AuctionService auctionService;
 
     private BidDto bidDto;
 
     @Autowired
-    public BidServiceImpl(HashService hashService, BidRepository bidRepository,
-                          GetAuctionService getAuctionService, UserService userService, AuctionService auctionService) {
+    public CreateBidServiceImpl(HashService hashService, BidRepository bidRepository,
+                                GetAuctionService getAuctionService, UserService userService) {
         this.hashService = hashService;
         this.bidRepository = bidRepository;
         this.getAuctionService = getAuctionService;
         this.userService = userService;
-        this.auctionService = auctionService;
     }
 
     @Override
     public Boolean checkOfferLowerThanCurrentPrice() {
-        if (bidDto.getAmount() != null) {
-            Bid bid = getOneByAuctionIdAndWinningIsTrue(bidDto.getAuctionId());
+        Bid bid = getOneByAuctionIdAndWinningIsTrue(bidDto.getAuctionId());
 
-            if (bid != null) {
-                return MathHelper.bigDecimalLessOrEqualToFirstValue(bid.getAmount(), bidDto.getAmount());
-            } else {
-                AuctionResultDto auction = getAuctionService.getOne(bidDto.getAuctionId());
-                return MathHelper.bigDecimalLessOrEqualToFirstValue(auction.getBidStartingPrice(), bidDto.getAmount());
-            }
+        if (bid != null) {
+            return MathHelper.bigDecimalLessOrEqualToFirstValue(bid.getAmount(), bidDto.getAmount());
+        } else {
+            AuctionResultDto auction = getAuctionService.getOne(bidDto.getAuctionId());
+            return MathHelper.bigDecimalLessOrEqualToFirstValue(auction.getBidStartingPrice(), bidDto.getAmount());
         }
-
-        return false;
     }
 
     @Override

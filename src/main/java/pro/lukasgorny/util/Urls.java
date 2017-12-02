@@ -54,4 +54,9 @@ public class Urls {
         public static final String GET_ALL_TOP = "/get-all-top";
         public static final String GET_CHILDREN = "/get-children/{id}";
     }
+
+    public class User {
+        public static final String MAIN = "/user";
+        public static final String ACCOUNT = "/account";
+    }
 }
