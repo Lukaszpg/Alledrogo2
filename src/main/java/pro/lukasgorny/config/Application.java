@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import pro.lukasgorny.dto.UserDto;
+import pro.lukasgorny.dto.UserSaveDto;
 import pro.lukasgorny.enums.RoleEnum;
 import pro.lukasgorny.model.Category;
 import pro.lukasgorny.model.Role;
@@ -109,14 +109,14 @@ public class Application extends SpringBootServletInitializer {
 
     @PostConstruct
     private void createAdminAccount() {
-        UserDto userDto = new UserDto();
-        userDto.setEmail("admin@alledrogo.pl");
-        userDto.setPassword("admin");
-        userDto.getRoles().add(RoleEnum.ADMIN);
-        userDto.setBirthdayDay("20");
-        userDto.setBirthdayMonth("4");
-        userDto.setBirthdayYear("1992");
-        registrationService.setUserDto(userDto);
+        UserSaveDto userSaveDto = new UserSaveDto();
+        userSaveDto.setEmail("admin@alledrogo.pl");
+        userSaveDto.setPassword("admin");
+        userSaveDto.getRoles().add(RoleEnum.ADMIN);
+        userSaveDto.setBirthdayDay("20");
+        userSaveDto.setBirthdayMonth("4");
+        userSaveDto.setBirthdayYear("1992");
+        registrationService.setUserSaveDto(userSaveDto);
         registrationService.register();
 
         User user = userService.getByEmail("admin@alledrogo.pl");
@@ -129,14 +129,14 @@ public class Application extends SpringBootServletInitializer {
 
     @PostConstruct
     private void createUserDemoAccount() {
-        UserDto userDto = new UserDto();
-        userDto.setEmail("user@alledrogo.pl");
-        userDto.setPassword("user");
-        userDto.getRoles().add(RoleEnum.USER);
-        userDto.setBirthdayDay("20");
-        userDto.setBirthdayMonth("4");
-        userDto.setBirthdayYear("1992");
-        registrationService.setUserDto(userDto);
+        UserSaveDto userSaveDto = new UserSaveDto();
+        userSaveDto.setEmail("user@alledrogo.pl");
+        userSaveDto.setPassword("user");
+        userSaveDto.getRoles().add(RoleEnum.USER);
+        userSaveDto.setBirthdayDay("20");
+        userSaveDto.setBirthdayMonth("4");
+        userSaveDto.setBirthdayYear("1992");
+        registrationService.setUserSaveDto(userSaveDto);
         registrationService.register();
 
         User user = userService.getByEmail("user@alledrogo.pl");

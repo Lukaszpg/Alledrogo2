@@ -3,10 +3,12 @@ package pro.lukasgorny.service.auction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.BidDto;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.Bid;
+import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.AuctionRepository;
 import pro.lukasgorny.repository.BidRepository;
 import pro.lukasgorny.service.hash.HashService;
@@ -61,8 +63,15 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     }
 
     @Override
-    public Auction getObservingByUserId(Long id) {
-        return auctionRepository.findByUsersObserving_Id(id);
+    public List<AuctionResultDto> getAllObservedByUserId(Long id) {
+        List<Auction> auctions = auctionRepository.findAllByUsersObserving_Id(id);
+        return createDtoListFromEntityList(auctions);
+    }
+
+    @Override
+    public List<AuctionResultDto> getEndedNotWonAuctionsForUser(Long userId) {
+        List<Auction> auctions = auctionRepository.findEndedNotWonAuctionsForUser(userId);
+        return createDtoListFromEntityList(auctions);
     }
 
     private List<AuctionResultDto> createDtoListFromEntityList(List<Auction> auctions) {
@@ -87,19 +96,25 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setBidStartingPrice(auction.getBidStartingPrice());
         auctionResultDto.setBidMinimalPrice(auction.getBidMinimalPrice());
         auctionResultDto.setEndDate(parseDate(auction));
-        auctionResultDto.setNickname(auction.getUser().getEmail());
+        auctionResultDto.setSellerDto(createUserDtoFromEntity(auction.getSeller()));
         auctionResultDto.setWinningBid(getWinningBid(auctionResultDto.getId()));
         auctionResultDto.setHasEnded(auction.getHasEnded());
 
         return auctionResultDto;
     }
 
+    private UserResultDto createUserDtoFromEntity(User user) {
+        UserResultDto userResultDto = new UserResultDto();
+        userResultDto.setEmail(user.getEmail());
+        return userResultDto;
+    }
+
     private BidDto getWinningBid(String id) {
-        Bid bid = bidRepository.findByAuctionIdAndWinningIsTrue(hashService.decode(id));
+        Bid bid = bidRepository.findByAuctionIdAndIsWinningIsTrue(hashService.decode(id));
 
         if (bid != null) {
             BidDto bidDto = new BidDto();
-            bidDto.setAmount(bid.getAmount());
+            bidDto.setAmount(bid.getOffer());
             bidDto.setUsername(bid.getUser().getEmail());
 
             return bidDto;

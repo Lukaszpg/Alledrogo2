@@ -13,5 +13,6 @@ public interface GetAuctionService {
     AuctionResultDto getOne(String id);
     Auction getOneEntity(String id);
     Boolean auctionExists(String id);
-    Auction getObservingByUserId(Long id);
+    List<AuctionResultDto> getAllObservedByUserId(Long id);
+    List<AuctionResultDto> getEndedNotWonAuctionsForUser(Long userId);
 }

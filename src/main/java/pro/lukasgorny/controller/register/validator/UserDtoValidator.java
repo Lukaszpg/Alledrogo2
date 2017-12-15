@@ -2,7 +2,7 @@ package pro.lukasgorny.controller.register.validator;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import pro.lukasgorny.dto.UserDto;
+import pro.lukasgorny.dto.UserSaveDto;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.service.registration.RegistrationService;
 import pro.lukasgorny.service.user.UserService;
@@ -19,19 +19,19 @@ public class UserDtoValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return UserDto.class.equals(aClass);
+        return UserSaveDto.class.equals(aClass);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
-        UserDto userDto = (UserDto) o;
-        User userExists = userService.getByEmail(userDto.getEmail());
+        UserSaveDto userSaveDto = (UserSaveDto) o;
+        User userExists = userService.getByEmail(userSaveDto.getEmail());
 
         if (userExists != null) {
             errors.rejectValue("email", "error.user.exists");
         }
 
-        if (!registrationService.validateEmail(userDto.getEmail())) {
+        if (!registrationService.validateEmail(userSaveDto.getEmail())) {
             errors.rejectValue("email", "error.email.invalid.format");
         }
     }

@@ -28,5 +28,6 @@ public class Templates {
     public class UserTemplates {
         public static final String PREFIX = "user/";
         public static final String ACCOUNT = PREFIX + "account";
+        public static final String OBSERVING = PREFIX + "observing";
     }
 }

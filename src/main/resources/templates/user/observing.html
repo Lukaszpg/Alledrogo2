@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/template :: headFragment(#{title.account})">
+    <title>Index</title>
+    <meta charset="utf-8"/>
+</head>
+<body th:replace="layout/template :: bodyFragment">
+<div th:fragment="content">
+    <div class="row">
+        <h2 th:text="#{page.title.auctions.observing}"></h2>
+    </div>
+    <div class="row">
+        <table>
+            <thead>
+                <tr>
+                    <th th:text="#{label.observed.seller}"></th>
+                    <th th:text="#{label.observed.auction.title}"></th>
+                    <th th:text="#{label.observed.auction.amount}"></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${!#lists.isEmpty(observedAuctions)}" th:each="auction : ${observedAuctions}">
+                    <td th:text="${auction?.sellerDto.email}"></td>
+                    <td th:text="${auction?.title}"></td>
+                    <td th:text="${auction?.amount}"></td>
+                    <td><a th:href="@{'/auction/get/' + ${auction.id}}" th:text="#{button.auction.goto}"></a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(observedAuctions)}">
+                    <td th:text="#{label.no.observed.auctions}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

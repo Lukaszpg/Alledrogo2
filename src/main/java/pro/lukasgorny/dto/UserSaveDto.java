@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by Łukasz on 24.10.2017.
  */
-public class UserDto {
+public class UserSaveDto {
 
     @NotNull
     private String email;

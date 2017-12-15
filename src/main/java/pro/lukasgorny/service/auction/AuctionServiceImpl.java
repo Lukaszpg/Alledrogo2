@@ -60,7 +60,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Boolean checkIsBiddingUserAuctionCreator(String auctionId, String username) {
         AuctionResultDto auction = getAuctionService.getOne(auctionId);
-        return auction.getNickname().equals(username);
+        return auction.getSellerDto().getEmail().equals(username);
     }
 
     @Override

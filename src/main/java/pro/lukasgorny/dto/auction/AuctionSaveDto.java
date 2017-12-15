@@ -40,7 +40,7 @@ public class AuctionSaveDto {
 
     private Boolean isBid;
 
-    private User user;
+    private User seller;
 
     @NotNull
     private Long auctionDuration;
@@ -141,11 +141,11 @@ public class AuctionSaveDto {
         this.bidMinimalPrice = bidMinimalPrice;
     }
 
-    public User getUser() {
-        return user;
+    public User getSeller() {
+        return seller;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setSeller(User seller) {
+        this.seller = seller;
     }
 }

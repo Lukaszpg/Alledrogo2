@@ -25,7 +25,7 @@ public class Auction extends Model {
     private Category category;
     private LocalDateTime endDate;
     private List<Bid> bids;
-    private User user;
+    private User seller;
     private List<User> usersObserving;
 
     public String getTitle() {
@@ -129,13 +129,13 @@ public class Auction extends Model {
     }
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    public User getUser() {
-        return user;
+    @JoinColumn(name = "seller_id")
+    public User getSeller() {
+        return seller;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setSeller(User seller) {
+        this.seller = seller;
     }
 
     public Boolean getHasEnded() {

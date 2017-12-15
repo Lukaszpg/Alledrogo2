@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import pro.lukasgorny.dto.UserDto;
+import pro.lukasgorny.dto.UserSaveDto;
 import pro.lukasgorny.model.Role;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.RoleRepository;
@@ -25,7 +25,7 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final RoleRepository roleRepository;
     private final ModelMapper modelmapper;
 
-    private UserDto userDto;
+    private UserSaveDto userSaveDto;
 
     @Autowired
     public RegistrationServiceImpl(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder,
@@ -50,10 +50,10 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     private User createEntityFromDto() {
-        User user = modelmapper.map(userDto, User.class);
+        User user = modelmapper.map(userSaveDto, User.class);
         user.setBlocked(false);
         user.setSellingBlocked(false);
-        user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        user.setPassword(bCryptPasswordEncoder.encode(userSaveDto.getPassword()));
         user.setEnabled(false);
         user.setDeleted(false);
         user.setRoles(prepareRoles());
@@ -64,11 +64,11 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     private List<Role> prepareRoles() {
         List<Role> results = new ArrayList<>();
-        userDto.getRoles().forEach(role -> results.add(roleRepository.findByName(role.name())));
+        userSaveDto.getRoles().forEach(role -> results.add(roleRepository.findByName(role.name())));
         return results;
     }
 
-    public void setUserDto(UserDto userDto) {
-        this.userDto = userDto;
+    public void setUserSaveDto(UserSaveDto userSaveDto) {
+        this.userSaveDto = userSaveDto;
     }
 }

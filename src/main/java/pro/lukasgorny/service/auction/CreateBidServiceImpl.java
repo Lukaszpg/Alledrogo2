@@ -37,7 +37,7 @@ public class CreateBidServiceImpl implements CreateBidService {
         Bid bid = getOneByAuctionIdAndWinningIsTrue(bidDto.getAuctionId());
 
         if (bid != null) {
-            return MathHelper.bigDecimalLessOrEqualToFirstValue(bid.getAmount(), bidDto.getAmount());
+            return MathHelper.bigDecimalLessOrEqualToFirstValue(bid.getOffer(), bidDto.getAmount());
         } else {
             AuctionResultDto auction = getAuctionService.getOne(bidDto.getAuctionId());
             return MathHelper.bigDecimalLessOrEqualToFirstValue(auction.getBidStartingPrice(), bidDto.getAmount());
@@ -62,9 +62,9 @@ public class CreateBidServiceImpl implements CreateBidService {
 
     private Bid createEntityFromDto() {
         Bid bid = new Bid();
-        bid.setAmount(bidDto.getAmount());
+        bid.setOffer(bidDto.getAmount());
         bid.setAuction(getAuctionService.getOneEntity(bidDto.getAuctionId()));
-        bid.setWinning(true);
+        bid.setIsWinning(true);
         bid.setUser(userService.getByEmail(bidDto.getUsername()));
 
         return bid;
@@ -74,13 +74,13 @@ public class CreateBidServiceImpl implements CreateBidService {
         Bid bid = getOneByAuctionIdAndWinningIsTrue(bidDto.getAuctionId());
 
         if (bid != null) {
-            bid.setWinning(false);
+            bid.setIsWinning(false);
             bidRepository.save(bid);
         }
     }
 
     @Override
     public Bid getOneByAuctionIdAndWinningIsTrue(String id) {
-        return bidRepository.findByAuctionIdAndWinningIsTrue(hashService.decode(id));
+        return bidRepository.findByAuctionIdAndIsWinningIsTrue(hashService.decode(id));
     }
 }

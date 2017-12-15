@@ -13,7 +13,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pro.lukasgorny.controller.register.validator.UserDtoValidator;
-import pro.lukasgorny.dto.UserDto;
+import pro.lukasgorny.dto.UserSaveDto;
 import pro.lukasgorny.enums.RoleEnum;
 import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.event.OnRegistrationCompleteEvent;
@@ -52,23 +52,23 @@ public class RegistrationController {
     @GetMapping(Urls.Registration.REGISTER)
     public ModelAndView registration() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("userDto", new UserDto());
+        modelAndView.addObject("userDto", new UserSaveDto());
         modelAndView.addObject("months", helperService.prepareMonthsList());
         modelAndView.setViewName(Templates.REGISTRATION);
         return modelAndView;
     }
 
     @PostMapping(Urls.Registration.REGISTER)
-    public ModelAndView createNewUser(@Valid UserDto userDto, BindingResult bindingResult, WebRequest request) {
+    public ModelAndView createNewUser(@Valid UserSaveDto userSaveDto, BindingResult bindingResult, WebRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("months", helperService.prepareMonthsList());
 
-        new UserDtoValidator(userService, registrationService).validate(userDto, bindingResult);
+        new UserDtoValidator(userService, registrationService).validate(userSaveDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.REGISTRATION);
         } else {
-            User user = registerUser(userDto);
+            User user = registerUser(userSaveDto);
 
             try {
                 sendActivationEmail(user, request);
@@ -78,16 +78,16 @@ public class RegistrationController {
             }
 
             ModelMap modelMap = new ModelMap();
-            modelMap.addAttribute("email", userDto.getEmail());
+            modelMap.addAttribute("email", userSaveDto.getEmail());
             return new ModelAndView(Urls.Registration.REGISTER_SUCCESS_REDIRECT, modelMap);
         }
 
         return modelAndView;
     }
 
-    private User registerUser(UserDto userDto) {
-        userDto.getRoles().add(RoleEnum.USER);
-        registrationService.setUserDto(userDto);
+    private User registerUser(UserSaveDto userSaveDto) {
+        userSaveDto.getRoles().add(RoleEnum.USER);
+        registrationService.setUserSaveDto(userSaveDto);
         return registrationService.register();
     }
 

@@ -70,7 +70,7 @@ public class AuctionController {
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.AuctionTemplates.SELL);
         } else {
-            auctionSaveDto.setUser(userService.getByEmail(principal.getName()));
+            auctionSaveDto.setSeller(userService.getByEmail(principal.getName()));
             createAuctionService.setAuctionSaveDto(auctionSaveDto);
 
             Auction auction = createAuctionService.create();

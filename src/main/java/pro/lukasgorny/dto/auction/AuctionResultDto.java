@@ -1,5 +1,6 @@
 package pro.lukasgorny.dto.auction;
 
+import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.model.Category;
 
 import java.math.BigDecimal;
@@ -22,7 +23,7 @@ public class AuctionResultDto {
     private Boolean hasEnded;
     private Category category;
     private String endDate;
-    private String nickname;
+    private UserResultDto sellerDto;
     private BidDto winningBid;
 
     public String getTitle() {
@@ -113,14 +114,6 @@ public class AuctionResultDto {
         this.bidStartingPrice = bidStartingPrice;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
     public BidDto getWinningBid() {
         return winningBid;
     }
@@ -143,5 +136,13 @@ public class AuctionResultDto {
 
     public void setHasEnded(Boolean hasEnded) {
         this.hasEnded = hasEnded;
+    }
+
+    public UserResultDto getSellerDto() {
+        return sellerDto;
+    }
+
+    public void setSellerDto(UserResultDto sellerDto) {
+        this.sellerDto = sellerDto;
     }
 }

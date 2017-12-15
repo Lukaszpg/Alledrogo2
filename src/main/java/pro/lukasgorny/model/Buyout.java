@@ -4,17 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.math.BigDecimal;
 
 /**
- * Created by Łukasz on 22.11.2017.
+ * Created by Łukasz on 15.12.2017.
  */
 @Entity
-@Table(name = "bids")
-public class Bid extends Model {
-
-    private BigDecimal offer;
-    private Boolean isWinning;
+@Table(name = "buyouts")
+public class Buyout extends Model {
+    private Integer amount;
     protected Auction auction;
     protected User user;
 
@@ -28,14 +25,6 @@ public class Bid extends Model {
         this.auction = auction;
     }
 
-    public Boolean getIsWinning() {
-        return isWinning;
-    }
-
-    public void setIsWinning(Boolean winning) {
-        isWinning = winning;
-    }
-
     @ManyToOne
     @JoinColumn(name="user_id")
     public User getUser() {
@@ -46,11 +35,11 @@ public class Bid extends Model {
         this.user = user;
     }
 
-    public BigDecimal getOffer() {
-        return offer;
+    public Integer getAmount() {
+        return amount;
     }
 
-    public void setOffer(BigDecimal offer) {
-        this.offer = offer;
+    public void setAmount(Integer amount) {
+        this.amount = amount;
     }
 }

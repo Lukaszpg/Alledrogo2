@@ -1,6 +1,6 @@
 package pro.lukasgorny.service.registration;
 
-import pro.lukasgorny.dto.UserDto;
+import pro.lukasgorny.dto.UserSaveDto;
 import pro.lukasgorny.model.User;
 
 /**
@@ -10,5 +10,5 @@ public interface RegistrationService {
 
     User register();
     boolean validateEmail(String email);
-    void setUserDto(UserDto userDto);
+    void setUserSaveDto(UserSaveDto userSaveDto);
 }

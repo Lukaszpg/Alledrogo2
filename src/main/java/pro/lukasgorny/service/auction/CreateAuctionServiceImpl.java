@@ -45,7 +45,7 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
         auction.setBidMinimalPrice(auctionSaveDto.getBidMinimalPrice());
         auction.setBidStartingPrice(auctionSaveDto.getBidStartingPrice());
         auction.setEndDate(calculateEndDate());
-        auction.setUser(auctionSaveDto.getUser());
+        auction.setSeller(auctionSaveDto.getSeller());
         auction.setDeleted(false);
         auction.setHasEnded(false);
         return auction;

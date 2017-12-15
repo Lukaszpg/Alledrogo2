@@ -58,5 +58,6 @@ public class Urls {
     public class User {
         public static final String MAIN = "/user";
         public static final String ACCOUNT = "/account";
+        public static final String OBSERVING = "/observing";
     }
 }
