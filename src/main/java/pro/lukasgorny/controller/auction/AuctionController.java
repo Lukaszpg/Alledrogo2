@@ -11,6 +11,7 @@ import pro.lukasgorny.controller.auction.validator.AuctionSaveDtoValidator;
 import pro.lukasgorny.controller.auction.validator.BidDtoValidator;
 import pro.lukasgorny.dto.auction.AuctionSaveDto;
 import pro.lukasgorny.dto.auction.BidDto;
+import pro.lukasgorny.dto.auction.BuyoutDto;
 import pro.lukasgorny.service.auction.AuctionService;
 import pro.lukasgorny.service.auction.CreateBidService;
 import pro.lukasgorny.service.user.UserService;
@@ -94,6 +95,7 @@ public class AuctionController {
         ModelAndView modelAndView = new ModelAndView(Templates.AuctionTemplates.ITEM);
         modelAndView.addObject("auctionDto", getAuctionService.getOne(id));
         modelAndView.addObject("bidDto", new BidDto());
+        modelAndView.addObject("buyoutDto", new BuyoutDto());
 
         return modelAndView;
     }
@@ -127,6 +129,12 @@ public class AuctionController {
         createBidService.createBid();
         modelAndView.setViewName(String.format(Urls.Auction.BID_SUCCESS_REDIRECT, id));
 
+        return modelAndView;
+    }
+
+    @PostMapping(Urls.Auction.CONFIRM_BUYOUT)
+    public ModelAndView confirmBuyout(@Valid BuyoutDto buyoutDto) {
+        ModelAndView modelAndView = new ModelAndView();
         return modelAndView;
     }
 

@@ -12,8 +12,8 @@ import javax.persistence.Table;
 @Table(name = "buyouts")
 public class Buyout extends Model {
     private Integer amount;
-    protected Auction auction;
-    protected User user;
+    private Auction auction;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name="auction_id")

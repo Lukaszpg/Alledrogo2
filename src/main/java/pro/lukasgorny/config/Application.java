@@ -1,5 +1,6 @@
 package pro.lukasgorny.config;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,12 +14,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import pro.lukasgorny.dto.UserSaveDto;
+import pro.lukasgorny.dto.auction.AuctionSaveDto;
 import pro.lukasgorny.enums.RoleEnum;
 import pro.lukasgorny.model.Category;
 import pro.lukasgorny.model.Role;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.CategoryRepository;
 import pro.lukasgorny.repository.RoleRepository;
+import pro.lukasgorny.service.auction.CreateAuctionService;
 import pro.lukasgorny.service.registration.RegistrationService;
 import pro.lukasgorny.service.user.UserService;
 
@@ -38,16 +41,18 @@ public class Application extends SpringBootServletInitializer {
     private final CategoryRepository categoryRepository;
     private final RegistrationService registrationService;
     private final UserService userService;
+    private final CreateAuctionService createAuctionService;
 
     private final String version = UUID.randomUUID().toString();
     private final Date compilationDate = new Date();
 
     @Autowired
-    public Application(RoleRepository roleRepository, CategoryRepository categoryRepository, RegistrationService registrationService, UserService userService) {
+    public Application(RoleRepository roleRepository, CategoryRepository categoryRepository, RegistrationService registrationService, UserService userService, CreateAuctionService createAuctionService) {
         this.roleRepository = roleRepository;
         this.categoryRepository = categoryRepository;
         this.registrationService = registrationService;
         this.userService = userService;
+        this.createAuctionService = createAuctionService;
     }
 
     @Override
@@ -62,7 +67,7 @@ public class Application extends SpringBootServletInitializer {
     @PostConstruct
     private void insertRoles() {
         if (roleRepository.countAll() == 0) {
-            for(int i = 0; i < RoleEnum.values().length; i++) {
+            for (int i = 0; i < RoleEnum.values().length; i++) {
                 Role toInsert = new Role(RoleEnum.values()[i].name());
                 toInsert.setDeleted(false);
                 roleRepository.save(toInsert);
@@ -149,6 +154,27 @@ public class Application extends SpringBootServletInitializer {
 
         userService.save(user);
     }
+
+    /*@PostConstruct
+    private void createTestAuction() {
+        User seller = userService.getByEmail("admin@alledrogo.pl");
+        AuctionSaveDto auctionSaveDto = new AuctionSaveDto();
+        auctionSaveDto.setCategoryId("1");
+        auctionSaveDto.setTitle("Test");
+        auctionSaveDto.setIsNew(true);
+        auctionSaveDto.setEditorContent("Test");
+        auctionSaveDto.setIsBid(true);
+        auctionSaveDto.setIsBuyout(true);
+        auctionSaveDto.setPrice(BigDecimal.ONE);
+        auctionSaveDto.setAmount(10);
+        auctionSaveDto.setBidMinimalPrice(BigDecimal.TEN);
+        auctionSaveDto.setBidStartingPrice(BigDecimal.ONE);
+        auctionSaveDto.setSeller(seller);
+        auctionSaveDto.setAuctionDuration(7L);
+
+        createAuctionService.setAuctionSaveDto(auctionSaveDto);
+        createAuctionService.create();
+    }*/
 
     public String getVersion() {
         return version;

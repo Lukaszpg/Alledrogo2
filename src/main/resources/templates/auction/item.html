@@ -48,8 +48,10 @@
                                      th:errors="*{amount}"></div>
                             </div>
                             <div th:if="${auctionDto.hasEnded}" class="col s8">
-                                <p class="auction-ended" th:if="${auctionDto.winningBid == null}" th:text="#{auction.ended.no.bids}"></p>
-                                <p class="auction-ended" th:if="${auctionDto.winningBid != null}" th:text="#{auction.ended.winner(${auctionDto.winningBid.username})}"></p>
+                                <p class="auction-ended" th:if="${auctionDto.winningBid == null}"
+                                   th:text="#{auction.ended.no.bids}"></p>
+                                <p class="auction-ended" th:if="${auctionDto.winningBid != null}"
+                                   th:text="#{auction.ended.winner(${auctionDto.winningBid.username})}"></p>
                             </div>
                             <div th:if="${!auctionDto.hasEnded}" class="col s3 offset-s3">
                                 <label class="right" for="endCountdown" th:text="#{label.auction.to.end}"></label>
@@ -69,17 +71,32 @@
                     <div class="divider"></div>
                 </div>
                 <div th:if="${auctionDto.isBuyout}" class="row">
-                    <div class="row">
-                        <div class="col s12">
-                            <label for="buyoutPrice" th:text="#{label.buyout.price}"></label>
-                            <div id="buyoutPrice" class="auction-price"
-                                 th:text="#{label.money.amount(${auctionDto.price})}"></div>
+                    <form action="#" th:action="@{'/auction/confirm-buyout/'}" th:object="${buyoutDto}"
+                          method="post">
+                        <input type="hidden" th:value="${auctionDto.id}" th:field="*{auctionId}">
+                        <div class="row">
+                            <div class="col s3">
+                                <label for="buyoutPrice" th:text="#{label.buyout.price}"></label>
+                                <div id="buyoutPrice" class="auction-price"
+                                     th:text="#{label.money.amount(${auctionDto.price})}"></div>
+                            </div>
+                            <div class="col s3">
+                                <input th:field="*{amountToBuy}" id="amountToBuy" type="text" th:placeholder="#{label.amount}"
+                                       class="validate"
+                                       th:classappend="${#fields.hasErrors('amountToBuy')}  ? 'invalid' : ''">
+                                <div class="validation-error-input" th:if="${#fields.hasErrors('amountToBuy')}"
+                                     th:errors="*{amountToBuy}"></div>
+                            </div>
+                            <div class="col s3 amount-to-buy">
+                                <div th:text="#{label.amout.to.buy(${auctionDto.amount})}"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row right">
-                        <button th:if="${!auctionDto.hasEnded}" class="btn waves-light waves-effect right" type="submit"
-                                th:text="#{button.buyout}"></button>
-                    </div>
+                        <div class="row right">
+                            <button th:if="${!auctionDto.hasEnded}" class="btn waves-light waves-effect right"
+                                    type="submit"
+                                    th:text="#{button.buyout}"></button>
+                        </div>
+                    </form>
                 </div>
                 <div class="row">
                     <div class="col s12">

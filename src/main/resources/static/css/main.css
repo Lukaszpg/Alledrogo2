@@ -302,3 +302,7 @@ div.validation-error-input:before {
 .account-top-margin {
     margin-top: 15px;
 }
+
+.amount-to-buy {
+    margin-top: 15px;
+}
