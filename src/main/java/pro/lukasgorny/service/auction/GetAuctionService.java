@@ -15,4 +15,5 @@ public interface GetAuctionService {
     Boolean auctionExists(String id);
     List<AuctionResultDto> getAllObservedByUserId(Long id);
     List<AuctionResultDto> getEndedNotWonAuctionsForUser(Long userId);
+    List<Auction> getAllAuctionsToEnd();
 }

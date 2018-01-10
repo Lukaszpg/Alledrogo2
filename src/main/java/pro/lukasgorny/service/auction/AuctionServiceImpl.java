@@ -67,4 +67,10 @@ public class AuctionServiceImpl implements AuctionService {
     public void setObserveDto(ObserveDto observeDto) {
         this.observeDto = observeDto;
     }
+
+    @Override
+    public void endAuction(Auction auction) {
+        auction.setHasEnded(true);
+        auctionRepository.save(auction);
+    }
 }

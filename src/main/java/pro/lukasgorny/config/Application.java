@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 import pro.lukasgorny.dto.UserSaveDto;
 import pro.lukasgorny.enums.RoleEnum;
 import pro.lukasgorny.model.Category;
@@ -29,6 +31,7 @@ import javax.annotation.PostConstruct;
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "pro.lukasgorny")
 @EntityScan(basePackages = "pro.lukasgorny")
+@EnableScheduling
 public class Application extends SpringBootServletInitializer {
 
     private final RoleRepository roleRepository;

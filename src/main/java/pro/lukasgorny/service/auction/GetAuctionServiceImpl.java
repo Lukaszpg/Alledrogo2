@@ -13,9 +13,11 @@ import pro.lukasgorny.repository.AuctionRepository;
 import pro.lukasgorny.repository.BidRepository;
 import pro.lukasgorny.service.hash.HashService;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Łukasz on 21.11.2017.
@@ -74,12 +76,13 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         return createDtoListFromEntityList(auctions);
     }
 
+    @Override
+    public List<Auction> getAllAuctionsToEnd() {
+        return auctionRepository.findAllByHasEndedIsFalseAndEndDateBefore(LocalDateTime.now());
+    }
+
     private List<AuctionResultDto> createDtoListFromEntityList(List<Auction> auctions) {
-        List<AuctionResultDto> results = new ArrayList<>();
-        if (auctions != null && !auctions.isEmpty()) {
-            auctions.forEach(auction -> results.add(createDtoFromEntity(auction)));
-        }
-        return results;
+        return auctions != null ? auctions.stream().map(this::createDtoFromEntity).collect(Collectors.toList()) : new ArrayList<>();
     }
 
     private AuctionResultDto createDtoFromEntity(Auction auction) {

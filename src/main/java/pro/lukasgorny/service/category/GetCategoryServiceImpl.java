@@ -42,8 +42,7 @@ public class GetCategoryServiceImpl implements GetCategoryService {
 
     @Override
     public List<CategoryDto> getChildrenByParentId(String parentId) {
-        Long decodedId = hashService.decode(parentId);
-        return categoryRepository.findByParentId(decodedId).stream().map(this::convertToDto).collect(Collectors.toList());
+        return categoryRepository.findByParentId(hashService.decode(parentId)).stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     @Override
