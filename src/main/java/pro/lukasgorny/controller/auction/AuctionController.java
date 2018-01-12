@@ -120,6 +120,7 @@ public class AuctionController {
 
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("auctionDto", getAuctionService.getOne(id));
+            modelAndView.addObject("buyoutDto", new BuyoutDto());
             modelAndView.setViewName(Templates.AuctionTemplates.ITEM);
             return modelAndView;
         }
@@ -140,5 +141,11 @@ public class AuctionController {
     @GetMapping(Urls.Auction.AUCTION_ENDED)
     public ModelAndView auctionEnded() {
         return new ModelAndView(Templates.AuctionTemplates.AUCTION_ENDED);
+    }
+
+    @PostMapping(Urls.Auction.CONFIRM_BUYOUT)
+    public ModelAndView confirmBuyout(@PathVariable("id") String id, @Valid @ModelAttribute("buyoutDto") BuyoutDto buyoutDto) {
+        ModelAndView modelAndView = new ModelAndView();
+        return modelAndView;
     }
 }

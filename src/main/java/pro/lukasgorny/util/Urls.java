@@ -20,7 +20,7 @@ public class Urls {
         public static final String AUCTION_ENDED_REDIRECT = "redirect:/" + PREFIX + "/auction-ended";
         public static final String BID_SUCCESS = "/bid-success/{id}";
         public static final String AUCTION_ENDED = "/auction-ended";
-        public static final String CONFIRM_BUYOUT = "/confirm-buyout";
+        public static final String CONFIRM_BUYOUT = "/confirm-buyout/{id}";
     }
 
     public class AuctionRest {
