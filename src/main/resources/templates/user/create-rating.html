@@ -10,7 +10,36 @@
         <form action="#" th:action="@{/user/rating/create}" th:object="${ratingDto}" method="post"
               class="col s10 offset-s2">
             <div class="row">
-                <h2 th:text="#{page.title.create.auction}"></h2>
+                <h2 th:text="#{menu.label.post.rating}"></h2>
+            </div>
+            <div class="row">
+                <div class="input-field col s10">
+                    <textarea th:field="*{content}" id="ratingContent" type="text" data-length="500"
+                           th:placeholder="#{placeholder.rating.content}"
+                              class="validate materialize-textarea" th:classappend="${#fields.hasErrors('content')}  ? 'invalid' : ''" ></textarea>
+                    <label for="ratingContent" th:text="#{label.rating.content}"></label>
+                    <div class="validation-error-input" th:if="${#fields.hasErrors('content')}"
+                         th:errors="*{content}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s10">
+                    <label for="ratingType" th:text="#{label.rating.type}"></label>
+                    <p>
+                        <input name="ratingType" type="radio" id="positive" value="positive"/>
+                        <label for="positive" class="rating-type-positive" th:text="#{label.rating.type.positive}"></label>
+                    </p>
+                    <p>
+                        <input name="ratingType" type="radio" id="neutral" value="neutral"/>
+                        <label for="neutral" th:text="#{label.rating.type.neutral}"></label>
+                    </p>
+                    <p>
+                        <input name="ratingType" type="radio" id="negative"  value="negative"/>
+                        <label for="negative" class="rating-type-negative" th:text="#{label.rating.type.negative}"></label>
+                    </p>
+                    <div class="validation-error" th:if="${#fields.hasErrors('ratingType')}"
+                         th:errors="*{ratingType}"></div>
+                </div>
             </div>
             <div class="row">
                 <div class="col s10">

@@ -310,3 +310,11 @@ div.validation-error-input:before {
 .post-rating-menu-header {
     margin-left: 15px;
 }
+
+.rating-type-negative {
+    color: red;
+}
+
+.rating-type-positive {
+    color: forestgreen;
+}

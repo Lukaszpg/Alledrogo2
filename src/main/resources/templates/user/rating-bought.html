@@ -24,7 +24,7 @@
                 <td th:text="${auction?.sellerDto.email}"></td>
                 <td th:text="${auction?.title}"></td>
                 <td th:text="${auction?.amount}"></td>
-                <td><a th:href="@{'/user/rating/create/' + ${auction.id}}" th:text="#{button.auction.goto}"></a></td>
+                <td><a th:href="@{'/user/rating/create/' + ${auction.id}}" th:text="#{menu.label.post.rating}"></a></td>
             </tr>
             <tr th:if="${#lists.isEmpty(auctions)}">
                 <td th:text="#{label.no.won.auctions}"></td>

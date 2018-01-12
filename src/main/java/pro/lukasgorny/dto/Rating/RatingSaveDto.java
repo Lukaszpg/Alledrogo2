@@ -7,7 +7,7 @@ import pro.lukasgorny.enums.RatingTypeEnum;
  */
 public class RatingSaveDto {
     private String content;
-    private RatingTypeEnum ratingTypeEnum;
+    private RatingTypeEnum ratingType;
     private String auctionId;
 
     public String getContent() {
@@ -18,12 +18,12 @@ public class RatingSaveDto {
         this.content = content;
     }
 
-    public RatingTypeEnum getRatingTypeEnum() {
-        return ratingTypeEnum;
+    public RatingTypeEnum getRatingType() {
+        return ratingType;
     }
 
-    public void setRatingTypeEnum(RatingTypeEnum ratingTypeEnum) {
-        this.ratingTypeEnum = ratingTypeEnum;
+    public void setRatingType(RatingTypeEnum ratingType) {
+        this.ratingType = ratingType;
     }
 
     public String getAuctionId() {
