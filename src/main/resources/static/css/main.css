@@ -56,7 +56,7 @@ main {
 }
 
 .search-bar-button {
-    background-color: #2ECC71;
+    background-color: #26a69a;
     margin-left: -23px;
     color: white;
     font-size: larger;
@@ -147,7 +147,7 @@ div.validation-error-input:before {
 }
 
 .btn {
-    background-color: #2ECC71 !important;
+    background-color: #26a69a !important;
 }
 
 .select-wrapper span.caret {
@@ -305,4 +305,8 @@ div.validation-error-input:before {
 
 .amount-to-buy {
     margin-top: 15px;
+}
+
+.post-rating-menu-header {
+    margin-left: 15px;
 }

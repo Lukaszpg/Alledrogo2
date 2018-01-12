@@ -1,9 +1,8 @@
 package pro.lukasgorny.config;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
-
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,7 +13,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import pro.lukasgorny.dto.UserSaveDto;
-import pro.lukasgorny.dto.auction.AuctionSaveDto;
 import pro.lukasgorny.enums.RoleEnum;
 import pro.lukasgorny.model.Category;
 import pro.lukasgorny.model.Role;
@@ -24,8 +22,6 @@ import pro.lukasgorny.repository.RoleRepository;
 import pro.lukasgorny.service.auction.CreateAuctionService;
 import pro.lukasgorny.service.registration.RegistrationService;
 import pro.lukasgorny.service.user.UserService;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by lukaszgo on 2017-05-25.

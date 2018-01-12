@@ -2,8 +2,11 @@ package pro.lukasgorny.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.model.Auction;
+import pro.lukasgorny.util.QueryBody;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +20,12 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
     List<Auction> findAllByUsersObserving_Id(Long id);
     List<Auction> findAllByHasEndedIsFalseAndEndDateBefore(LocalDateTime dateTime);
 
-    @Query("SELECT a FROM Auction a INNER JOIN a.bids b WHERE a.hasEnded = true AND b.isWinning = false AND b.user.id = :userId")
-    List<Auction> findEndedNotWonAuctionsForUser(Long userId);
+    @Query(QueryBody.AuctionQuery.FIND_ENDED_NOT_WON_AUCTIONS)
+    List<Auction> findEndedNotWonAuctionsForUser(@Param("id") Long id);
+
+    @Query(QueryBody.AuctionQuery.FIND_ENDED_WON_AUCTIONS)
+    List<Auction> findEndedWonAuctionsForUser(@Param("id") Long id);
+
+    @Query(QueryBody.AuctionQuery.FIND_ENDED_BUYOUT_AUCTIONS)
+    List<Auction> findEndedBuyoutAuctionsForUser(@Param("id") Long id);
 }

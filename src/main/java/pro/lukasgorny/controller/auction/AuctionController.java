@@ -41,9 +41,8 @@ public class AuctionController {
     private final AuctionService auctionService;
 
     @Autowired
-    public AuctionController(UserService userService, GetAuctionService getAuctionService,
-                             CreateAuctionService createAuctionService,
-                             HashService hashService, CreateBidService createBidService, AuctionService auctionService) {
+    public AuctionController(UserService userService, GetAuctionService getAuctionService, CreateAuctionService createAuctionService,
+            HashService hashService, CreateBidService createBidService, AuctionService auctionService) {
         this.userService = userService;
         this.getAuctionService = getAuctionService;
         this.createAuctionService = createAuctionService;
@@ -96,24 +95,23 @@ public class AuctionController {
         modelAndView.addObject("auctionDto", getAuctionService.getOne(id));
         modelAndView.addObject("bidDto", new BidDto());
         modelAndView.addObject("buyoutDto", new BuyoutDto());
-
         return modelAndView;
     }
 
     @PostMapping(Urls.Auction.BID)
-    public ModelAndView bid(@PathVariable String id, @Valid BidDto bidDto, BindingResult bindingResult, Principal principal) {
+    public ModelAndView bid(@PathVariable String id, @ModelAttribute("bidDto") @Valid BidDto bidDto, BindingResult bindingResult, Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
 
         bidDto.setUsername(principal.getName());
         bidDto.setAuctionId(id);
         createBidService.setBidDto(bidDto);
 
-        if(!getAuctionService.auctionExists(id)) {
+        if (!getAuctionService.auctionExists(id)) {
             modelAndView.setViewName(Templates.AuctionTemplates.ITEM);
             return modelAndView;
         }
 
-        if(createBidService.checkHasAuctionEnded()) {
+        if (createBidService.checkHasAuctionEnded()) {
             modelAndView.setViewName(Urls.Auction.AUCTION_ENDED_REDIRECT);
             return modelAndView;
         }
@@ -129,12 +127,6 @@ public class AuctionController {
         createBidService.createBid();
         modelAndView.setViewName(String.format(Urls.Auction.BID_SUCCESS_REDIRECT, id));
 
-        return modelAndView;
-    }
-
-    @PostMapping(Urls.Auction.CONFIRM_BUYOUT)
-    public ModelAndView confirmBuyout(@Valid BuyoutDto buyoutDto) {
-        ModelAndView modelAndView = new ModelAndView();
         return modelAndView;
     }
 

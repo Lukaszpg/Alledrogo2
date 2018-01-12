@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import pro.lukasgorny.model.Role;
+import pro.lukasgorny.util.QueryBody;
 
 /**
  * Created by lukaszgo on 2017-05-25.
@@ -14,6 +15,6 @@ import pro.lukasgorny.model.Role;
 public interface RoleRepository extends JpaRepository<Role, Long> {
     Role findByName(String name);
 
-    @Query("SELECT COUNT(*) FROM Role")
+    @Query(QueryBody.RoleQuery.GET_ROLE_COUNT)
     Long countAll();
 }

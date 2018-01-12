@@ -6,6 +6,7 @@ $(document).ready(function () {
     searchBarOnFocusOut();
     setAxiosBaseURL();
     initializeInputMasks();
+    initializeMenuButtons();
 });
 
 var enableSelectValidation = function() {
@@ -42,4 +43,8 @@ var initializeInputMasks = function () {
     $('.money').mask('###0.00', {reverse: true});
     $('.amount').mask('#####0');
 };
+
+var initializeMenuButtons = function() {
+    $(".post-rating-button-menu").sideNav();
+}
 

@@ -10,6 +10,7 @@
         <li class="divider"></li>
         <li><a th:href="@{/user/account}" class="menu-dropdown-top-black" th:text="#{menu.label.user.account}"></a></li>
         <li><a th:href="@{/user/observing}" class="menu-dropdown-top-black" th:text="#{menu.label.user.observing}"></a></li>
+        <li><a th:href="@{/user/rating/bought}" class="menu-dropdown-top-black" th:text="#{menu.label.post.rating}"></a></li>
         <li class="divider"></li>
         <li sec:authorize="hasAuthority('ADMIN')"><a class="menu-top-login" th:href="@{/admin/panel}" th:text="#{menu.label.admin.panel}"></a></li>
         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="menu-top-create-account" th:text="#{page.title.create.account}"></a></li>

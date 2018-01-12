@@ -25,6 +25,7 @@ public class Auction extends Model {
     private Category category;
     private LocalDateTime endDate;
     private List<Bid> bids;
+    private List<Buyout> buyouts;
     private User seller;
     private List<User> usersObserving;
 
@@ -154,5 +155,14 @@ public class Auction extends Model {
 
     public void setUsersObserving(List<User> usersObserving) {
         this.usersObserving = usersObserving;
+    }
+
+    @OneToMany(mappedBy = "auction")
+    public List<Buyout> getBuyouts() {
+        return buyouts;
+    }
+
+    public void setBuyouts(List<Buyout> buyouts) {
+        this.buyouts = buyouts;
     }
 }

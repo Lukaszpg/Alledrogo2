@@ -26,7 +26,7 @@
             </div>
             <div class="col s6">
                 <div th:if="${auctionDto.isBid}" class="row">
-                    <form action="#" th:action="@{'/auction/bid/' + ${auctionDto.id}}" th:object="${bidDto}"
+                    <form id="bidForm" th:action="@{'/auction/bid/' + ${auctionDto.id}}" th:object="${bidDto}"
                           method="post">
                         <div class="row">
                             <div class="col s3">
@@ -71,9 +71,8 @@
                     <div class="divider"></div>
                 </div>
                 <div th:if="${auctionDto.isBuyout}" class="row">
-                    <form action="#" th:action="@{'/auction/confirm-buyout/'}" th:object="${buyoutDto}"
+                    <form id="buyoutForm" th:action="@{'/buyout/confirm-buyout'}" th:object="${buyoutDto}"
                           method="post">
-                        <input type="hidden" th:value="${auctionDto.id}" th:field="*{auctionId}">
                         <div class="row">
                             <div class="col s3">
                                 <label for="buyoutPrice" th:text="#{label.buyout.price}"></label>

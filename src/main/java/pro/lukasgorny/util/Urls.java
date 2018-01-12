@@ -20,7 +20,7 @@ public class Urls {
         public static final String AUCTION_ENDED_REDIRECT = "redirect:/" + PREFIX + "/auction-ended";
         public static final String BID_SUCCESS = "/bid-success/{id}";
         public static final String AUCTION_ENDED = "/auction-ended";
-        public static final String CONFIRM_BUYOUT = PREFIX + "/confirm-buyout";
+        public static final String CONFIRM_BUYOUT = "/confirm-buyout";
     }
 
     public class AuctionRest {
@@ -60,5 +60,11 @@ public class Urls {
         public static final String MAIN = "/user";
         public static final String ACCOUNT = "/account";
         public static final String OBSERVING = "/observing";
+        public static final String RATING = "/rating";
+        public static final String RATING_BOUGHT = RATING + "/bought";
+        public static final String RATING_SOLD = RATING + "/sold";
+        public static final String CREATE_RATING = RATING + "/create/{id}";
+        public static final String POST_RATING_BOUGHT = RATING + "/post-bought";
+        public static final String POST_RATING_SOLD = RATING + "/post-sold";
     }
 }

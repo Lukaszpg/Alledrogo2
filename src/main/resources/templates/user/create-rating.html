@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/template :: headFragment(#{menu.label.post.rating})">
+    <title>Index</title>
+    <meta charset="utf-8"/>
+</head>
+<body th:replace="layout/template :: bodyFragment">
+<div th:fragment="content">
+    <div id="ratingForm" class="row">
+        <form action="#" th:action="@{/user/rating/create}" th:object="${ratingDto}" method="post"
+              class="col s10 offset-s2">
+            <div class="row">
+                <h2 th:text="#{page.title.create.auction}"></h2>
+            </div>
+            <div class="row">
+                <div class="col s10">
+                    <button class="btn waves-light waves-effect right" type="submit"
+                            th:text="#{button.create.auction}"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

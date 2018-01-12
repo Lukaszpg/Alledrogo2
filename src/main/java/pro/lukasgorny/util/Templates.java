@@ -29,5 +29,8 @@ public class Templates {
         public static final String PREFIX = "user/";
         public static final String ACCOUNT = PREFIX + "account";
         public static final String OBSERVING = PREFIX + "observing";
+        public static final String POST_RATING_BOUGHT = PREFIX + "rating-bought";
+        public static final String POST_RATING_SOLD = PREFIX + "rating-sold";
+        public static final String CREATE_RATING = PREFIX + "create-rating";
     }
 }
