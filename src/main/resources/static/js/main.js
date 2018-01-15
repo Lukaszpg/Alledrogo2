@@ -7,6 +7,7 @@ $(document).ready(function () {
     setAxiosBaseURL();
     initializeInputMasks();
     initializeMenuButtons();
+    initializeSearchSelect();
 });
 
 var enableSelectValidation = function() {
@@ -46,5 +47,9 @@ var initializeInputMasks = function () {
 
 var initializeMenuButtons = function() {
     $(".post-rating-button-menu").sideNav();
+};
+
+var initializeSearchSelect = function() {
+    $("#searchCategoriesSelect").material_select();
 }
 

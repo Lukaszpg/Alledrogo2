@@ -20,7 +20,10 @@
                         </div>
                     </div>
                     <div class="input-field col s2 search-bar-category-select">
-                        <category-picker-search></category-picker-search>
+                        <select id="searchCategoriesSelect">
+                            <option value="" disabled selected th:text="#{label.category.pick}"></option>
+                            <option th:each="category : ${searchCategories}" th:value="${category.id}" th:text="${category.name}"></option>
+                        </select>
                     </div>
                     <div class="col s1">
                         <button type="submit" class="btn-flat waves-effect search-bar-button"
