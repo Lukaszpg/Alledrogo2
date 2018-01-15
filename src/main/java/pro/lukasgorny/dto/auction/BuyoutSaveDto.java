@@ -1,23 +1,16 @@
 package pro.lukasgorny.dto.auction;
 
-import java.math.BigDecimal;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by Łukasz on 23.11.2017.
  */
-public class BidDto {
+public class BuyoutSaveDto {
 
-    private BigDecimal amount;
+    @NotNull
+    private Integer amountToBuy;
     private String auctionId;
     private String username;
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
 
     public String getAuctionId() {
         return auctionId;
@@ -33,5 +26,13 @@ public class BidDto {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Integer getAmountToBuy() {
+        return amountToBuy;
+    }
+
+    public void setAmountToBuy(Integer amountToBuy) {
+        this.amountToBuy = amountToBuy;
     }
 }

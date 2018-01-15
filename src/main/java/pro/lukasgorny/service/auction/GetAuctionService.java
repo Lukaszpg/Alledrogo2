@@ -16,7 +16,6 @@ public interface GetAuctionService {
     List<AuctionResultDto> getAllObservedByUserId(Long id);
     List<AuctionResultDto> getEndedNotWonAuctionsForUser(Long id);
     List<AuctionResultDto> getEndedWonAuctionsForUser(Long id);
-    List<AuctionResultDto> getEndedBuyoutAuctionsForUser(Long id);
     List<AuctionResultDto> getAllBoughtItemsForUser(Long id);
     List<Auction> getAllAuctionsToEnd();
 }

@@ -1,13 +1,24 @@
 package pro.lukasgorny.dto.auction;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Łukasz on 23.11.2017.
  */
-public class BuyoutDto {
+public class BidSaveDto {
 
-    private Integer amountToBuy;
+    private BigDecimal offeredPrice;
     private String auctionId;
     private String username;
+    private Boolean isWinning;
+
+    public BigDecimal getOfferedPrice() {
+        return offeredPrice;
+    }
+
+    public void setOfferedPrice(BigDecimal offeredPrice) {
+        this.offeredPrice = offeredPrice;
+    }
 
     public String getAuctionId() {
         return auctionId;
@@ -25,11 +36,11 @@ public class BuyoutDto {
         this.username = username;
     }
 
-    public Integer getAmountToBuy() {
-        return amountToBuy;
+    public Boolean getWinning() {
+        return isWinning;
     }
 
-    public void setAmountToBuy(Integer amountToBuy) {
-        this.amountToBuy = amountToBuy;
+    public void setWinning(Boolean winning) {
+        isWinning = winning;
     }
 }

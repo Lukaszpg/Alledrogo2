@@ -24,8 +24,7 @@ public class Auction extends Model {
     private Integer amount;
     private Category category;
     private LocalDateTime endDate;
-    private List<Bid> bids;
-    private List<Buyout> buyouts;
+    private List<Transaction> transactions;
     private User seller;
     private List<User> usersObserving;
 
@@ -96,15 +95,6 @@ public class Auction extends Model {
         this.endDate = endDate;
     }
 
-    @OneToMany(mappedBy="auction")
-    public List<Bid> getBids() {
-        return bids;
-    }
-
-    public void setBids(List<Bid> bids) {
-        this.bids = bids;
-    }
-
     public BigDecimal getPrice() {
         return price;
     }
@@ -158,11 +148,11 @@ public class Auction extends Model {
     }
 
     @OneToMany(mappedBy = "auction")
-    public List<Buyout> getBuyouts() {
-        return buyouts;
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public void setBuyouts(List<Buyout> buyouts) {
-        this.buyouts = buyouts;
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }

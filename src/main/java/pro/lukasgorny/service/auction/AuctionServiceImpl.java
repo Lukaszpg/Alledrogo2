@@ -3,6 +3,7 @@ package pro.lukasgorny.service.auction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pro.lukasgorny.dto.auction.AuctionResultDto;
+import pro.lukasgorny.dto.auction.BidSaveDto;
 import pro.lukasgorny.dto.auction.ObserveDto;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.User;
@@ -19,8 +20,6 @@ public class AuctionServiceImpl implements AuctionService {
     private final GetAuctionService getAuctionService;
     private final UserService userService;
 
-    private ObserveDto observeDto;
-
     @Autowired
     public AuctionServiceImpl(AuctionRepository auctionRepository, GetAuctionService getAuctionService, UserService userService) {
         this.auctionRepository = auctionRepository;
@@ -29,8 +28,8 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public Boolean observe() {
-        if(!checkIsBiddingUserAuctionCreator(observeDto.getAuctionId(), observeDto.getUsername())) {
+    public Boolean observe(ObserveDto observeDto) {
+        if (!checkIsBiddingUserAuctionCreator(observeDto.getAuctionId(), observeDto.getUsername())) {
             Auction auction = getAuctionService.getOneEntity(observeDto.getAuctionId());
             User user = userService.getByEmail(observeDto.getUsername());
             auction.getUsersObserving().add(user);
@@ -42,7 +41,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public Boolean unobserve() {
+    public Boolean unobserve(ObserveDto observeDto) {
         Auction auction = getAuctionService.getOneEntity(observeDto.getAuctionId());
         User user = userService.getByEmail(observeDto.getUsername());
         auction.getUsersObserving().remove(user);
@@ -51,7 +50,7 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public Boolean isObserving() {
+    public Boolean isObserving(ObserveDto observeDto) {
         User user = userService.getByEmail(observeDto.getUsername());
         Auction auction = auctionRepository.findByUsersObserving_Id(user.getId());
         return auction != null;
@@ -64,13 +63,13 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public void setObserveDto(ObserveDto observeDto) {
-        this.observeDto = observeDto;
-    }
-
-    @Override
     public void endAuction(Auction auction) {
         auction.setHasEnded(true);
         auctionRepository.save(auction);
+    }
+
+    @Override
+    public Boolean checkHasAuctionEnded(String auctionId) {
+        return getAuctionService.getOne(auctionId).getHasEnded();
     }
 }

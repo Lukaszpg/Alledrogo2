@@ -2,15 +2,13 @@ package pro.lukasgorny.service.auction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.dto.auction.AuctionResultDto;
-import pro.lukasgorny.dto.auction.BidDto;
+import pro.lukasgorny.dto.auction.TransactionResultDto;
 import pro.lukasgorny.model.Auction;
-import pro.lukasgorny.model.Bid;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.AuctionRepository;
-import pro.lukasgorny.repository.BidRepository;
+import pro.lukasgorny.repository.TransactionRepository;
 import pro.lukasgorny.service.hash.HashService;
 
 import java.time.LocalDateTime;
@@ -27,14 +25,14 @@ public class GetAuctionServiceImpl implements GetAuctionService {
 
     private final HashService hashService;
     private final AuctionRepository auctionRepository;
-    private final BidRepository bidRepository;
+    private final GetTransactionService getTransactionService;
 
     @Autowired
     public GetAuctionServiceImpl(AuctionRepository auctionRepository, HashService hashService,
-                                 BidRepository bidRepository) {
+                                 GetTransactionService getTransactionService) {
         this.hashService = hashService;
         this.auctionRepository = auctionRepository;
-        this.bidRepository = bidRepository;
+        this.getTransactionService = getTransactionService;
     }
 
     @Override
@@ -83,16 +81,9 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     }
 
     @Override
-    public List<AuctionResultDto> getEndedBuyoutAuctionsForUser(Long id) {
-        List<Auction> auctions = auctionRepository.findEndedBuyoutAuctionsForUser(id);
-        return createDtoListFromEntityList(auctions);
-    }
-
-    @Override
     public List<AuctionResultDto> getAllBoughtItemsForUser(Long id) {
         List<AuctionResultDto> resultList = new ArrayList<>();
         resultList.addAll(getEndedWonAuctionsForUser(id));
-        resultList.addAll(getEndedBuyoutAuctionsForUser(id));
         return resultList;
     }
 
@@ -132,18 +123,8 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         return userResultDto;
     }
 
-    private BidDto getWinningBid(String id) {
-        Bid bid = bidRepository.findByAuctionIdAndIsWinningIsTrue(hashService.decode(id));
-
-        if (bid != null) {
-            BidDto bidDto = new BidDto();
-            bidDto.setAmount(bid.getOffer());
-            bidDto.setUsername(bid.getUser().getEmail());
-
-            return bidDto;
-        }
-
-        return null;
+    private TransactionResultDto getWinningBid(String id) {
+        return getTransactionService.getWinningBidForAuction(id);
     }
 
     private String parseDate(Auction auction) {

@@ -25,7 +25,4 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
 
     @Query(QueryBody.AuctionQuery.FIND_ENDED_WON_AUCTIONS)
     List<Auction> findEndedWonAuctionsForUser(@Param("id") Long id);
-
-    @Query(QueryBody.AuctionQuery.FIND_ENDED_BUYOUT_AUCTIONS)
-    List<Auction> findEndedBuyoutAuctionsForUser(@Param("id") Long id);
 }

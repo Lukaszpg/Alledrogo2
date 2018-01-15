@@ -23,6 +23,8 @@ public class Templates {
         public static final String ITEM = PREFIX + "item";
         public static final String BID_SUCCESS = PREFIX + "bid-success";
         public static final String AUCTION_ENDED = PREFIX + "auction-ended";
+        public static final String CONFIRM_BUYOUT = PREFIX + "confirm-buyout";
+        public static final String BUYOUT_SUCCESS = PREFIX + "buyout-success";
     }
 
     public class UserTemplates {

@@ -2,35 +2,35 @@ package pro.lukasgorny.controller.auction.validator;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import pro.lukasgorny.dto.auction.BidDto;
+import pro.lukasgorny.dto.auction.BidSaveDto;
 import pro.lukasgorny.service.auction.AuctionService;
-import pro.lukasgorny.service.auction.CreateBidService;
+import pro.lukasgorny.service.auction.CreateTransactionService;
 
 public class BidDtoValidator implements Validator {
 
     private final AuctionService auctionService;
-    private final CreateBidService createBidService;
+    private final CreateTransactionService createTransactionService;
 
-    public BidDtoValidator(AuctionService auctionService, CreateBidService createBidService) {
+    public BidDtoValidator(AuctionService auctionService, CreateTransactionService createTransactionService) {
         this.auctionService = auctionService;
-        this.createBidService = createBidService;
+        this.createTransactionService = createTransactionService;
     }
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return BidDto.class.equals(aClass);
+        return BidSaveDto.class.equals(aClass);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
-        BidDto bidDto = (BidDto) o;
-        if(auctionService.checkIsBiddingUserAuctionCreator(bidDto.getAuctionId(), bidDto.getUsername())) {
-            errors.rejectValue("amount","error.bid.same.user");
+        BidSaveDto bidSaveDto = (BidSaveDto) o;
+        if(auctionService.checkIsBiddingUserAuctionCreator(bidSaveDto.getAuctionId(), bidSaveDto.getUsername())) {
+            errors.rejectValue("offeredPrice","error.bid.same.user");
         } else {
-            if(bidDto.getAmount() == null) {
-                errors.rejectValue("amount", "NotNull.bidDto.amount");
-            } else if(createBidService.checkOfferLowerThanCurrentPrice()) {
-                errors.rejectValue("amount", "error.bid.price.lower");
+            if(bidSaveDto.getOfferedPrice() == null) {
+                errors.rejectValue("offeredPrice", "NotNull.bidDto.offeredPrice");
+            } else if(createTransactionService.checkOfferLowerThanCurrentPrice(bidSaveDto)) {
+                errors.rejectValue("offeredPrice", "error.bid.price.lower");
             }
         }
     }

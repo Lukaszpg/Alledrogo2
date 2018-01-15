@@ -30,8 +30,7 @@ public class AuctionRestController {
         ObserveDto observeDto = new ObserveDto();
         observeDto.setUsername(principal.getName());
         observeDto.setAuctionId(id);
-        auctionService.setObserveDto(observeDto);
-        return auctionService.observe();
+        return auctionService.observe(observeDto);
     }
 
     @GetMapping(Urls.AuctionRest.UNOBSERVE)
@@ -39,8 +38,7 @@ public class AuctionRestController {
         ObserveDto observeDto = new ObserveDto();
         observeDto.setUsername(principal.getName());
         observeDto.setAuctionId(id);
-        auctionService.setObserveDto(observeDto);
-        return auctionService.unobserve();
+        return auctionService.unobserve(observeDto);
     }
 
     @GetMapping(Urls.AuctionRest.IS_OBSERVING)
@@ -48,7 +46,6 @@ public class AuctionRestController {
         ObserveDto observeDto = new ObserveDto();
         observeDto.setUsername(principal.getName());
         observeDto.setAuctionId(id);
-        auctionService.setObserveDto(observeDto);
-        return auctionService.isObserving();
+        return auctionService.isObserving(observeDto);
     }
 }

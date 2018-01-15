@@ -24,7 +24,7 @@ public class AuctionResultDto {
     private Category category;
     private String endDate;
     private UserResultDto sellerDto;
-    private BidDto winningBid;
+    private TransactionResultDto winningBid;
 
     public String getTitle() {
         return title;
@@ -114,14 +114,6 @@ public class AuctionResultDto {
         this.bidStartingPrice = bidStartingPrice;
     }
 
-    public BidDto getWinningBid() {
-        return winningBid;
-    }
-
-    public void setWinningBid(BidDto winningBid) {
-        this.winningBid = winningBid;
-    }
-
     public BigDecimal getBidMinimalPrice() {
         return bidMinimalPrice;
     }
@@ -144,5 +136,13 @@ public class AuctionResultDto {
 
     public void setSellerDto(UserResultDto sellerDto) {
         this.sellerDto = sellerDto;
+    }
+
+    public TransactionResultDto getWinningBid() {
+        return winningBid;
+    }
+
+    public void setWinningBid(TransactionResultDto winningBid) {
+        this.winningBid = winningBid;
     }
 }

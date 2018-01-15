@@ -21,6 +21,9 @@ public class Urls {
         public static final String BID_SUCCESS = "/bid-success/{id}";
         public static final String AUCTION_ENDED = "/auction-ended";
         public static final String CONFIRM_BUYOUT = "/confirm-buyout/{id}";
+        public static final String BUYOUT = "/buyout/{id}";
+        public static final String BUYOUT_SUCCESS = "/buyout-success/";
+        public static final String BUYOUT_SUCCESS_REDIRECT = "redirect:/" + PREFIX + "/buyout-success";
     }
 
     public class AuctionRest {
