@@ -2,6 +2,7 @@ package pro.lukasgorny.service.auction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.BidSaveDto;
 import pro.lukasgorny.dto.auction.BuyoutSaveDto;
@@ -22,14 +23,16 @@ public class CreateTransactionServiceImpl implements CreateTransactionService {
     private final TransactionRepository transactionRepository;
     private final GetAuctionService getAuctionService;
     private final UserService userService;
+    private final AuctionService auctionService;
 
     @Autowired
-    public CreateTransactionServiceImpl(HashService hashService, TransactionRepository transactionRepository,
-                                        GetAuctionService getAuctionService, UserService userService) {
+    public CreateTransactionServiceImpl(HashService hashService, TransactionRepository transactionRepository, GetAuctionService getAuctionService,
+            UserService userService, AuctionService auctionService) {
         this.hashService = hashService;
         this.transactionRepository = transactionRepository;
         this.getAuctionService = getAuctionService;
         this.userService = userService;
+        this.auctionService = auctionService;
     }
 
     @Override
@@ -55,6 +58,7 @@ public class CreateTransactionServiceImpl implements CreateTransactionService {
     public void createTransaction(BuyoutSaveDto buyoutSaveDto) {
         Transaction buyout = createEntityFromDto(buyoutSaveDto);
         transactionRepository.save(buyout);
+        updateAuctionCurrentItemsAmountOrEndAuction(buyoutSaveDto);
     }
 
     private Transaction createEntityFromDto(BidSaveDto bidSaveDto) {
@@ -84,6 +88,10 @@ public class CreateTransactionServiceImpl implements CreateTransactionService {
             bid.setIsWinning(false);
             transactionRepository.save(bid);
         }
+    }
+
+    private void updateAuctionCurrentItemsAmountOrEndAuction(BuyoutSaveDto buyoutSaveDto) {
+        auctionService.updateCurrentItemsAmountOrEndAuction(buyoutSaveDto);
     }
 
     @Override

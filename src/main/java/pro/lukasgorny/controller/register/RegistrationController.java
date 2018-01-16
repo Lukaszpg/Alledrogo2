@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import pro.lukasgorny.controller.register.validator.UserDtoValidator;
 import pro.lukasgorny.dto.UserSaveDto;
 import pro.lukasgorny.enums.RoleEnum;
@@ -37,16 +38,17 @@ public class RegistrationController {
     private final RegistrationService registrationService;
     private final ApplicationEventPublisher eventPublisher;
     private final MessageSource messageSource;
+    private final UserDtoValidator userDtoValidator;
 
     @Autowired
-    public RegistrationController(UserService userService, HelperServiceImpl helperService,
-                                  RegistrationService registrationService, ApplicationEventPublisher eventPublisher,
-                                  MessageSource messageSource) {
+    public RegistrationController(UserService userService, HelperServiceImpl helperService, RegistrationService registrationService,
+            ApplicationEventPublisher eventPublisher, MessageSource messageSource, UserDtoValidator userDtoValidator) {
         this.userService = userService;
         this.helperService = helperService;
         this.registrationService = registrationService;
         this.eventPublisher = eventPublisher;
         this.messageSource = messageSource;
+        this.userDtoValidator = userDtoValidator;
     }
 
     @GetMapping(Urls.Registration.REGISTER)
@@ -63,7 +65,7 @@ public class RegistrationController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("months", helperService.prepareMonthsList());
 
-        new UserDtoValidator(userService, registrationService).validate(userSaveDto, bindingResult);
+        userDtoValidator.validate(userSaveDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.REGISTRATION);
@@ -93,15 +95,15 @@ public class RegistrationController {
 
     private void sendActivationEmail(User user, WebRequest request) throws Exception {
         String appUrl = request.getContextPath();
-        eventPublisher.publishEvent(new OnRegistrationCompleteEvent
-                (user, request.getLocale(), appUrl));
+        eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), appUrl));
     }
 
     @GetMapping(Urls.Registration.ACTIVATE)
     public ModelAndView activate(@RequestParam("token") String token, RedirectAttributes redirectAttributes) {
         VerificationToken verificationToken = userService.getVerificationToken(token);
         if (verificationToken == null || token == null) {
-            redirectAttributes.addAttribute("message", messageSource.getMessage("error.message.invalid.token", null, LocaleContextHolder.getLocale()));
+            redirectAttributes
+                    .addAttribute("message", messageSource.getMessage("error.message.invalid.token", null, LocaleContextHolder.getLocale()));
             return new ModelAndView(Urls.Registration.TOKEN_ERROR_REDIRECT);
         }
 
@@ -142,7 +144,8 @@ public class RegistrationController {
         String name = ex.getParameterName();
 
         if (name.equals("token")) {
-            redirectAttributes.addAttribute("message", messageSource.getMessage("error.message.invalid.token", null, LocaleContextHolder.getLocale()));
+            redirectAttributes
+                    .addAttribute("message", messageSource.getMessage("error.message.invalid.token", null, LocaleContextHolder.getLocale()));
             return Urls.Registration.TOKEN_ERROR_REDIRECT;
         }
 

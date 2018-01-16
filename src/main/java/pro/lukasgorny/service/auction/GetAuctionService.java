@@ -18,4 +18,5 @@ public interface GetAuctionService {
     List<AuctionResultDto> getEndedWonAuctionsForUser(Long id);
     List<AuctionResultDto> getAllBoughtItemsForUser(Long id);
     List<Auction> getAllAuctionsToEnd();
+    Integer getAuctionCurrentItemAmount(String id);
 }

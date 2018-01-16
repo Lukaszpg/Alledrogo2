@@ -18,6 +18,7 @@ public class AuctionResultDto {
     private BigDecimal bidStartingPrice;
     private BigDecimal bidMinimalPrice;
     private Integer amount;
+    private Integer currentAmount;
     private Boolean isBuyout;
     private Boolean isBid;
     private Boolean hasEnded;
@@ -144,5 +145,13 @@ public class AuctionResultDto {
 
     public void setWinningBid(TransactionResultDto winningBid) {
         this.winningBid = winningBid;
+    }
+
+    public Integer getCurrentAmount() {
+        return currentAmount;
+    }
+
+    public void setCurrentAmount(Integer currentAmount) {
+        this.currentAmount = currentAmount;
     }
 }

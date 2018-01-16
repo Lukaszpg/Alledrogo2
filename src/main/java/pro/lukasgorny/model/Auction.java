@@ -22,6 +22,7 @@ public class Auction extends Model {
     private BigDecimal bidStartingPrice;
     private BigDecimal bidMinimalPrice;
     private Integer amount;
+    private Integer currentAmount;
     private Category category;
     private LocalDateTime endDate;
     private List<Transaction> transactions;
@@ -154,5 +155,13 @@ public class Auction extends Model {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public Integer getCurrentAmount() {
+        return currentAmount;
+    }
+
+    public void setCurrentAmount(Integer currentAmount) {
+        this.currentAmount = currentAmount;
     }
 }

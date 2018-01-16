@@ -92,6 +92,11 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         return auctionRepository.findAllByHasEndedIsFalseAndEndDateBefore(LocalDateTime.now());
     }
 
+    @Override
+    public Integer getAuctionCurrentItemAmount(String id) {
+        return auctionRepository.findCurrentItemsAmountByAuctionId(hashService.decode(id));
+    }
+
     private List<AuctionResultDto> createDtoListFromEntityList(List<Auction> auctions) {
         return auctions != null ? auctions.stream().map(this::createDtoFromEntity).collect(Collectors.toList()) : new ArrayList<>();
     }
@@ -113,6 +118,7 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setSellerDto(createUserDtoFromEntity(auction.getSeller()));
         auctionResultDto.setWinningBid(getWinningBid(auctionResultDto.getId()));
         auctionResultDto.setHasEnded(auction.getHasEnded());
+        auctionResultDto.setCurrentAmount(auction.getCurrentAmount());
 
         return auctionResultDto;
     }

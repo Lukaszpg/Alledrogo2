@@ -1,5 +1,6 @@
 package pro.lukasgorny.service.auction;
 
+import pro.lukasgorny.dto.auction.BuyoutSaveDto;
 import pro.lukasgorny.dto.auction.ObserveDto;
 import pro.lukasgorny.model.Auction;
 
@@ -13,4 +14,5 @@ public interface AuctionService {
     void endAuction(Auction auction);
     Boolean checkIsBiddingUserAuctionCreator(String auctionId, String username);
     Boolean checkHasAuctionEnded(String id);
+    void updateCurrentItemsAmountOrEndAuction(BuyoutSaveDto buyoutSaveDto);
 }

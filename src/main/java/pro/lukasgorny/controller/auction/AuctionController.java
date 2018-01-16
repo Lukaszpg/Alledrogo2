@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import pro.lukasgorny.controller.auction.validator.AuctionSaveDtoValidator;
 import pro.lukasgorny.controller.auction.validator.BidDtoValidator;
+import pro.lukasgorny.controller.auction.validator.BuyoutDtoValidator;
 import pro.lukasgorny.dto.auction.AuctionSaveDto;
 import pro.lukasgorny.dto.auction.BidSaveDto;
 import pro.lukasgorny.dto.auction.BuyoutSaveDto;
@@ -39,16 +40,23 @@ public class AuctionController {
     private final HashService hashService;
     private final CreateTransactionService createTransactionService;
     private final AuctionService auctionService;
+    private final AuctionSaveDtoValidator auctionSaveDtoValidator;
+    private final BidDtoValidator bidDtoValidator;
+    private final BuyoutDtoValidator buyoutDtoValidator;
 
     @Autowired
     public AuctionController(UserService userService, GetAuctionService getAuctionService, CreateAuctionService createAuctionService,
-                             HashService hashService, CreateTransactionService createTransactionService, AuctionService auctionService) {
+            HashService hashService, CreateTransactionService createTransactionService, AuctionService auctionService,
+            AuctionSaveDtoValidator auctionSaveDtoValidator, BidDtoValidator bidDtoValidator, BuyoutDtoValidator buyoutDtoValidator) {
         this.userService = userService;
         this.getAuctionService = getAuctionService;
         this.createAuctionService = createAuctionService;
         this.hashService = hashService;
         this.createTransactionService = createTransactionService;
         this.auctionService = auctionService;
+        this.auctionSaveDtoValidator = auctionSaveDtoValidator;
+        this.bidDtoValidator = bidDtoValidator;
+        this.buyoutDtoValidator = buyoutDtoValidator;
     }
 
     @GetMapping(Urls.Auction.SELL)
@@ -65,15 +73,14 @@ public class AuctionController {
     public ModelAndView createAuction(@Valid AuctionSaveDto auctionSaveDto, BindingResult bindingResult, Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
 
-        new AuctionSaveDtoValidator().validate(auctionSaveDto, bindingResult);
+        auctionSaveDtoValidator.validate(auctionSaveDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.AuctionTemplates.SELL);
         } else {
             auctionSaveDto.setSeller(userService.getByEmail(principal.getName()));
-            createAuctionService.setAuctionSaveDto(auctionSaveDto);
 
-            Auction auction = createAuctionService.create();
+            Auction auction = createAuctionService.create(auctionSaveDto);
             ModelMap modelMap = new ModelMap();
             modelMap.addAttribute("auctionId", hashService.encode(auction.getId()));
             return new ModelAndView(Urls.Auction.CREATE_SUCCESS_REDIRECT, modelMap);
@@ -99,7 +106,8 @@ public class AuctionController {
     }
 
     @PostMapping(Urls.Auction.BID)
-    public ModelAndView bid(@PathVariable String id, @ModelAttribute("bidDto") @Valid BidSaveDto bidSaveDto, BindingResult bindingResult, Principal principal) {
+    public ModelAndView bid(@PathVariable String id, @ModelAttribute("bidDto") @Valid BidSaveDto bidSaveDto, BindingResult bindingResult,
+            Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
 
         bidSaveDto.setUsername(principal.getName());
@@ -115,7 +123,7 @@ public class AuctionController {
             return modelAndView;
         }
 
-        new BidDtoValidator(auctionService, createTransactionService).validate(bidSaveDto, bindingResult);
+        bidDtoValidator.validate(bidSaveDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             modelAndView.addObject("auctionDto", getAuctionService.getOne(id));
@@ -144,16 +152,34 @@ public class AuctionController {
     }
 
     @PostMapping(Urls.Auction.CONFIRM_BUYOUT)
-    public ModelAndView confirmBuyout(@PathVariable("id") String id, @Valid @ModelAttribute("buyoutDto") BuyoutSaveDto buyoutSaveDto, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView(Templates.AuctionTemplates.CONFIRM_BUYOUT);
+    public ModelAndView confirmBuyout(@PathVariable("id") String id, @Valid @ModelAttribute("buyoutDto") BuyoutSaveDto buyoutSaveDto,
+            BindingResult bindingResult, Principal principal) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (!getAuctionService.auctionExists(id)) {
+            modelAndView.setViewName(Templates.AuctionTemplates.ITEM);
+            return modelAndView;
+        }
+
+        if (auctionService.checkHasAuctionEnded(id)) {
+            modelAndView.setViewName(Urls.Auction.AUCTION_ENDED_REDIRECT);
+            return modelAndView;
+        }
+
+        buyoutSaveDto.setUsername(principal.getName());
+        buyoutSaveDto.setAuctionId(id);
+        buyoutDtoValidator.validate(buyoutSaveDto, bindingResult);
+
         modelAndView.addObject("buyoutDto", buyoutSaveDto);
         modelAndView.addObject("auctionDto", getAuctionService.getOne(id));
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             modelAndView.addObject("bidDto", new BidSaveDto());
             modelAndView.setViewName(Templates.AuctionTemplates.ITEM);
             return modelAndView;
         }
+
+        modelAndView.setViewName(Templates.AuctionTemplates.CONFIRM_BUYOUT);
 
         return modelAndView;
     }
@@ -164,13 +190,14 @@ public class AuctionController {
         buyoutSaveDto.setAuctionId(id);
         buyoutSaveDto.setUsername(principal.getName());
         createTransactionService.createTransaction(buyoutSaveDto);
-        modelAndView.setViewName(Templates.AuctionTemplates.BUYOUT_SUCCESS);
+        modelAndView.setViewName(String.format(Urls.Auction.BUYOUT_SUCCESS_REDIRECT, id));
         return modelAndView;
     }
 
     @GetMapping(Urls.Auction.BUYOUT_SUCCESS)
-    public ModelAndView buyoutSuccess() {
-        ModelAndView modelAndView = new ModelAndView();
+    public ModelAndView buyoutSuccess(@PathVariable("id") String id) {
+        ModelAndView modelAndView = new ModelAndView(Templates.AuctionTemplates.BUYOUT_SUCCESS);
+        modelAndView.addObject("auctionId", id);
         return modelAndView;
     }
 }

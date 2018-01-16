@@ -18,8 +18,6 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
     private final AuctionRepository auctionRepository;
     private final GetCategoryService getCategoryService;
 
-    private AuctionSaveDto auctionSaveDto;
-
     @Autowired
     public CreateAuctionServiceImpl(AuctionRepository auctionRepository, GetCategoryService getCategoryService) {
         this.auctionRepository = auctionRepository;
@@ -27,12 +25,12 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
     }
 
     @Override
-    public Auction create() {
-        Auction auction = createEntityFromDto();
+    public Auction create(AuctionSaveDto auctionSaveDto) {
+        Auction auction = createEntityFromDto(auctionSaveDto);
         return auctionRepository.save(auction);
     }
 
-    private Auction createEntityFromDto() {
+    private Auction createEntityFromDto(AuctionSaveDto auctionSaveDto) {
         Auction auction = new Auction();
         auction.setCategory(getCategoryService.getById(auctionSaveDto.getCategoryId()));
         auction.setTitle(auctionSaveDto.getTitle());
@@ -42,25 +40,21 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
         auction.setBid(calculateBooleanFieldValue(auctionSaveDto.getIsBid()));
         auction.setPrice(auctionSaveDto.getPrice());
         auction.setAmount(auctionSaveDto.getAmount());
+        auction.setCurrentAmount(auctionSaveDto.getAmount());
         auction.setBidMinimalPrice(auctionSaveDto.getBidMinimalPrice());
         auction.setBidStartingPrice(auctionSaveDto.getBidStartingPrice());
-        auction.setEndDate(calculateEndDate());
+        auction.setEndDate(calculateEndDate(auctionSaveDto));
         auction.setSeller(auctionSaveDto.getSeller());
         auction.setDeleted(false);
         auction.setHasEnded(false);
         return auction;
     }
 
-    private LocalDateTime calculateEndDate() {
+    private LocalDateTime calculateEndDate(AuctionSaveDto auctionSaveDto) {
         return LocalDateTime.now().plusDays(auctionSaveDto.getAuctionDuration());
     }
 
     private Boolean calculateBooleanFieldValue(Boolean field) {
         return field != null;
-    }
-
-    @Override
-    public void setAuctionSaveDto(AuctionSaveDto auctionSaveDto) {
-        this.auctionSaveDto = auctionSaveDto;
     }
 }

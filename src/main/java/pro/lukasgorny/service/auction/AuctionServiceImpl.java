@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.BidSaveDto;
+import pro.lukasgorny.dto.auction.BuyoutSaveDto;
 import pro.lukasgorny.dto.auction.ObserveDto;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.User;
@@ -71,5 +72,16 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Boolean checkHasAuctionEnded(String auctionId) {
         return getAuctionService.getOne(auctionId).getHasEnded();
+    }
+
+    @Override
+    public void updateCurrentItemsAmountOrEndAuction(BuyoutSaveDto buyoutSaveDto) {
+        Auction auction = getAuctionService.getOneEntity(buyoutSaveDto.getAuctionId());
+        if((auction.getCurrentAmount() - buyoutSaveDto.getAmountToBuy()) == 0) {
+            endAuction(auction);
+        } else {
+            auction.setCurrentAmount(auction.getCurrentAmount() - buyoutSaveDto.getAmountToBuy());
+            auctionRepository.save(auction);
+        }
     }
 }

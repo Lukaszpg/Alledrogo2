@@ -1,9 +1,11 @@
 package pro.lukasgorny.controller.auction.validator;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import pro.lukasgorny.dto.auction.AuctionSaveDto;
 
+@Component
 public class AuctionSaveDtoValidator implements Validator {
 
     @Override

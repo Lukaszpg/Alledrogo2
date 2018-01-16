@@ -9,6 +9,10 @@ public class QueryBody {
 
     }
 
+    public class CategoryQuery {
+        public static final String GET_CATEGORY_COUNT = "SELECT COUNT(*) FROM Category";
+    }
+
     public class RoleQuery {
         public static final String GET_ROLE_COUNT = "SELECT COUNT(*) FROM Role";
     }
@@ -16,6 +20,7 @@ public class QueryBody {
     public class AuctionQuery {
         public static final String FIND_ENDED_NOT_WON_AUCTIONS = "SELECT a FROM Auction a INNER JOIN a.transactions t WHERE a.hasEnded = true AND t.isWinning = false AND t.user.id = :id AND t.transactionType = 'BID'";
         public static final String FIND_ENDED_WON_AUCTIONS = "SELECT a FROM Auction a INNER JOIN a.transactions t WHERE a.hasEnded = true AND t.isWinning = true AND t.user.id = :id AND t.transactionType = 'BID'";
+        public static final String FIND_CURRENT_ITEMS_AMOUNT = "Select a.currentAmount FROM Auction a WHERE a.id = :id";
     }
 
     public class TransactionQuery {

@@ -1,8 +1,10 @@
 package pro.lukasgorny.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pro.lukasgorny.model.Category;
+import pro.lukasgorny.util.QueryBody;
 
 import java.util.List;
 
@@ -14,4 +16,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findByParentIsNull();
     List<Category> findByParentId(Long parentId);
+
+    @Query(QueryBody.CategoryQuery.GET_CATEGORY_COUNT)
+    Long countAll();
+
 }

@@ -1,16 +1,20 @@
 package pro.lukasgorny.controller.auction.validator;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import pro.lukasgorny.dto.auction.BidSaveDto;
 import pro.lukasgorny.service.auction.AuctionService;
 import pro.lukasgorny.service.auction.CreateTransactionService;
 
+@Component
 public class BidDtoValidator implements Validator {
 
     private final AuctionService auctionService;
     private final CreateTransactionService createTransactionService;
 
+    @Autowired
     public BidDtoValidator(AuctionService auctionService, CreateTransactionService createTransactionService) {
         this.auctionService = auctionService;
         this.createTransactionService = createTransactionService;

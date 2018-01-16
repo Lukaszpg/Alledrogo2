@@ -73,104 +73,89 @@ public class Application extends SpringBootServletInitializer {
 
     @PostConstruct
     private void createExampleCategories() {
-        Category electronics = new Category();
-        electronics.setName("Elektronika");
-        electronics.setIsLeaf(false);
+        if(categoryRepository.countAll() == 0) {
+            Category electronics = new Category();
+            electronics.setName("Elektronika");
+            electronics.setIsLeaf(false);
 
-        Category laptops = new Category();
-        laptops.setName("Laptopy");
-        laptops.setIsLeaf(false);
+            Category laptops = new Category();
+            laptops.setName("Laptopy");
+            laptops.setIsLeaf(false);
 
-        electronics.getChildren().add(laptops);
-        electronics.setIsLeaf(false);
+            electronics.getChildren().add(laptops);
+            electronics.setIsLeaf(false);
 
-        Category lenovo = new Category();
-        lenovo.setName("Lenovo");
-        lenovo.setIsLeaf(true);
-        laptops.getChildren().add(lenovo);
+            Category lenovo = new Category();
+            lenovo.setName("Lenovo");
+            lenovo.setIsLeaf(true);
+            laptops.getChildren().add(lenovo);
 
-        Category dell = new Category();
-        dell.setName("Dell");
-        dell.setIsLeaf(true);
-        laptops.getChildren().add(dell);
+            Category dell = new Category();
+            dell.setName("Dell");
+            dell.setIsLeaf(true);
+            laptops.getChildren().add(dell);
 
-        Category cars = new Category();
-        cars.setName("Samochody");
-        cars.setIsLeaf(false);
+            Category cars = new Category();
+            cars.setName("Samochody");
+            cars.setIsLeaf(false);
 
-        Category audi = new Category();
-        audi.setName("Audi");
-        audi.setIsLeaf(true);
-        cars.getChildren().add(audi);
+            Category audi = new Category();
+            audi.setName("Audi");
+            audi.setIsLeaf(true);
+            cars.getChildren().add(audi);
 
-        categoryRepository.save(audi);
-        categoryRepository.save(dell);
-        categoryRepository.save(lenovo);
-        categoryRepository.save(laptops);
-        categoryRepository.save(electronics);
-        categoryRepository.save(cars);
+            categoryRepository.save(audi);
+            categoryRepository.save(dell);
+            categoryRepository.save(lenovo);
+            categoryRepository.save(laptops);
+            categoryRepository.save(electronics);
+            categoryRepository.save(cars);
+        }
     }
 
     @PostConstruct
     private void createAdminAccount() {
-        UserSaveDto userSaveDto = new UserSaveDto();
-        userSaveDto.setEmail("admin@alledrogo.pl");
-        userSaveDto.setPassword("admin");
-        userSaveDto.getRoles().add(RoleEnum.ADMIN);
-        userSaveDto.setBirthdayDay("20");
-        userSaveDto.setBirthdayMonth("4");
-        userSaveDto.setBirthdayYear("1992");
-        registrationService.setUserSaveDto(userSaveDto);
-        registrationService.register();
+        if(userService.getByEmail("admin@alledrogo.pl") == null) {
+            UserSaveDto userSaveDto = new UserSaveDto();
+            userSaveDto.setEmail("admin@alledrogo.pl");
+            userSaveDto.setPassword("admin");
+            userSaveDto.getRoles().add(RoleEnum.ADMIN);
+            userSaveDto.setBirthdayDay("20");
+            userSaveDto.setBirthdayMonth("4");
+            userSaveDto.setBirthdayYear("1992");
+            registrationService.setUserSaveDto(userSaveDto);
+            registrationService.register();
 
-        User user = userService.getByEmail("admin@alledrogo.pl");
-        user.setEnabled(true);
-        user.setSellingBlocked(false);
-        user.setBlocked(false);
+            User user = userService.getByEmail("admin@alledrogo.pl");
+            user.setEnabled(true);
+            user.setSellingBlocked(false);
+            user.setBlocked(false);
 
-        userService.save(user);
+            userService.save(user);
+        }
     }
 
     @PostConstruct
     private void createUserDemoAccount() {
-        UserSaveDto userSaveDto = new UserSaveDto();
-        userSaveDto.setEmail("user@alledrogo.pl");
-        userSaveDto.setPassword("user");
-        userSaveDto.getRoles().add(RoleEnum.USER);
-        userSaveDto.setBirthdayDay("20");
-        userSaveDto.setBirthdayMonth("4");
-        userSaveDto.setBirthdayYear("1992");
-        registrationService.setUserSaveDto(userSaveDto);
-        registrationService.register();
+        if(userService.getByEmail("user@alledrogo.pl") == null) {
+            UserSaveDto userSaveDto = new UserSaveDto();
+            userSaveDto.setEmail("user@alledrogo.pl");
+            userSaveDto.setPassword("user");
+            userSaveDto.getRoles().add(RoleEnum.USER);
+            userSaveDto.setBirthdayDay("20");
+            userSaveDto.setBirthdayMonth("4");
+            userSaveDto.setBirthdayYear("1992");
+            registrationService.setUserSaveDto(userSaveDto);
+            registrationService.register();
 
-        User user = userService.getByEmail("user@alledrogo.pl");
-        user.setEnabled(true);
-        user.setSellingBlocked(false);
-        user.setBlocked(false);
+            User user = userService.getByEmail("user@alledrogo.pl");
+            user.setEnabled(true);
+            user.setSellingBlocked(false);
+            user.setBlocked(false);
 
-        userService.save(user);
+            userService.save(user);
+        }
     }
-
-    /*@PostConstruct
-    private void createTestAuction() {
-        User seller = userService.getByEmail("admin@alledrogo.pl");
-        AuctionSaveDto auctionSaveDto = new AuctionSaveDto();
-        auctionSaveDto.setCategoryId("1");
-        auctionSaveDto.setTitle("Test");
-        auctionSaveDto.setIsNew(true);
-        auctionSaveDto.setEditorContent("Test");
-        auctionSaveDto.setIsBid(true);
-        auctionSaveDto.setIsBuyout(true);
-        auctionSaveDto.setPrice(BigDecimal.ONE);
-        auctionSaveDto.setAmount(10);
-        auctionSaveDto.setBidMinimalPrice(BigDecimal.TEN);
-        auctionSaveDto.setBidStartingPrice(BigDecimal.ONE);
-        auctionSaveDto.setSeller(seller);
-        auctionSaveDto.setAuctionDuration(7L);
-
-        createAuctionService.setAuctionSaveDto(auctionSaveDto);
-        createAuctionService.create();
-    }*/
 
     public String getVersion() {
         return version;

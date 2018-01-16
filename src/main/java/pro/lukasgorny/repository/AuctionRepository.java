@@ -20,6 +20,9 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
     List<Auction> findAllByUsersObserving_Id(Long id);
     List<Auction> findAllByHasEndedIsFalseAndEndDateBefore(LocalDateTime dateTime);
 
+    @Query(QueryBody.AuctionQuery.FIND_CURRENT_ITEMS_AMOUNT)
+    Integer findCurrentItemsAmountByAuctionId(@Param("id") Long id);
+
     @Query(QueryBody.AuctionQuery.FIND_ENDED_NOT_WON_AUCTIONS)
     List<Auction> findEndedNotWonAuctionsForUser(@Param("id") Long id);
 

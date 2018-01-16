@@ -1,13 +1,10 @@
 package pro.lukasgorny.dto.auction;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * Created by Łukasz on 23.11.2017.
  */
 public class BuyoutSaveDto {
 
-    @NotNull
     private Integer amountToBuy;
     private String auctionId;
     private String username;
