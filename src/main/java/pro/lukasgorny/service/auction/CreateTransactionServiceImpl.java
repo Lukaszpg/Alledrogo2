@@ -67,7 +67,7 @@ public class CreateTransactionServiceImpl implements CreateTransactionService {
         bid.setAuction(getAuctionService.getOneEntity(bidSaveDto.getAuctionId()));
         bid.setUser(userService.getByEmail(bidSaveDto.getUsername()));
         bid.setTransactionType(TransactionType.BID);
-        bid.setIsWinning(bidSaveDto.getWinning());
+        bid.setIsWinning(bidSaveDto.getWinning() != null ? bidSaveDto.getWinning() : false);
 
         return bid;
     }
@@ -78,6 +78,7 @@ public class CreateTransactionServiceImpl implements CreateTransactionService {
         buyout.setAuction(getAuctionService.getOneEntity(buyoutSaveDto.getAuctionId()));
         buyout.setUser(userService.getByEmail(buyoutSaveDto.getUsername()));
         buyout.setTransactionType(TransactionType.BUYOUT);
+        buyout.setIsWinning(null);
         return buyout;
     }
 

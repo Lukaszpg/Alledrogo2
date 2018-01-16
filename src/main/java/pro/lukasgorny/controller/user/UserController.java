@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import pro.lukasgorny.dto.Rating.RatingSaveDto;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.service.auction.GetAuctionService;
+import pro.lukasgorny.service.auction.GetTransactionService;
 import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.util.Urls;
@@ -26,11 +27,13 @@ public class UserController {
 
     private final UserService userService;
     private final GetAuctionService getAuctionService;
+    private final GetTransactionService getTransactionService;
 
     @Autowired
-    public UserController(UserService userService, GetAuctionService getAuctionService) {
+    public UserController(UserService userService, GetAuctionService getAuctionService, GetTransactionService getTransactionService) {
         this.userService = userService;
         this.getAuctionService = getAuctionService;
+        this.getTransactionService = getTransactionService;
     }
 
     @GetMapping(Urls.User.ACCOUNT)
@@ -48,7 +51,7 @@ public class UserController {
     }
 
     @GetMapping(Urls.User.RATING_BOUGHT)
-    public ModelAndView listAllBought(Principal principal) {
+    public ModelAndView listRatingAllBought(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.POST_RATING_BOUGHT);
         User user = userService.getByEmail(principal.getName());
         modelAndView.addObject("auctions", getAuctionService.getAllBoughtItemsForUser(user.getId()));
@@ -56,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping(Urls.User.RATING_SOLD)
-    public ModelAndView listAllSold(Principal principal) {
+    public ModelAndView listRatingAllSold(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.POST_RATING_SOLD);
         User user = userService.getByEmail(principal.getName());
         modelAndView.addObject("auctions", getAuctionService.getAllBoughtItemsForUser(user.getId()));
@@ -69,6 +72,20 @@ public class UserController {
         RatingSaveDto ratingSaveDto = new RatingSaveDto();
         ratingSaveDto.setAuctionId(id);
         modelAndView.addObject("ratingDto", ratingSaveDto);
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.ITEMS_SOLD)
+    public ModelAndView getUserSoldItems(Principal principal) {
+        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.ITEMS_SOLD);
+        modelAndView.addObject("transactions", getTransactionService.getAllSoldItemsByUserEmail(principal.getName()));
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.ITEMS_BOUGHT)
+    public ModelAndView getUserBoughtItems(Principal principal) {
+        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.ITEMS_BOUGHT);
+        modelAndView.addObject("transactions", getTransactionService.getAllBoughtItemsByUserEmail(principal.getName()));
         return modelAndView;
     }
 }

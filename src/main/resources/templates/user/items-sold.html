@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/template :: headFragment(#{title.items.sold})">
+    <title>Index</title>
+    <meta charset="utf-8"/>
+</head>
+<body th:replace="layout/template :: bodyFragment">
+<div th:fragment="content">
+    <div class="row">
+        <h2 th:text="#{menu.label.post.rating.sold}"></h2>
+    </div>
+    <div class="row">
+        <table>
+            <thead>
+            <tr>
+                <th th:text="#{label.sold.buyer}"></th>
+                <th th:text="#{label.items.sold.date}"></th>
+                <th th:text="#{label.observed.auction.title}"></th>
+                <th th:text="#{label.items.sold.amount}"></th>
+                <th th:text="#{label.price.simple}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${!#lists.isEmpty(transactions)}" th:each="transaction : ${transactions}">
+                <td th:text="${transaction?.buyerName}"></td>
+                <td th:text="${transaction?.created}"></td>
+                <td th:text="${transaction?.auctionResultDto?.title}"></td>
+                <td th:text="${transaction?.amountBought}"></td>
+                <td th:text="${transaction?.price}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(transactions)}">
+                <td th:text="#{label.no.sold.items}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

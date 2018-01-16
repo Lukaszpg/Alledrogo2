@@ -24,7 +24,7 @@
                     </div>
                     <div class="input-field col s2 search-bar-category-select">
                         <select name="categoryId" id="searchCategoriesSelect">
-                            <option value="" disabled selected th:text="#{label.category.all}"></option>
+                            <option value="" selected th:text="#{label.category.all}"></option>
                             <option th:each="category : ${searchCategories}" th:value="${category.id}" th:text="${category.name}"></option>
                         </select>
                     </div>

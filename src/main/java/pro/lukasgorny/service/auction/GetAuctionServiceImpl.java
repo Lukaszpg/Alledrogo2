@@ -8,7 +8,6 @@ import pro.lukasgorny.dto.auction.TransactionResultDto;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.AuctionRepository;
-import pro.lukasgorny.repository.TransactionRepository;
 import pro.lukasgorny.service.hash.HashService;
 
 import java.time.LocalDateTime;
@@ -44,6 +43,17 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     @Override
     public AuctionResultDto getOne(String id) {
         Auction auction = auctionRepository.findOne(hashService.decode(id));
+
+        if (auction != null) {
+            return createDtoFromEntity(auction);
+        }
+
+        return null;
+    }
+
+    @Override
+    public AuctionResultDto getOne(Long id) {
+        Auction auction = auctionRepository.findOne(id);
 
         if (auction != null) {
             return createDtoFromEntity(auction);

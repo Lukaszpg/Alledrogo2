@@ -10,8 +10,14 @@ import java.math.BigDecimal;
 public class TransactionResultDto {
 
     private String buyerName;
-    private BigDecimal offeredPrice;
+    private BigDecimal price;
     private TransactionType transactionType;
+    private Integer amountBought;
+    private String created;
+    private AuctionResultDto auctionResultDto;
+
+    public TransactionResultDto() {
+    }
 
     public String getBuyerName() {
         return buyerName;
@@ -21,12 +27,12 @@ public class TransactionResultDto {
         this.buyerName = buyerName;
     }
 
-    public BigDecimal getOfferedPrice() {
-        return offeredPrice;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setOfferedPrice(BigDecimal offeredPrice) {
-        this.offeredPrice = offeredPrice;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public TransactionType getTransactionType() {
@@ -35,5 +41,29 @@ public class TransactionResultDto {
 
     public void setTransactionType(TransactionType transactionType) {
         this.transactionType = transactionType;
+    }
+
+    public Integer getAmountBought() {
+        return amountBought;
+    }
+
+    public void setAmountBought(Integer amountBought) {
+        this.amountBought = amountBought;
+    }
+
+    public AuctionResultDto getAuctionResultDto() {
+        return auctionResultDto;
+    }
+
+    public void setAuctionResultDto(AuctionResultDto auctionResultDto) {
+        this.auctionResultDto = auctionResultDto;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
     }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 public interface GetAuctionService {
     List<AuctionResultDto> getTopAuctions();
     AuctionResultDto getOne(String id);
+    AuctionResultDto getOne(Long id);
     Auction getOneEntity(String id);
     Boolean auctionExists(String id);
     List<AuctionResultDto> getAllObservedByUserId(Long id);
