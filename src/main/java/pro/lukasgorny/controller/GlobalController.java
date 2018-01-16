@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import pro.lukasgorny.dto.auction.SearchDto;
 import pro.lukasgorny.dto.category.CategoryDto;
 import pro.lukasgorny.service.category.GetCategoryService;
 
@@ -24,5 +25,10 @@ public class GlobalController {
     @ModelAttribute("searchCategories")
     public List<CategoryDto> getAllTopCategoriesForSearch() {
         return getCategoryService.getAllTop();
+    }
+
+    @ModelAttribute("searchDto")
+    public SearchDto getSearchDto() {
+        return new SearchDto();
     }
 }

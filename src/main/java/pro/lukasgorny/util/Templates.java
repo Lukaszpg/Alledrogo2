@@ -35,4 +35,9 @@ public class Templates {
         public static final String POST_RATING_SOLD = PREFIX + "rating-sold";
         public static final String CREATE_RATING = PREFIX + "create-rating";
     }
+
+    public class SearchTemplates {
+        public static final String PREFIX = "search/";
+        public static final String SEARCH_RESULTS = PREFIX + "search-results";
+    }
 }

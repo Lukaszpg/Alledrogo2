@@ -10,18 +10,21 @@
                 <div class="col s3">
                     <a th:href="@{/}"><img class="logo hide-on-med-and-down" th:src="@{/img/logo-placeholder.png}"></a></img>
                 </div>
-                <form>
+                <form action="#" th:action="@{/search}" th:object="${searchDto}" method="post">
                     <div class="col s3">
                         <div class="input-field search-bar-border search-bar-top">
-                            <input id="search" th:placeholder="#{placeholder.search}" type="search" required>
-                            <label class="label-icon search-icon" for="search"><i
-                                    class="material-icons">search</i></label>
+                            <input id="search" th:field="*{searchString}" type="search"
+                                   th:placeholder="#{placeholder.search}"
+                                   class="validate" th:classappend="${#fields.hasErrors('searchString')}  ? 'invalid' : ''">
+                            <label class="label-icon search-icon" for="search"><i class="material-icons">search</i></label>
                             <i class="material-icons search-clear-icon">close</i>
+                            <div class="validation-error-input" th:if="${#fields.hasErrors('searchString')}"
+                                 th:errors="*{searchString}"></div>
                         </div>
                     </div>
                     <div class="input-field col s2 search-bar-category-select">
-                        <select id="searchCategoriesSelect">
-                            <option value="" disabled selected th:text="#{label.category.pick}"></option>
+                        <select name="categoryId" id="searchCategoriesSelect">
+                            <option value="" disabled selected th:text="#{label.category.all}"></option>
                             <option th:each="category : ${searchCategories}" th:value="${category.id}" th:text="${category.name}"></option>
                         </select>
                     </div>
@@ -30,17 +33,17 @@
                                 th:text="#{button.search}">
                         </button>
                     </div>
-
-                    <ul th:replace="/fragments/menu-navbar-top :: menu-navbar-top"></ul>
-
-                    <div class="col s3">
-                        <ul class="right hide-on-med-and-down menu-top">
-                            <li><a class="dropdown-button menu-top-link" href="#!"
-                                   data-activates="dropdown-menu">
-                                <th:block th:text="#{menu.top.text}" /><i class="material-icons right">menu</i></a></li>
-                        </ul>
-                    </div>
                 </form>
+                <ul th:replace="/fragments/menu-navbar-top :: menu-navbar-top"></ul>
+
+                <div class="col s3">
+                    <ul class="right hide-on-med-and-down menu-top">
+                        <li><a class="dropdown-button menu-top-link" href="#!"
+                               data-activates="dropdown-menu">
+                            <th:block th:text="#{menu.top.text}"/>
+                            <i class="material-icons right">menu</i></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>

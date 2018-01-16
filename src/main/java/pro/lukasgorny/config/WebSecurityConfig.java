@@ -65,6 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/token-error").permitAll()
                 .antMatchers("/register-success").permitAll()
                 .antMatchers("/version").permitAll()
+                .antMatchers("/search").permitAll()
                 .antMatchers("/category-rest/**").permitAll()
                 .antMatchers("/auction/get/**").permitAll()
                 .antMatchers("/auction/**").hasAnyAuthority("USER", "ADMIN")
