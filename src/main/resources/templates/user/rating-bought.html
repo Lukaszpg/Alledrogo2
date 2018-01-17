@@ -14,19 +14,19 @@
             <thead>
             <tr>
                 <th th:text="#{label.observed.seller}"></th>
+                <th th:text="#{label.items.buy.date}"></th>
                 <th th:text="#{label.observed.auction.title}"></th>
-                <th th:text="#{label.auction.bought.amount}"></th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${!#lists.isEmpty(auctions)}" th:each="auction : ${auctions}">
-                <td th:text="${auction?.sellerDto.email}"></td>
-                <td th:text="${auction?.title}"></td>
-                <td th:text="${auction?.amount}"></td>
-                <td><a th:href="@{'/user/rating/create/' + ${auction.id}}" th:text="#{menu.label.post.rating}"></a></td>
+            <tr th:if="${!#lists.isEmpty(transactions)}" th:each="transaction : ${transactions}">
+                <td th:text="${transaction?.auctionResultDto?.sellerDto?.email}"></td>
+                <td th:text="${transaction?.created}"></td>
+                <td th:text="${transaction?.auctionResultDto?.title}"></td>
+                <td><a th:href="@{'/user/rating/create/' + ${transaction?.id}}" th:text="#{menu.label.post.rating}"></a></td>
             </tr>
-            <tr th:if="${#lists.isEmpty(auctions)}">
+            <tr th:if="${#lists.isEmpty(transactions)}">
                 <td th:text="#{label.no.won.auctions}"></td>
             </tr>
             </tbody>

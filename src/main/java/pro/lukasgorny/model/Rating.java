@@ -16,7 +16,6 @@ public class Rating extends Model {
     private RatingTypeEnum ratingTypeEnum;
     private User issuer;
     private User receiver;
-    private Auction auction;
 
     public String getContent() {
         return content;
@@ -53,15 +52,5 @@ public class Rating extends Model {
 
     public void setReceiver(User receiver) {
         this.receiver = receiver;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "auction_id")
-    public Auction getAuction() {
-        return auction;
-    }
-
-    public void setAuction(Auction auction) {
-        this.auction = auction;
     }
 }

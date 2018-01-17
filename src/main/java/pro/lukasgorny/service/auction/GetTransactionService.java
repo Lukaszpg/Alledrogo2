@@ -11,4 +11,5 @@ public interface GetTransactionService {
     TransactionResultDto getWinningBidForAuction(String id);
     List<TransactionResultDto> getAllBoughtItemsByUserEmail(String email);
     List<TransactionResultDto> getAllSoldItemsByUserEmail(String email);
+    List<TransactionResultDto> getAllBoughtItemsWithoutRatingForBuyerByUserEmail(String email);
 }

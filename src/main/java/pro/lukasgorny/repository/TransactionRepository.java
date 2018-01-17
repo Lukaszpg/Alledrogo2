@@ -27,4 +27,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Query(QueryBody.TransactionQuery.FIND_ALL_ENDED_BIDS_FOR_USER_SELLER)
     List<Transaction> findAllEndedBidsForUserSeller(@Param("userId") Long id);
+
+    @Query(QueryBody.TransactionQuery.FIND_ALL_BOUGHT_ITEMS_WITHOUT_RATING_FOR_BUYER)
+    List<Transaction> findAllBoughtItemsWithoutRatingForBuyer(@Param("userId") Long id);
 }

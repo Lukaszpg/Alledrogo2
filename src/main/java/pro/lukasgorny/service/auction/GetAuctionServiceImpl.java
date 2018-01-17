@@ -79,25 +79,6 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     }
 
     @Override
-    public List<AuctionResultDto> getEndedNotWonAuctionsForUser(Long id) {
-        List<Auction> auctions = auctionRepository.findEndedNotWonAuctionsForUser(id);
-        return createDtoListFromEntityList(auctions);
-    }
-
-    @Override
-    public List<AuctionResultDto> getEndedWonAuctionsForUser(Long id) {
-        List<Auction> auctions = auctionRepository.findEndedWonAuctionsForUser(id);
-        return createDtoListFromEntityList(auctions);
-    }
-
-    @Override
-    public List<AuctionResultDto> getAllBoughtItemsForUser(Long id) {
-        List<AuctionResultDto> resultList = new ArrayList<>();
-        resultList.addAll(getEndedWonAuctionsForUser(id));
-        return resultList;
-    }
-
-    @Override
     public List<Auction> getAllAuctionsToEnd() {
         return auctionRepository.findAllByHasEndedIsFalseAndEndDateBefore(LocalDateTime.now());
     }

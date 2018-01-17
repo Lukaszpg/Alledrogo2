@@ -9,6 +9,7 @@ import java.math.BigDecimal;
  */
 public class TransactionResultDto {
 
+    private String id;
     private String buyerName;
     private BigDecimal price;
     private TransactionType transactionType;
@@ -65,5 +66,13 @@ public class TransactionResultDto {
 
     public void setCreated(String created) {
         this.created = created;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

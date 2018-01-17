@@ -66,12 +66,19 @@ public class GetTransactionServiceImpl implements GetTransactionService {
         return createDtoListFromEntityList(transactions);
     }
 
+    @Override
+    public List<TransactionResultDto> getAllBoughtItemsWithoutRatingForBuyerByUserEmail(String email) {
+        User user = userService.getByEmail(email);
+        return createDtoListFromEntityList(transactionRepository.findAllBoughtItemsWithoutRatingForBuyer(user.getId()));
+    }
+
     private List<TransactionResultDto> createDtoListFromEntityList(List<Transaction> transactions) {
         return transactions != null ? transactions.stream().map(this::createDtoFromEntity).collect(Collectors.toList()) : new ArrayList<>();
     }
 
     private TransactionResultDto createDtoFromEntity(Transaction transaction) {
         TransactionResultDto transactionResultDto = new TransactionResultDto();
+        transactionResultDto.setId(hashService.encode(transaction.getId()));
         transactionResultDto.setPrice(transaction.getOffer());
         transactionResultDto.setBuyerName(transaction.getUser().getEmail());
         transactionResultDto.setTransactionType(transaction.getTransactionType());

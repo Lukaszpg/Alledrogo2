@@ -8,7 +8,8 @@ import pro.lukasgorny.enums.RatingTypeEnum;
 public class RatingSaveDto {
     private String content;
     private RatingTypeEnum ratingType;
-    private String auctionId;
+    private String issuerName;
+    private String transactionId;
 
     public String getContent() {
         return content;
@@ -26,11 +27,19 @@ public class RatingSaveDto {
         this.ratingType = ratingType;
     }
 
-    public String getAuctionId() {
-        return auctionId;
+    public String getIssuerName() {
+        return issuerName;
     }
 
-    public void setAuctionId(String auctionId) {
-        this.auctionId = auctionId;
+    public void setIssuerName(String issuerName) {
+        this.issuerName = issuerName;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
 }
