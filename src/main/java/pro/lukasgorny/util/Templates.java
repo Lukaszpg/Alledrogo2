@@ -29,13 +29,13 @@ public class Templates {
 
     public class UserTemplates {
         public static final String PREFIX = "user/";
-        public static final String ACCOUNT = PREFIX + "account";
         public static final String OBSERVING = PREFIX + "observing";
         public static final String POST_RATING_BOUGHT = PREFIX + "rating-bought";
         public static final String POST_RATING_SOLD = PREFIX + "rating-sold";
         public static final String CREATE_RATING = PREFIX + "create-rating";
         public static final String ITEMS_BOUGHT = PREFIX + "items-bought";
         public static final String ITEMS_SOLD = PREFIX + "items-sold";
+        public static final String CREATE_RATING_SUCCESS = PREFIX + "create-rating-success";
     }
 
     public class SearchTemplates {

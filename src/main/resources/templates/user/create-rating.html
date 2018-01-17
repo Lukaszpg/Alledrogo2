@@ -7,7 +7,7 @@
 <body th:replace="layout/template :: bodyFragment">
 <div th:fragment="content">
     <div id="ratingForm" class="row">
-        <form action="#" th:action="@{/user/rating/create}" th:object="${ratingDto}" method="post"
+        <form action="#" th:action="@{'/user/rating/create/' + ${ratingSaveDto.transactionId}}" th:object="${ratingSaveDto}" method="post"
               class="col s10 offset-s2">
             <div class="row">
                 <h2 th:text="#{menu.label.post.rating}"></h2>

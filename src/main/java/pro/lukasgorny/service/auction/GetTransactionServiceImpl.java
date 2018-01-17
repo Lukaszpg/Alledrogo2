@@ -38,6 +38,11 @@ public class GetTransactionServiceImpl implements GetTransactionService {
     }
 
     @Override
+    public Transaction getOneEntity(String id) {
+        return transactionRepository.getOne(hashService.decode(id));
+    }
+
+    @Override
     public TransactionResultDto getWinningBidForAuction(String id) {
         Transaction bid = transactionRepository.findWinningBidForAuction(hashService.decode(id));
 
@@ -70,6 +75,12 @@ public class GetTransactionServiceImpl implements GetTransactionService {
     public List<TransactionResultDto> getAllBoughtItemsWithoutRatingForBuyerByUserEmail(String email) {
         User user = userService.getByEmail(email);
         return createDtoListFromEntityList(transactionRepository.findAllBoughtItemsWithoutRatingForBuyer(user.getId()));
+    }
+
+    @Override
+    public List<TransactionResultDto> getAllSoldItemsWithoutRatingForBuyerByUserEmail(String email) {
+        User user = userService.getByEmail(email);
+        return createDtoListFromEntityList(transactionRepository.findAllSoldItemsWithoutRatingForBuyer(user.getId()));
     }
 
     private List<TransactionResultDto> createDtoListFromEntityList(List<Transaction> transactions) {

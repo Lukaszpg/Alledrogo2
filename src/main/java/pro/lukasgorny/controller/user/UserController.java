@@ -43,12 +43,6 @@ public class UserController {
         this.createRatingService = createRatingService;
     }
 
-    @GetMapping(Urls.User.ACCOUNT)
-    public ModelAndView account(Principal principal) {
-        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.ACCOUNT);
-        return modelAndView;
-    }
-
     @GetMapping(Urls.User.OBSERVING)
     public ModelAndView observing(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.OBSERVING);
@@ -67,7 +61,7 @@ public class UserController {
     @GetMapping(Urls.User.RATING_SOLD)
     public ModelAndView listRatingAllSold(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.POST_RATING_SOLD);
-        modelAndView.addObject("transactions", getTransactionService.getAllBoughtItemsWithoutRatingForBuyerByUserEmail(principal.getName()));
+        modelAndView.addObject("transactions", getTransactionService.getAllSoldItemsWithoutRatingForBuyerByUserEmail(principal.getName()));
         return modelAndView;
     }
 
@@ -76,13 +70,16 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.CREATE_RATING);
         RatingSaveDto ratingSaveDto = new RatingSaveDto();
         ratingSaveDto.setTransactionId(id);
-        modelAndView.addObject("ratingDto", ratingSaveDto);
+        modelAndView.addObject("ratingSaveDto", ratingSaveDto);
         return modelAndView;
     }
 
     @PostMapping(Urls.User.CREATE_RATING)
-    public ModelAndView createRating(@Valid RatingSaveDto ratingSaveDto, BindingResult bindingResult, Principal principal) {
+    public ModelAndView createRating(@PathVariable String id, @Valid RatingSaveDto ratingSaveDto, BindingResult bindingResult, Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
+
+        ratingSaveDto.setIssuerName(principal.getName());
+        ratingSaveDto.setTransactionId(id);
 
         if(bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.UserTemplates.CREATE_RATING);
@@ -90,9 +87,16 @@ public class UserController {
         }
 
         createRatingService.createRating(ratingSaveDto);
+        modelAndView.setViewName(Urls.User.CREATE_RATING_SUCCESS_REDIRECT);
 
         return modelAndView;
     }
+
+    @GetMapping(Urls.User.CREATE_RATING_SUCCESS)
+    public ModelAndView createRatingSuccess() {
+        return new ModelAndView(Templates.UserTemplates.CREATE_RATING_SUCCESS);
+    }
+
 
     @GetMapping(Urls.User.ITEMS_SOLD)
     public ModelAndView getUserSoldItems(Principal principal) {

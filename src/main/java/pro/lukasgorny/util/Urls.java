@@ -61,14 +61,13 @@ public class Urls {
 
     public class User {
         public static final String MAIN = "/user";
-        public static final String ACCOUNT = "/account";
         public static final String OBSERVING = "/observing";
         public static final String RATING = "/rating";
         public static final String RATING_BOUGHT = RATING + "/bought";
         public static final String RATING_SOLD = RATING + "/sold";
         public static final String CREATE_RATING = RATING + "/create/{id}";
-        public static final String POST_RATING_BOUGHT = RATING + "/post-bought";
-        public static final String POST_RATING_SOLD = RATING + "/post-sold";
+        public static final String CREATE_RATING_SUCCESS_REDIRECT = "redirect:/" + MAIN + RATING + "/create-success";
+        public static final String CREATE_RATING_SUCCESS = RATING + "/create-success/";
         public static final String ITEMS_SOLD = "/item/sold";
         public static final String ITEMS_BOUGHT = "/item/bought";
     }

@@ -2,12 +2,19 @@ package pro.lukasgorny.dto.Rating;
 
 import pro.lukasgorny.enums.RatingTypeEnum;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by lukaszgo on 2018-01-11.
  */
 public class RatingSaveDto {
+
+    @NotNull
     private String content;
-    private RatingTypeEnum ratingType;
+
+    @NotNull
+    private String ratingType;
+
     private String issuerName;
     private String transactionId;
 
@@ -17,14 +24,6 @@ public class RatingSaveDto {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public RatingTypeEnum getRatingType() {
-        return ratingType;
-    }
-
-    public void setRatingType(RatingTypeEnum ratingType) {
-        this.ratingType = ratingType;
     }
 
     public String getIssuerName() {
@@ -41,5 +40,13 @@ public class RatingSaveDto {
 
     public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
+    }
+
+    public String getRatingType() {
+        return ratingType;
+    }
+
+    public void setRatingType(String ratingType) {
+        this.ratingType = ratingType;
     }
 }
