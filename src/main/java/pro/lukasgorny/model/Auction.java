@@ -78,7 +78,7 @@ public class Auction extends Model {
         this.amount = amount;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     public Category getCategory() {
         return category;
@@ -120,7 +120,7 @@ public class Auction extends Model {
         this.bidMinimalPrice = bidMinimalPrice;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")
     public User getSeller() {
         return seller;
@@ -138,7 +138,7 @@ public class Auction extends Model {
         this.hasEnded = hasEnded;
     }
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "auction_user_observing", joinColumns = @JoinColumn(name = "auction_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     public List<User> getUsersObserving() {
         return usersObserving;

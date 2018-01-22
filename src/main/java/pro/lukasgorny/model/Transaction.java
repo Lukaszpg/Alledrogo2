@@ -21,7 +21,7 @@ public class Transaction extends Model {
     private Rating buyerRating;
     private Rating sellerRating;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="auction_id")
     public Auction getAuction() {
         return auction;
@@ -31,7 +31,7 @@ public class Transaction extends Model {
         this.auction = auction;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     public User getUser() {
         return user;
@@ -74,7 +74,7 @@ public class Transaction extends Model {
         this.transactionType = transactionType;
     }
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="buyer_rating_id")
     public Rating getBuyerRating() {
         return buyerRating;
@@ -84,7 +84,7 @@ public class Transaction extends Model {
         this.buyerRating = buyerRating;
     }
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="seller_rating_id")
     public Rating getSellerRating() {
         return sellerRating;

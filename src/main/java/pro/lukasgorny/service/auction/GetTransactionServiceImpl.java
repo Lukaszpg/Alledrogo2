@@ -78,9 +78,9 @@ public class GetTransactionServiceImpl implements GetTransactionService {
     }
 
     @Override
-    public List<TransactionResultDto> getAllSoldItemsWithoutRatingForBuyerByUserEmail(String email) {
+    public List<TransactionResultDto> getAllSoldItemsWithoutRatingForSellerByUserEmail(String email) {
         User user = userService.getByEmail(email);
-        return createDtoListFromEntityList(transactionRepository.findAllSoldItemsWithoutRatingForBuyer(user.getId()));
+        return createDtoListFromEntityList(transactionRepository.findAllSoldItemsWithoutRatingForSeller(user.getId()));
     }
 
     private List<TransactionResultDto> createDtoListFromEntityList(List<Transaction> transactions) {

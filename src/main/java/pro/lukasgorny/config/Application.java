@@ -115,9 +115,9 @@ public class Application extends SpringBootServletInitializer {
 
     @PostConstruct
     private void createAdminAccount() {
-        if(userService.getByEmail("admin@alledrogo.pl") == null) {
+        if(userService.getByEmail("admin@auctionify.pl") == null) {
             UserSaveDto userSaveDto = new UserSaveDto();
-            userSaveDto.setEmail("admin@alledrogo.pl");
+            userSaveDto.setEmail("admin@auctionify.pl");
             userSaveDto.setPassword("admin");
             userSaveDto.getRoles().add(RoleEnum.ADMIN);
             userSaveDto.setBirthdayDay("20");
@@ -126,7 +126,7 @@ public class Application extends SpringBootServletInitializer {
             registrationService.setUserSaveDto(userSaveDto);
             registrationService.register();
 
-            User user = userService.getByEmail("admin@alledrogo.pl");
+            User user = userService.getByEmail("admin@auctionify.pl");
             user.setEnabled(true);
             user.setSellingBlocked(false);
             user.setBlocked(false);
@@ -137,9 +137,9 @@ public class Application extends SpringBootServletInitializer {
 
     @PostConstruct
     private void createUserDemoAccount() {
-        if(userService.getByEmail("user@alledrogo.pl") == null) {
+        if(userService.getByEmail("user@auctionify.pl") == null) {
             UserSaveDto userSaveDto = new UserSaveDto();
-            userSaveDto.setEmail("user@alledrogo.pl");
+            userSaveDto.setEmail("user@auctionify.pl");
             userSaveDto.setPassword("user");
             userSaveDto.getRoles().add(RoleEnum.USER);
             userSaveDto.setBirthdayDay("20");
@@ -148,7 +148,7 @@ public class Application extends SpringBootServletInitializer {
             registrationService.setUserSaveDto(userSaveDto);
             registrationService.register();
 
-            User user = userService.getByEmail("user@alledrogo.pl");
+            User user = userService.getByEmail("user@auctionify.pl");
             user.setEnabled(true);
             user.setSellingBlocked(false);
             user.setBlocked(false);

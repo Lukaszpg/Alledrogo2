@@ -14,6 +14,7 @@ import pro.lukasgorny.model.User;
 import pro.lukasgorny.service.auction.GetAuctionService;
 import pro.lukasgorny.service.auction.GetTransactionService;
 import pro.lukasgorny.service.rating.CreateRatingService;
+import pro.lukasgorny.service.rating.GetRatingService;
 import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.util.Urls;
@@ -33,14 +34,16 @@ public class UserController {
     private final GetAuctionService getAuctionService;
     private final GetTransactionService getTransactionService;
     private final CreateRatingService createRatingService;
+    private final GetRatingService getRatingService;
 
     @Autowired
     public UserController(UserService userService, GetAuctionService getAuctionService, GetTransactionService getTransactionService,
-            CreateRatingService createRatingService) {
+            CreateRatingService createRatingService, GetRatingService getRatingService) {
         this.userService = userService;
         this.getAuctionService = getAuctionService;
         this.getTransactionService = getTransactionService;
         this.createRatingService = createRatingService;
+        this.getRatingService = getRatingService;
     }
 
     @GetMapping(Urls.User.OBSERVING)
@@ -51,17 +54,11 @@ public class UserController {
         return modelAndView;
     }
 
-    @GetMapping(Urls.User.RATING_BOUGHT)
-    public ModelAndView listRatingAllBought(Principal principal) {
-        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.POST_RATING_BOUGHT);
-        modelAndView.addObject("transactions", getTransactionService.getAllBoughtItemsWithoutRatingForBuyerByUserEmail(principal.getName()));
-        return modelAndView;
-    }
-
-    @GetMapping(Urls.User.RATING_SOLD)
-    public ModelAndView listRatingAllSold(Principal principal) {
-        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.POST_RATING_SOLD);
-        modelAndView.addObject("transactions", getTransactionService.getAllSoldItemsWithoutRatingForBuyerByUserEmail(principal.getName()));
+    @GetMapping(Urls.User.RATING)
+    public ModelAndView listRatingAll(Principal principal) {
+        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.POST_RATING);
+        modelAndView.addObject("transactionsSold", getTransactionService.getAllSoldItemsWithoutRatingForSellerByUserEmail(principal.getName()));
+        modelAndView.addObject("transactionsBought", getTransactionService.getAllBoughtItemsWithoutRatingForBuyerByUserEmail(principal.getName()));
         return modelAndView;
     }
 
@@ -81,7 +78,7 @@ public class UserController {
         ratingSaveDto.setIssuerName(principal.getName());
         ratingSaveDto.setTransactionId(id);
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.UserTemplates.CREATE_RATING);
             return modelAndView;
         }
@@ -97,7 +94,6 @@ public class UserController {
         return new ModelAndView(Templates.UserTemplates.CREATE_RATING_SUCCESS);
     }
 
-
     @GetMapping(Urls.User.ITEMS_SOLD)
     public ModelAndView getUserSoldItems(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.ITEMS_SOLD);
@@ -109,6 +105,14 @@ public class UserController {
     public ModelAndView getUserBoughtItems(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.ITEMS_BOUGHT);
         modelAndView.addObject("transactions", getTransactionService.getAllBoughtItemsByUserEmail(principal.getName()));
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.MY_RATINGS)
+    public ModelAndView getUserRatings(Principal principal) {
+        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.MY_RATINGS);
+        modelAndView.addObject("receivedRatings", getRatingService.getReceivedRatingsForUser(principal.getName()));
+        modelAndView.addObject("issuedRatings", getRatingService.getIssuedRatingsForUser(principal.getName()));
         return modelAndView;
     }
 }

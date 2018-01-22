@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/template :: headFragment(#{title.my.ratings})">
+    <title>Index</title>
+    <meta charset="utf-8"/>
+</head>
+<body th:replace="layout/template :: bodyFragment">
+<div th:fragment="content">
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s3"><a href="#receivedRating" th:text="#{menu.label.post.rating.received}"></a></li>
+                <li class="tab col s3"><a href="#issuedRating" th:text="#{menu.label.post.rating.issued}"></a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="receivedRating">
+        <div class="row">
+            <h2 th:text="#{page.title.my.ratings.received}"></h2>
+        </div>
+        <div class="row">
+            <table>
+                <thead>
+                <tr>
+                    <th th:text="#{label.rating.receive.date}"></th>
+                    <th th:text="#{label.observed.auction.title}"></th>
+                    <th th:text="#{label.rating.content}"></th>
+                    <th th:text="#{label.rating.type}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${!#lists.isEmpty(receivedRatings)}" th:each="rating : ${receivedRatings}">
+                    <td th:text="${rating?.date}"></td>
+                    <td th:text="${rating?.auctionName}"></td>
+                    <td th:text="${rating?.content}"></td>
+                    <td>
+                        <i th:if="${rating?.ratingType == 'positive'}" class="rating-type-positive icon-larger material-icons">sentiment_very_satisfied</i>
+                        <i th:if="${rating?.ratingType == 'neutral'}" class="material-icons">sentiment_neutral</i>
+                        <i th:if="${rating?.ratingType == 'negative'}" class="rating-type-negative icon-larger material-icons">sentiment_very_dissatisfied</i>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(receivedRatings)}">
+                    <td th:text="#{label.no.rating.to.display}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="issuedRating">
+        <div class="row">
+            <h2 th:text="#{page.title.my.ratings.issued}"></h2>
+        </div>
+        <div class="row">
+            <table>
+                <thead>
+                <tr>
+                    <th th:text="#{label.rating.issue.date}"></th>
+                    <th th:text="#{label.observed.auction.title}"></th>
+                    <th th:text="#{label.rating.content}"></th>
+                    <th th:text="#{label.rating.type}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${!#lists.isEmpty(issuedRatings)}" th:each="rating : ${issuedRatings}">
+                    <td th:text="${rating?.date}"></td>
+                    <td th:text="${rating?.auctionName}"></td>
+                    <td th:text="${rating?.content}"></td>
+                    <td>
+                        <i th:if="${rating?.ratingType == 'positive'}" class="rating-type-positive icon-larger material-icons">sentiment_very_satisfied</i>
+                        <i th:if="${rating?.ratingType == 'neutral'}" class="material-icons">sentiment_neutral</i>
+                        <i th:if="${rating?.ratingType == 'negative'}" class="rating-type-negative icon-larger material-icons">sentiment_very_dissatisfied</i>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(issuedRatings)}">
+                    <td th:text="#{label.no.rating.to.post}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

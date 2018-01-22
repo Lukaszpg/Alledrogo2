@@ -9,6 +9,7 @@ import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.AuctionRepository;
 import pro.lukasgorny.service.hash.HashService;
+import pro.lukasgorny.util.DateFormatter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -105,7 +106,7 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setCategory(auction.getCategory());
         auctionResultDto.setBidStartingPrice(auction.getBidStartingPrice());
         auctionResultDto.setBidMinimalPrice(auction.getBidMinimalPrice());
-        auctionResultDto.setEndDate(parseDate(auction));
+        auctionResultDto.setEndDate(DateFormatter.formatDateToCountdownFormat(auction.getEndDate()));
         auctionResultDto.setSellerDto(createUserDtoFromEntity(auction.getSeller()));
         auctionResultDto.setWinningBid(getWinningBid(auctionResultDto.getId()));
         auctionResultDto.setHasEnded(auction.getHasEnded());
@@ -122,10 +123,5 @@ public class GetAuctionServiceImpl implements GetAuctionService {
 
     private TransactionResultDto getWinningBid(String id) {
         return getTransactionService.getWinningBidForAuction(id);
-    }
-
-    private String parseDate(Auction auction) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        return auction.getEndDate().format(formatter);
     }
 }

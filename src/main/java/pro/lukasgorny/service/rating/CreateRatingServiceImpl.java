@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
+
 import pro.lukasgorny.dto.Rating.RatingSaveDto;
 import pro.lukasgorny.enums.RatingTypeEnum;
 import pro.lukasgorny.model.Rating;
@@ -26,8 +27,8 @@ public class CreateRatingServiceImpl implements CreateRatingService {
     private final TransactionRepository transactionRepository;
 
     @Autowired
-    public CreateRatingServiceImpl(RatingRepository ratingRepository, GetTransactionService getTransactionService,
-                                   UserService userService, TransactionRepository transactionRepository) {
+    public CreateRatingServiceImpl(RatingRepository ratingRepository, GetTransactionService getTransactionService, UserService userService,
+            TransactionRepository transactionRepository) {
         this.ratingRepository = ratingRepository;
         this.getTransactionService = getTransactionService;
         this.userService = userService;
@@ -39,13 +40,15 @@ public class CreateRatingServiceImpl implements CreateRatingService {
     public void createRating(RatingSaveDto ratingSaveDto) {
         Rating rating = createEntityFromDto(ratingSaveDto);
         Transaction transaction = getTransactionService.getOneEntity(ratingSaveDto.getTransactionId());
+        rating.setTransaction(transaction);
         ratingRepository.save(rating);
+
         transaction = setRatingAsIssuerOrBuyer(transaction, rating);
         transactionRepository.save(transaction);
     }
 
     private Transaction setRatingAsIssuerOrBuyer(Transaction transaction, Rating rating) {
-        if(rating.getIssuer().getId().equals(transaction.getUser().getId())) {
+        if (rating.getIssuer().getId().equals(transaction.getUser().getId())) {
             transaction.setBuyerRating(rating);
         } else {
             transaction.setSellerRating(rating);
@@ -64,24 +67,23 @@ public class CreateRatingServiceImpl implements CreateRatingService {
     }
 
     private User getIssuer(RatingSaveDto ratingSaveDto) {
-        Transaction transaction = getTransactionService.getOneEntity(ratingSaveDto.getTransactionId());
-        User user = userService.getByEmail(ratingSaveDto.getIssuerName());
-
-        if (transaction.getUser().getId().equals(user.getId())) {
-            return user;
-        } else {
-            return transaction.getAuction().getSeller();
-        }
+        return userService.getByEmail(ratingSaveDto.getIssuerName());
     }
 
     private User getReceiver(RatingSaveDto ratingSaveDto) {
         Transaction transaction = getTransactionService.getOneEntity(ratingSaveDto.getTransactionId());
         User user = userService.getByEmail(ratingSaveDto.getIssuerName());
 
-        if (!transaction.getAuction().getSeller().getId().equals(user.getId())) {
+        if (!isTheIssuerSeller(transaction, user)) {
             return transaction.getAuction().getSeller();
-        } else {
-            return user;
+        } else if(isTheIssuerSeller(transaction, user)) {
+            return transaction.getUser();
         }
+
+        return user;
+    }
+
+    private boolean isTheIssuerSeller(Transaction transaction, User user) {
+        return transaction.getAuction().getSeller().getId().equals(user.getId());
     }
 }

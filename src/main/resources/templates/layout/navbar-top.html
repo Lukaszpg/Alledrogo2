@@ -40,7 +40,8 @@
                     <ul class="right hide-on-med-and-down menu-top">
                         <li><a class="dropdown-button menu-top-link" href="#!"
                                data-activates="dropdown-menu">
-                            <th:block th:text="#{menu.top.text}"/>
+                            <th:block th:if="${currentLoggedInUsername == null}" th:text="#{menu.top.text}"/>
+                            <th:block th:if="${currentLoggedInUsername != null}" th:text="${currentLoggedInUsername}"/>
                             <i class="material-icons right">menu</i></a></li>
                     </ul>
                 </div>

@@ -63,8 +63,7 @@ public class Urls {
         public static final String MAIN = "/user";
         public static final String OBSERVING = "/observing";
         public static final String RATING = "/rating";
-        public static final String RATING_BOUGHT = RATING + "/bought";
-        public static final String RATING_SOLD = RATING + "/sold";
+        public static final String MY_RATINGS = "/my-ratings";
         public static final String CREATE_RATING = RATING + "/create/{id}";
         public static final String CREATE_RATING_SUCCESS_REDIRECT = "redirect:/" + MAIN + RATING + "/create-success";
         public static final String CREATE_RATING_SUCCESS = RATING + "/create-success/";

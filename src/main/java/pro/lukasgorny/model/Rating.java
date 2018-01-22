@@ -16,7 +16,9 @@ public class Rating extends Model {
     private RatingTypeEnum ratingTypeEnum;
     private User issuer;
     private User receiver;
+    private Transaction transaction;
 
+    @Lob
     public String getContent() {
         return content;
     }
@@ -34,7 +36,7 @@ public class Rating extends Model {
         this.ratingTypeEnum = ratingTypeEnum;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "issuer_id")
     public User getIssuer() {
         return issuer;
@@ -44,7 +46,7 @@ public class Rating extends Model {
         this.issuer = issuer;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id")
     public User getReceiver() {
         return receiver;
@@ -52,5 +54,14 @@ public class Rating extends Model {
 
     public void setReceiver(User receiver) {
         this.receiver = receiver;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY)
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 }

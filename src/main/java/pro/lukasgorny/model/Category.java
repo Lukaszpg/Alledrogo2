@@ -16,7 +16,7 @@ public class Category extends Model {
     private Category parent;
     private List<Category> children = new LinkedList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", insertable = false, updatable = false)
     public Category getParent() {
         return parent;
@@ -26,7 +26,7 @@ public class Category extends Model {
         this.parent = parent;
     }
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @OrderColumn
     @JoinColumn(name = "parent_id")
     public List<Category> getChildren() {

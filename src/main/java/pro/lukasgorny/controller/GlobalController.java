@@ -1,5 +1,6 @@
 package pro.lukasgorny.controller;
 
+import java.security.Principal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -31,4 +32,9 @@ public class GlobalController {
     public SearchDto getSearchDto() {
         return new SearchDto();
     }
+
+    @ModelAttribute("currentLoggedInUsername")
+    public String getCurrentLoggedInUsername(Principal principal) {
+        return principal != null ? principal.getName() : null;
+}
 }
