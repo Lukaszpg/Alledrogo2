@@ -1,5 +1,7 @@
 package pro.lukasgorny.controller.user;
 
+import java.security.Principal;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -18,9 +20,6 @@ import pro.lukasgorny.service.rating.GetRatingService;
 import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.util.Urls;
-
-import java.security.Principal;
-import javax.validation.Valid;
 
 /**
  * Created by Łukasz on 25.10.2017.

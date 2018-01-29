@@ -17,7 +17,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findByParentIsNull();
     List<Category> findByParentId(Long parentId);
 
-    @Query(QueryBody.CategoryQuery.GET_CATEGORY_COUNT)
+    @Query(QueryBody.CategoryQuery.FIND_ALL_IDS)
+    List<Long> findAllIds();
+
+    @Query(QueryBody.CategoryQuery.FIND_CATEGORY_COUNT)
     Long countAll();
 
 }

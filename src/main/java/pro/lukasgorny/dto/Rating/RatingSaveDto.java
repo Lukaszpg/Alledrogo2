@@ -1,7 +1,5 @@
 package pro.lukasgorny.dto.Rating;
 
-import pro.lukasgorny.enums.RatingTypeEnum;
-
 import javax.validation.constraints.NotNull;
 
 /**

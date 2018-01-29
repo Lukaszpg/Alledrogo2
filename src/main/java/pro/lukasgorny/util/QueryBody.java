@@ -10,7 +10,8 @@ public class QueryBody {
     }
 
     public class CategoryQuery {
-        public static final String GET_CATEGORY_COUNT = "SELECT COUNT(*) FROM Category";
+        public static final String FIND_CATEGORY_COUNT = "SELECT COUNT(*) FROM Category";
+        public static final String FIND_ALL_IDS = "SELECT c.id FROM Category c";
     }
 
     public class RoleQuery {
@@ -19,6 +20,7 @@ public class QueryBody {
 
     public class AuctionQuery {
         public static final String FIND_CURRENT_ITEMS_AMOUNT = "Select a.currentAmount FROM Auction a WHERE a.id = :id";
+        public static final String FIND_BY_CATEGORY_ID_AND_TITLE = "SELECT a FROM Auction a WHERE a.category.id IN (:ids) AND a.title LIKE CONCAT('%', :title, '%') AND a.hasEnded = false";
     }
 
     public class RatingQuery {

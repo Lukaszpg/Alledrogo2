@@ -9,6 +9,7 @@ import pro.lukasgorny.model.Category;
 import pro.lukasgorny.repository.CategoryRepository;
 import pro.lukasgorny.service.hash.HashService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,22 @@ public class GetCategoryServiceImpl implements GetCategoryService {
         this.hashService = hashService;
         this.categoryRepository = categoryRepository;
         this.modelMapper = modelMapper;
+    }
+
+    @Override
+    public List<Long> getAllLeafIdsByTopCategoryId(String id) {
+        Category category = categoryRepository.getOne(hashService.decode(id));
+
+        if(category != null) {
+            return getAllChildren(category);
+        }
+
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<Long> getAllCategoryIds() {
+        return categoryRepository.findAllIds();
     }
 
     @Override
@@ -53,6 +70,18 @@ public class GetCategoryServiceImpl implements GetCategoryService {
     @Override
     public Category getById(Long id) {
         return categoryRepository.findOne(id);
+    }
+
+    private List<Long> getAllChildren(Category category) {
+        List<Long> results = new ArrayList<>();
+
+        if(!category.getIsLeaf()) {
+            category.getChildren().forEach(child -> results.addAll(getAllChildren(child)));
+        } else {
+            results.add(category.getId());
+        }
+
+        return results;
     }
 
     private CategoryDto convertToDto(Category category) {

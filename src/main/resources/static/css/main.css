@@ -22,15 +22,15 @@ main {
 }
 
 .tabs .indicator {
-    background-color: #26a69a !important;
+    background-color: RGB(34, 105, 255) !important;
 }
 
 .tabs .tab a.active {
-    color: #26a69a !important;
+    color: RGB(34, 105, 255) !important;
 }
 
 .tabs .tab a {
-    color: #26a69a !important;
+    color: RGB(34, 105, 255) !important;
 }
 
 .logo {
@@ -332,4 +332,34 @@ div.validation-error-input:before {
 
 .icon-larger {
     font-size: 30px;
+}
+
+.single-auction-result-photo {
+    width: 80%;
+}
+
+.single-auction-result-title {
+    margin-top: 10px;
+    margin-left: -45px !important;
+}
+
+.single-auction-result-price-position {
+    margin-left: -45px !important;
+    margin-top: -20px;
+    height: 0;
+}
+
+.single-auction-result-price {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.single-auction-result-price-with-shipping-position {
+    margin-left: -45px !important;
+    margin-top: 80px;
+    color: #a9a9a9;
+}
+
+.single-auction-result {
+    margin-top: 25px;
 }

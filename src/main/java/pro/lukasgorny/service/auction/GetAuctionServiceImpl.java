@@ -2,20 +2,23 @@ package pro.lukasgorny.service.auction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.dto.auction.AuctionResultDto;
+import pro.lukasgorny.dto.auction.SearchDto;
 import pro.lukasgorny.dto.auction.TransactionResultDto;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.AuctionRepository;
+import pro.lukasgorny.service.category.GetCategoryService;
 import pro.lukasgorny.service.hash.HashService;
 import pro.lukasgorny.util.DateFormatter;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.mysql.jdbc.StringUtils;
 
 /**
  * Created by Łukasz on 21.11.2017.
@@ -26,13 +29,22 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     private final HashService hashService;
     private final AuctionRepository auctionRepository;
     private final GetTransactionService getTransactionService;
+    private final GetCategoryService getCategoryService;
 
     @Autowired
-    public GetAuctionServiceImpl(AuctionRepository auctionRepository, HashService hashService,
-                                 GetTransactionService getTransactionService) {
+    public GetAuctionServiceImpl(AuctionRepository auctionRepository, HashService hashService, GetTransactionService getTransactionService,
+            GetCategoryService getCategoryService) {
         this.hashService = hashService;
         this.auctionRepository = auctionRepository;
         this.getTransactionService = getTransactionService;
+        this.getCategoryService = getCategoryService;
+    }
+
+    @Override
+    public List<AuctionResultDto> getByCategoryIdAndTitle(SearchDto searchDto) {
+        List<Long> categoryIds = prepareCategoryIds(searchDto);
+        List<Auction> auctions = auctionRepository.findByCategoryIdAndTitle(searchDto.getSearchString(), categoryIds);
+        return createDtoListFromEntityList(auctions);
     }
 
     @Override
@@ -87,6 +99,14 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     @Override
     public Integer getAuctionCurrentItemAmount(String id) {
         return auctionRepository.findCurrentItemsAmountByAuctionId(hashService.decode(id));
+    }
+
+    private List<Long> prepareCategoryIds(SearchDto searchDto) {
+        if (StringUtils.isNullOrEmpty(searchDto.getCategoryId())) {
+            return getCategoryService.getAllCategoryIds();
+        } else {
+            return getCategoryService.getAllLeafIdsByTopCategoryId(searchDto.getCategoryId());
+        }
     }
 
     private List<AuctionResultDto> createDtoListFromEntityList(List<Auction> auctions) {

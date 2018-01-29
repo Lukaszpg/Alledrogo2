@@ -9,6 +9,47 @@
     <div class="row">
         <div class="col s8 offset-s2">
             <h2 th:text="#{page.title.search.results}"></h2>
+            <div th:if="${auctions != null && !#lists.isEmpty(auctions)}">
+                <div th:each="auction : ${auctions}">
+                    <div class="single-auction-result">
+                        <div class="row">
+                            <div class="col l2">
+                                <img class="single-auction-result-photo"
+                                     th:src="@{/img/placeholder.png}">
+                            </div>
+                            <div class="col l9 single-auction-result-title">
+                                <a th:href="@{/auctions/details/{id}(id=${auction.id})}" th:text="${auction.title}"></a>
+                            </div>
+                            <div class="col l9 single-auction-result-price-position">
+                                <div th:if="${auction.winningBid != null}">
+                                    <p class="single-auction-result-price"
+                                       th:utext="#{label.current.price(${auction.winningBid.price})}"></p>
+                                </div>
+                                <div th:if="${auction.winningBid == null}">
+                                    <p class="single-auction-result-price"
+                                       th:utext="#{label.current.price(${auction.price})}"></p>
+                                </div>
+                            </div>
+                            <div class="col l9 single-auction-result-price-with-shipping-position">
+                                <div th:if="${auction.winningBid != null}">
+                                    <p class="single-auction-result-price-with-shipping"
+                                       th:utext="#{label.price.with.shipping.lowest(${auction.winningBid.price + 12.99})}"></p>
+                                </div>
+                                <div th:if="${auction.winningBid == null}">
+                                    <p class="single-auction-result-price-with-shipping"
+                                       th:utext="#{label.price.with.shipping.lowest(${auction.price + 12.99})}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                </div>
+            </div>
+            <div th:if="${auctions == null || #lists.isEmpty(auctions)}">
+                <div class="col offset-s4">
+                    <h5 th:text="#{label.no.search.results}"></h5>
+                </div>
+            </div>
         </div>
     </div>
 </div>
