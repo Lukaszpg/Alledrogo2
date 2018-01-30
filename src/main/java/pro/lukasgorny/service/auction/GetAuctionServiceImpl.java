@@ -3,15 +3,16 @@ package pro.lukasgorny.service.auction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.SearchDto;
 import pro.lukasgorny.dto.auction.TransactionResultDto;
+import pro.lukasgorny.enums.TransactionType;
 import pro.lukasgorny.model.Auction;
-import pro.lukasgorny.model.User;
+import pro.lukasgorny.model.Transaction;
 import pro.lukasgorny.repository.AuctionRepository;
 import pro.lukasgorny.service.category.GetCategoryService;
 import pro.lukasgorny.service.hash.HashService;
+import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.DateFormatter;
 
 import java.time.LocalDateTime;
@@ -30,14 +31,16 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     private final AuctionRepository auctionRepository;
     private final GetTransactionService getTransactionService;
     private final GetCategoryService getCategoryService;
+    private final UserService userService;
 
     @Autowired
     public GetAuctionServiceImpl(AuctionRepository auctionRepository, HashService hashService, GetTransactionService getTransactionService,
-            GetCategoryService getCategoryService) {
+            GetCategoryService getCategoryService, UserService userService) {
         this.hashService = hashService;
         this.auctionRepository = auctionRepository;
         this.getTransactionService = getTransactionService;
         this.getCategoryService = getCategoryService;
+        this.userService = userService;
     }
 
     @Override
@@ -127,21 +130,22 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setBidStartingPrice(auction.getBidStartingPrice());
         auctionResultDto.setBidMinimalPrice(auction.getBidMinimalPrice());
         auctionResultDto.setEndDate(DateFormatter.formatDateToCountdownFormat(auction.getEndDate()));
-        auctionResultDto.setSellerDto(createUserDtoFromEntity(auction.getSeller()));
+        auctionResultDto.setSellerDto(userService.createDtoFromEntity(auction.getSeller()));
         auctionResultDto.setWinningBid(getWinningBid(auctionResultDto.getId()));
         auctionResultDto.setHasEnded(auction.getHasEnded());
         auctionResultDto.setCurrentAmount(auction.getCurrentAmount());
+        auctionResultDto.setBiddingUsersAmount(calculateBiddingUserAmount(auction));
 
         return auctionResultDto;
     }
 
-    private UserResultDto createUserDtoFromEntity(User user) {
-        UserResultDto userResultDto = new UserResultDto();
-        userResultDto.setEmail(user.getEmail());
-        return userResultDto;
-    }
-
     private TransactionResultDto getWinningBid(String id) {
         return getTransactionService.getWinningBidForAuction(id);
+    }
+
+    private Integer calculateBiddingUserAmount(Auction auction) {
+        List<Transaction> bids = auction.getTransactions().stream().filter(transaction -> transaction.getTransactionType().equals(TransactionType.BID)).collect(
+                Collectors.toList());
+        return bids.size();
     }
 }

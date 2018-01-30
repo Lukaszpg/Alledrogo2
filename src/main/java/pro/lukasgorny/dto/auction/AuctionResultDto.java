@@ -26,6 +26,7 @@ public class AuctionResultDto {
     private String endDate;
     private UserResultDto sellerDto;
     private TransactionResultDto winningBid;
+    private Integer biddingUsersAmount;
 
     public String getTitle() {
         return title;
@@ -153,5 +154,13 @@ public class AuctionResultDto {
 
     public void setCurrentAmount(Integer currentAmount) {
         this.currentAmount = currentAmount;
+    }
+
+    public Integer getBiddingUsersAmount() {
+        return biddingUsersAmount;
+    }
+
+    public void setBiddingUsersAmount(Integer biddingUsersAmount) {
+        this.biddingUsersAmount = biddingUsersAmount;
     }
 }

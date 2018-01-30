@@ -14,10 +14,10 @@
         <li><a th:href="@{/user/item/sold}" class="menu-dropdown-top-black" th:text="#{menu.label.items.sold}"></a></li>
         <li><a th:href="@{/user/item/bought}" class="menu-dropdown-top-black" th:text="#{menu.label.items.bought}"></a></li>
         <li class="divider"></li>
-        <li sec:authorize="hasAuthority('ADMIN')"><a class="menu-top-login" th:href="@{/admin/panel}" th:text="#{menu.label.admin.panel}"></a></li>
-        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="menu-top-create-account" th:text="#{page.title.create.account}"></a></li>
-        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}"  class="menu-top-login" th:text="#{menu.label.login}"></a></li>
-        <li sec:authorize="isAuthenticated()" ><a th:href="@{/logout}" class="menu-top-login" th:text="#{menu.label.logout}"></a></li>
+        <li sec:authorize="hasAuthority('ADMIN')"><a class="menu-top-item" th:href="@{/admin/panel}" th:text="#{menu.label.admin.panel}"></a></li>
+        <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="menu-top-item" th:text="#{page.title.create.account}"></a></li>
+        <li sec:authorize="!isAuthenticated()"><a th:href="@{/login}"  class="menu-top-item" th:text="#{menu.label.login}"></a></li>
+        <li sec:authorize="isAuthenticated()" ><a th:href="@{/logout}" class="menu-top-item" th:text="#{menu.label.logout}"></a></li>
     </ul>
 </div>
 </body>

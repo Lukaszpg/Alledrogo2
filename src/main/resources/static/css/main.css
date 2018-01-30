@@ -22,11 +22,15 @@ main {
 }
 
 .tabs .indicator {
-    background-color: RGB(34, 105, 255) !important;
+    background-color: RGB(200, 67, 255) !important;
 }
 
 .tabs .tab a.active {
-    color: RGB(34, 105, 255) !important;
+    color: RGB(200, 67, 255)!important;
+}
+
+.tabs .tab a:hover {
+    color: RGB(200, 67, 255) !important;
 }
 
 .tabs .tab a {
@@ -104,9 +108,10 @@ input[type=search] {
     background-color: white !important;
 }
 
-.menu-top-create-account, .menu-top-login {
+.menu-top-item {
     text-align: center;
     font-weight: 600;
+    color: RGB(34, 105, 255) !important;
 }
 
 div.validation-error {
@@ -362,4 +367,40 @@ div.validation-error-input:before {
 
 .single-auction-result {
     margin-top: 25px;
+}
+
+ul.dropdown-content.select-dropdown li span {
+    color: RGB(34, 105, 255);
+}
+
+.card .card-action a {
+    color: RGB(34, 105, 255) !important;
+}
+
+.card .card-action a:hover {
+    color: RGB(200, 67, 255) !important;
+}
+
+.switch label input[type=checkbox]:checked+.lever {
+    background-color: RGB(73, 145, 255);
+}
+
+.switch label input[type=checkbox]:checked+.lever:after {
+    background-color: RGB(34, 105, 255);
+}
+
+.search-result-price {
+    font-weight: bold;
+}
+
+.buyout-label {
+    margin-top: -10px;
+}
+
+.buyout-label, .buyout-label-with-bid {
+    color: RGB(34, 105, 255);
+}
+
+.buyout-label-with-bid {
+    margin-top: -8px;
 }
