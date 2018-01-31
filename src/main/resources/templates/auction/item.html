@@ -32,9 +32,9 @@
                             <div class="col s3">
                                 <label for="bidStartingPrice" th:text="#{label.current.price}"></label>
                                 <div id="bidStartingPrice" class="auction-price"
-                                     th:text="#{label.money.amount(${auctionDto.winningBid != null ? auctionDto.winningBid.offeredPrice : auctionDto.bidStartingPrice})}"></div>
+                                     th:text="#{label.money.amount(${auctionDto.winningBid != null ? auctionDto.winningBid.price : auctionDto.bidStartingPrice})}"></div>
                                 <div th:if="${!auctionDto.hasEnded}">
-                                    <label th:if="${auctionDto.winningBid != null ? auctionDto.winningBid.offeredPrice
+                                    <label th:if="${auctionDto.winningBid != null ? auctionDto.winningBid.price
                                 <= auctionDto.bidMinimalPrice : auctionDto.bidStartingPrice <= auctionDto.bidMinimalPrice}"
                                            th:text="#{label.minimum.price.not.met}"></label>
                                 </div>

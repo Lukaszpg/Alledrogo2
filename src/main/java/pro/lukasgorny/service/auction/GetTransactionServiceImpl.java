@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import pro.lukasgorny.dto.auction.TransactionResultDto;
 import pro.lukasgorny.enums.TransactionType;
+import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.Transaction;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.TransactionRepository;
@@ -88,15 +89,17 @@ public class GetTransactionServiceImpl implements GetTransactionService {
     }
 
     private TransactionResultDto createDtoFromEntity(Transaction transaction) {
+        Auction auction = transaction.getAuction();
         TransactionResultDto transactionResultDto = new TransactionResultDto();
         transactionResultDto.setId(hashService.encode(transaction.getId()));
         transactionResultDto.setPrice(transaction.getOffer());
         transactionResultDto.setBuyerName(transaction.getUser().getEmail());
         transactionResultDto.setTransactionType(transaction.getTransactionType());
         transactionResultDto.setCreated(DateFormatter.formatDateToHourMinuteFormat(transaction.getCreateDate()));
-        transactionResultDto.setAuctionResultDto(getAuctionService.getOne(transaction.getAuction().getId()));
         transactionResultDto.setAmountBought(transaction.getAmountBought());
         transactionResultDto.setPrice(calculatePrice(transaction));
+        transactionResultDto.setAuctionTitle(auction.getTitle());
+        transactionResultDto.setSellerDto(userService.createDtoFromEntity(auction.getSeller()));
         return transactionResultDto;
     }
 

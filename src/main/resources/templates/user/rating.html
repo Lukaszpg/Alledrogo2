@@ -30,9 +30,9 @@
                 </thead>
                 <tbody>
                 <tr th:if="${!#lists.isEmpty(transactionsBought)}" th:each="transaction : ${transactionsBought}">
-                    <td th:text="${transaction?.auctionResultDto?.sellerDto?.email}"></td>
+                    <td th:text="${transaction?.sellerDto?.email}"></td>
                     <td th:text="${transaction?.created}"></td>
-                    <td th:text="${transaction?.auctionResultDto?.title}"></td>
+                    <td th:text="${transaction?.auctionTitle}"></td>
                     <td><a th:href="@{'/user/rating/create/' + ${transaction?.id}}" th:text="#{menu.label.post.rating}"></a></td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(transactionsBought)}">
@@ -60,7 +60,7 @@
                 <tr th:if="${!#lists.isEmpty(transactionsSold)}" th:each="transaction : ${transactionsSold}">
                     <td th:text="${transaction?.buyerName}"></td>
                     <td th:text="${transaction?.created}"></td>
-                    <td th:text="${transaction?.auctionResultDto?.title}"></td>
+                    <td th:text="${transaction?.auctionTitle}"></td>
                     <td><a th:href="@{'/user/rating/create/' + ${transaction.id}}" th:text="#{menu.label.post.rating}"></a></td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(transactionsSold)}">

@@ -22,9 +22,9 @@
             </thead>
             <tbody>
             <tr th:if="${!#lists.isEmpty(transactions)}" th:each="transaction : ${transactions}">
-                <td th:text="${transaction?.auctionResultDto?.sellerDto?.email}"></td>
+                <td th:text="${transaction?.sellerDto?.email}"></td>
                 <td th:text="${transaction?.created}"></td>
-                <td th:text="${transaction?.auctionResultDto?.title}"></td>
+                <td th:text="${transaction?.auctionTitle}"></td>
                 <td th:text="${transaction?.amountBought}"></td>
                 <td th:text="${transaction?.price}"></td>
             </tr>

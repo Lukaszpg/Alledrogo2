@@ -26,7 +26,7 @@
                                 class="material-icons right">more_vert</i></span>
                         <p th:if="${auction.price != null}" th:utext="#{label.buyout.amount(${auction.price})}"></p>
                         <div th:if="${auction.winningBid != null}">
-                            <p th:utext="#{label.current.price.amount(${auction.winningBid.offeredPrice})}"></p>
+                            <p th:utext="#{label.current.price.amount(${auction.winningBid.price})}"></p>
                         </div>
                         <div th:if="${auction.winningBid == null && auction.isBid}">
                             <p th:utext="#{label.current.price.amount(${auction.bidStartingPrice})}"></p>

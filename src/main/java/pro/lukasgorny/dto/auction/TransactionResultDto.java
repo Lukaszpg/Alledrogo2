@@ -1,5 +1,6 @@
 package pro.lukasgorny.dto.auction;
 
+import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.enums.TransactionType;
 
 import java.math.BigDecimal;
@@ -15,7 +16,8 @@ public class TransactionResultDto {
     private TransactionType transactionType;
     private Integer amountBought;
     private String created;
-    private AuctionResultDto auctionResultDto;
+    private String auctionTitle;
+    private UserResultDto sellerDto;
 
     public TransactionResultDto() {
     }
@@ -52,14 +54,6 @@ public class TransactionResultDto {
         this.amountBought = amountBought;
     }
 
-    public AuctionResultDto getAuctionResultDto() {
-        return auctionResultDto;
-    }
-
-    public void setAuctionResultDto(AuctionResultDto auctionResultDto) {
-        this.auctionResultDto = auctionResultDto;
-    }
-
     public String getCreated() {
         return created;
     }
@@ -74,5 +68,21 @@ public class TransactionResultDto {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getAuctionTitle() {
+        return auctionTitle;
+    }
+
+    public void setAuctionTitle(String auctionTitle) {
+        this.auctionTitle = auctionTitle;
+    }
+
+    public UserResultDto getSellerDto() {
+        return sellerDto;
+    }
+
+    public void setSellerDto(UserResultDto sellerDto) {
+        this.sellerDto = sellerDto;
     }
 }

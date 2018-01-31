@@ -13,6 +13,7 @@ import pro.lukasgorny.repository.AuctionRepository;
 import pro.lukasgorny.service.category.GetCategoryService;
 import pro.lukasgorny.service.hash.HashService;
 import pro.lukasgorny.service.user.UserService;
+import pro.lukasgorny.util.CollectionHelper;
 import pro.lukasgorny.util.DateFormatter;
 
 import java.time.LocalDateTime;
@@ -144,8 +145,7 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     }
 
     private Integer calculateBiddingUserAmount(Auction auction) {
-        List<Transaction> bids = auction.getTransactions().stream().filter(transaction -> transaction.getTransactionType().equals(TransactionType.BID)).collect(
-                Collectors.toList());
+        List<Transaction> bids = auction.getTransactions().stream().filter(CollectionHelper.distinctByKey(a -> a.getUser().getId())).collect(Collectors.toList());
         return bids.size();
     }
 }
