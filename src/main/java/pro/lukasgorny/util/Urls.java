@@ -70,4 +70,9 @@ public class Urls {
         public static final String ITEMS_SOLD = "/item/sold";
         public static final String ITEMS_BOUGHT = "/item/bought";
     }
+
+    public class Search {
+        public static final String SEARCH = "/search";
+        public static final String SEARCH_REST = "/search-rest";
+    }
 }

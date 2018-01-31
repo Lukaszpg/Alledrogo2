@@ -14,27 +14,28 @@
         <div th:if="${#lists.isEmpty(auctions)}" class="col s4 offset-s5">
             <h5 th:text="#{label.no.auctions}"></h5>
         </div>
-        <div th:each="auction : ${auctions}">
-            <div class="col s4">
-                <div class="card">
-                    <div class="card-image waves-effect waves-block waves-light">
-                        <img class="activator" th:src="@{/img/placeholder.png}">
+        <div th:each="auction : ${auctions}" class="col s4">
+            <div class="card">
+                <div class="card-image waves-effect waves-block waves-light">
+                    <img class="activator" th:src="@{/img/placeholder.png}">
+                </div>
+                <div class="card-content">
+                    <span class="truncate card-title activator grey-text text-darken-4"
+                          th:text="${auction.title}"><i
+                            class="material-icons right">more_vert</i></span>
+                    <p th:if="${auction.price != null}" th:utext="#{label.buyout.amount(${auction.price})}"></p>
+                    <div th:if="${auction.winningBid != null}">
+                        <p th:utext="#{label.current.price.amount(${auction.winningBid.price})}"></p>
                     </div>
-                    <div class="card-content">
-                        <span class="truncate card-title activator grey-text text-darken-4"
-                              th:text="${auction.title}"><i
-                                class="material-icons right">more_vert</i></span>
-                        <p th:if="${auction.price != null}" th:utext="#{label.buyout.amount(${auction.price})}"></p>
-                        <div th:if="${auction.winningBid != null}">
-                            <p th:utext="#{label.current.price.amount(${auction.winningBid.price})}"></p>
-                        </div>
-                        <div th:if="${auction.winningBid == null && auction.isBid}">
-                            <p th:utext="#{label.current.price.amount(${auction.bidStartingPrice})}"></p>
-                        </div>
+                    <div th:if="${auction.winningBid == null && auction.isBid}">
+                        <p th:utext="#{label.current.price.amount(${auction.bidStartingPrice})}"></p>
                     </div>
-                    <div class="card-action">
-                        <a th:text="#{button.auction.goto}" th:href="@{/auction/get/{id}(id=${auction.id})}"></a>
+                    <div th:if="${!auction.isBid}">
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
                     </div>
+                </div>
+                <div class="card-action">
+                    <a th:text="#{button.auction.goto}" th:href="@{/auction/get/{id}(id=${auction.id})}"></a>
                 </div>
             </div>
         </div>

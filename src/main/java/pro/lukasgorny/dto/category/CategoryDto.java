@@ -14,6 +14,7 @@ public class CategoryDto {
     private String name;
     private List<CategoryDto> children = new LinkedList<>();
     private Boolean isLeaf;
+    private Integer itemsAmount;
 
     public String getName() {
         return name;
@@ -69,5 +70,13 @@ public class CategoryDto {
 
     public void setParentOfParentId(String parentOfParentId) {
         this.parentOfParentId = parentOfParentId;
+    }
+
+    public Integer getItemsAmount() {
+        return itemsAmount;
+    }
+
+    public void setItemsAmount(Integer itemsAmount) {
+        this.itemsAmount = itemsAmount;
     }
 }

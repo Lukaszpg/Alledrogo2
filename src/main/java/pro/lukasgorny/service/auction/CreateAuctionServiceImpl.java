@@ -2,10 +2,13 @@ package pro.lukasgorny.service.auction;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import pro.lukasgorny.dto.auction.AuctionSaveDto;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.repository.AuctionRepository;
 import pro.lukasgorny.service.category.GetCategoryService;
+import pro.lukasgorny.service.storage.StorageService;
 
 import java.time.LocalDateTime;
 
@@ -17,17 +20,22 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
 
     private final AuctionRepository auctionRepository;
     private final GetCategoryService getCategoryService;
+    private final StorageService storageService;
 
     @Autowired
-    public CreateAuctionServiceImpl(AuctionRepository auctionRepository, GetCategoryService getCategoryService) {
+    public CreateAuctionServiceImpl(AuctionRepository auctionRepository, GetCategoryService getCategoryService, StorageService storageService) {
         this.auctionRepository = auctionRepository;
         this.getCategoryService = getCategoryService;
+        this.storageService = storageService;
     }
 
     @Override
+    @Transactional
     public Auction create(AuctionSaveDto auctionSaveDto) {
         Auction auction = createEntityFromDto(auctionSaveDto);
-        return auctionRepository.save(auction);
+        auction = auctionRepository.save(auction);
+        savePhotos(auctionSaveDto);
+        return auction;
     }
 
     private Auction createEntityFromDto(AuctionSaveDto auctionSaveDto) {
@@ -48,6 +56,12 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
         auction.setDeleted(false);
         auction.setHasEnded(false);
         return auction;
+    }
+
+    private void savePhotos(AuctionSaveDto auctionSaveDto) {
+        for (MultipartFile file : auctionSaveDto.getPhotos()) {
+            storageService.store(file, auctionSaveDto.getPhotoStorePath());
+        }
     }
 
     private LocalDateTime calculateEndDate(AuctionSaveDto auctionSaveDto) {

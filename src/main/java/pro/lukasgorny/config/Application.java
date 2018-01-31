@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -21,6 +22,7 @@ import pro.lukasgorny.repository.CategoryRepository;
 import pro.lukasgorny.repository.RoleRepository;
 import pro.lukasgorny.service.auction.CreateAuctionService;
 import pro.lukasgorny.service.registration.RegistrationService;
+import pro.lukasgorny.service.storage.StorageProperties;
 import pro.lukasgorny.service.user.UserService;
 
 /**
@@ -31,6 +33,7 @@ import pro.lukasgorny.service.user.UserService;
 @EnableJpaRepositories(basePackages = "pro.lukasgorny")
 @EntityScan(basePackages = "pro.lukasgorny")
 @EnableScheduling
+@EnableConfigurationProperties(StorageProperties.class)
 public class Application extends SpringBootServletInitializer {
 
     private final RoleRepository roleRepository;

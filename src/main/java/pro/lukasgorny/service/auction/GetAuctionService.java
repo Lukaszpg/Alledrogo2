@@ -19,4 +19,5 @@ public interface GetAuctionService {
     List<AuctionResultDto> getAllObservedByUserId(Long id);
     List<Auction> getAllAuctionsToEnd();
     Integer getAuctionCurrentItemAmount(String id);
+    Integer getAuctionsCountByCategory(Long id);
 }

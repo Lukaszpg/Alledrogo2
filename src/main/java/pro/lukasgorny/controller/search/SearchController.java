@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import pro.lukasgorny.dto.auction.SearchDto;
 import pro.lukasgorny.service.auction.GetAuctionService;
 import pro.lukasgorny.util.Templates;
+import pro.lukasgorny.util.Urls;
 
 /**
  * Created by lukaszgo on 2018-01-16.
@@ -25,10 +26,10 @@ public class SearchController {
         this.getAuctionService = getAuctionService;
     }
 
-    @PostMapping("/search")
+    @GetMapping(Urls.Search.SEARCH)
     public ModelAndView search(@Valid SearchDto searchDto) {
         ModelAndView modelAndView = new ModelAndView(Templates.SearchTemplates.SEARCH_RESULTS);
-        modelAndView.addObject("auctions", getAuctionService.getByCategoryIdAndTitle(searchDto));
+        modelAndView.addObject("searchDto", searchDto);
         return modelAndView;
     }
 

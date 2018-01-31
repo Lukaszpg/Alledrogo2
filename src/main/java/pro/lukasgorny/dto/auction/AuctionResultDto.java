@@ -1,5 +1,6 @@
 package pro.lukasgorny.dto.auction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.model.Category;
 
@@ -22,6 +23,8 @@ public class AuctionResultDto {
     private Boolean isBuyout;
     private Boolean isBid;
     private Boolean hasEnded;
+
+    @JsonIgnore
     private Category category;
     private String endDate;
     private UserResultDto sellerDto;

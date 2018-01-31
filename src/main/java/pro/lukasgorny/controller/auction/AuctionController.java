@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import pro.lukasgorny.controller.auction.validator.AuctionSaveDtoValidator;
@@ -23,6 +24,7 @@ import pro.lukasgorny.service.auction.CreateAuctionService;
 import pro.lukasgorny.service.hash.HashService;
 import pro.lukasgorny.util.Urls;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 
@@ -70,8 +72,9 @@ public class AuctionController {
     }
 
     @PostMapping(Urls.Auction.SELL)
-    public ModelAndView createAuction(@Valid AuctionSaveDto auctionSaveDto, BindingResult bindingResult, Principal principal) {
+    public ModelAndView createAuction(@Valid AuctionSaveDto auctionSaveDto, BindingResult bindingResult, Principal principal, HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView();
+        auctionSaveDto.setPhotoStorePath(request.getSession().getServletContext().getRealPath("/"));
 
         auctionSaveDtoValidator.validate(auctionSaveDto, bindingResult);
 

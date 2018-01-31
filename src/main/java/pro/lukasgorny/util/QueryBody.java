@@ -21,6 +21,7 @@ public class QueryBody {
     public class AuctionQuery {
         public static final String FIND_CURRENT_ITEMS_AMOUNT = "Select a.currentAmount FROM Auction a WHERE a.id = :id";
         public static final String FIND_BY_CATEGORY_ID_AND_TITLE = "SELECT a FROM Auction a WHERE a.category.id IN (:ids) AND lower(a.title) LIKE lower(CONCAT('%', :title, '%')) AND a.hasEnded = false";
+        public static final String FIND_AUCTION_AMOUNT_BY_CATEGORY = "SELECT COUNT(*) FROM Auction a WHERE a.category.id IN (:ids) AND a.hasEnded = false";
     }
 
     public class RatingQuery {

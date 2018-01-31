@@ -238,6 +238,169 @@ window.onload = function () {
         }
     });
 
+    Vue.component('search', {
+        data() {
+            return {
+                searchString: "",
+                categoryId: "",
+                auctions: [],
+                categories: [],
+                previousCategoryId: 0,
+                isLoading: false,
+                showReturn: false
+            }
+        },
+        template:
+            '<div>' +
+                '<div class="row">' +
+                    '<div class="col s2">' +
+                        '<div class="row"></div>' +
+                        '<div class="row"></div>' +
+                        '<div class="row"></div>' +
+                        '<div class="row"></div>' +
+                        '<div class="row"></div>' +
+                            '<h5>Podkategorie<i @click="previous" v-if="showReturn" class="filter-return-icon material-icons">undo</i></h5>' +
+                            '<ul class="collection">' +
+                                '<a @click="getChildren(category.id)" v-for="category in categories" class="collection-item">' +
+                                    '<span class="title">{{ category.name }}</span>' +
+                                    '<br/><label>{{ category.itemsAmount }} przedmiotów</label>' +
+                                '</a>' +
+                            '</ul>' +
+                            '</div>' +
+                    '<div v-if="auctions.length > 0" class="col s10">' +
+                        '<h2>Wyniki wyszukiwania</h2>' +
+                        '<div v-for="auction in auctions" class="single-auction-result">' +
+                            '<div class="row">' +
+                                '<div class="col s4">' +
+                                    '<img class="single-auction-result-photo" src="/img/placeholder.png">' +
+                                '</div>' +
+                                '<div class="col s8">' +
+                                    '<div class="row">' +
+                                        '<a :href="\'/auction/get/\' + auction.id"><h5>{{ auction.title }}</h5></a>' +
+                                    '</div>' +
+                                    '<div class="row"></div>' +
+                                        '<div class="row">' +
+                                            '<div v-if="auction.winningBid != null && auction.isBid">' +
+                                                '<h5 class="search-result-price">{{ auction.winningBid.price }} PLN</h5>' +
+                                            '</div>' +
+                                            '<div v-if="auction.winningBid == null && auction.isBid">' +
+                                                '<h5 class="search-result-price">{{ auction.bidStartingPrice }} PLN</h5>' +
+                                            '</div>' +
+                                        '</div>' +
+                                        '<div class="row">' +
+                                            '<div v-if="auction.isBuyout && auction.isBid">' +
+                                                '<h6 class="search-result-price">{{ auction.price }} PLN</h6>' +
+                                                '<div class="buyout-label-with-bid">Kup teraz</div>' +
+                                            '</div>' +
+                                            '<div v-if="auction.isBuyout && !auction.isBid">' +
+                                                '<h5 class="search-result-price">{{ auction.price }} PLN</h5>' +
+                                                '<div class="buyout-label">Kup teraz</div>' +
+                                                '</div>' +
+                                            '</div>' +
+                                        '<div class="row"></div>' +
+                                        '<div class="row"></div>' +
+                                        '<div class="row">' +
+                                            '<div class="right" v-if="auction.isBid && auction.biddingUsersAmount > 0">{{ auction.biddingUsersAmount }} osoby licytują</div>' +
+                                            '<div class="right" v-if="auction.isBid && auction.biddingUsersAmount == 0">nikt nie licytuje, bądź pierwszy</div>' +
+                                        '</div>' +
+                                    '<div class="row"></div>' +
+                                '</div>' +
+                            '</div>' +
+                            '<div class="divider"></div>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div v-else-if="auctions.length == 0" class="col s10">' +
+                        '<h2>Wyniki wyszukiwania</h2>' +
+                        '<h5>Brak wyników wyszukiwania</h5>' +
+                    '</div>' +
+                '</div>' +
+            '</div>',
+
+        methods: {
+            previous: function() {
+                var vm = this;
+                if (vm.previousCategoryId === 0) {
+                    vm.getCategories();
+                    vm.showReturn = false;
+                    vm.getSearchResults(vm.searchString, undefined);
+                } else {
+                    vm.getChildren(vm.previousCategoryId);
+                    vm.getSearchResults(vm.searchString, vm.previousCategoryId);
+                }
+            },
+            constructSearchUrl: function(searchString, categoryId) {
+                let baseUrl = "/search-rest?";
+
+                if(searchString !== undefined || searchString != "") {
+                    baseUrl += "searchString=" + searchString;
+                }
+
+                if(categoryId !== undefined) {
+                    baseUrl += "&categoryId=" + categoryId;
+                }
+
+                return baseUrl;
+            },
+            getSearchResults: function(searchString, categoryId) {
+                let vm = this;
+                let url = vm.constructSearchUrl(searchString, categoryId);
+
+                axios.get(url)
+                    .then(function (response) {
+                        vm.auctions = response.data;
+                    })
+                    .catch(function () {
+                        vm.auctions = [];
+                        this.errors.push(e)
+                    })
+            },
+            getCategories: function() {
+                let vm = this;
+
+                if(vm.categoryId == undefined || vm.categoryId == "") {
+                    axios.get('/category-rest/get-all-top')
+                        .then(function (response) {
+                            vm.categories = response.data;
+                            vm.isLoading = false;
+                            vm.showReturn = false;
+                        })
+                        .catch(function () {
+                            this.errors.push(e);
+                            console.log(e);
+                        })
+                } else {
+                    vm.getChildren(vm.categoryId);
+                }
+            },
+
+            getChildren: function(id) {
+                let vm = this;
+
+                axios.get('/category-rest/get-children/' + id)
+                    .then(function (response) {
+                        vm.categories = response.data;
+                        vm.previousCategoryId = vm.categories[0].parentOfParentId !== null ? vm.categories[0].parentOfParentId : 0;
+                        vm.isLoading = false;
+                        vm.showReturn = true;
+                    })
+                    .catch(function () {
+                        this.errors.push(e);
+                        console.log(e);
+                    })
+
+                vm.getSearchResults(vm.searchString, id);
+            }
+        },
+
+        mounted() {
+            let vm = this;
+            vm.searchString = $("#searchString").val();
+            vm.categoryId = $("#searchCategory").val();
+            vm.getSearchResults(vm.searchString, vm.categoryId);
+            vm.getCategories();
+        }
+    });
+
     var app = new Vue({
         el: '#app',
     });

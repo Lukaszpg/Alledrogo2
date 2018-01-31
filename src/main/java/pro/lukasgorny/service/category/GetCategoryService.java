@@ -11,6 +11,7 @@ import java.util.List;
 public interface GetCategoryService {
 
     List<Long> getAllLeafIdsByTopCategoryId(String id);
+    List<Long> getAllLeafIdsByTopCategoryId(Long id);
     List<Long> getAllCategoryIds();
     List<CategoryDto> getAll();
     List<CategoryDto> getAllTop();

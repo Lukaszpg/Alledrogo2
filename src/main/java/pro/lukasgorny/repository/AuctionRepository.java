@@ -25,4 +25,7 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
 
     @Query(QueryBody.AuctionQuery.FIND_CURRENT_ITEMS_AMOUNT)
     Integer findCurrentItemsAmountByAuctionId(@Param("id") Long id);
+
+    @Query(QueryBody.AuctionQuery.FIND_AUCTION_AMOUNT_BY_CATEGORY)
+    Integer findAuctionCountByCategoryId(@Param("ids") List<Long> id);
 }

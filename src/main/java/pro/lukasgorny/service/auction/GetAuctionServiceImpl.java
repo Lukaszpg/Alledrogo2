@@ -1,12 +1,12 @@
 package pro.lukasgorny.service.auction;
 
+import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.SearchDto;
 import pro.lukasgorny.dto.auction.TransactionResultDto;
-import pro.lukasgorny.enums.TransactionType;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.Transaction;
 import pro.lukasgorny.repository.AuctionRepository;
@@ -20,7 +20,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.mysql.jdbc.StringUtils;
 
 /**
  * Created by Łukasz on 21.11.2017.
@@ -36,7 +35,7 @@ public class GetAuctionServiceImpl implements GetAuctionService {
 
     @Autowired
     public GetAuctionServiceImpl(AuctionRepository auctionRepository, HashService hashService, GetTransactionService getTransactionService,
-            GetCategoryService getCategoryService, UserService userService) {
+                                 @Lazy GetCategoryService getCategoryService, UserService userService) {
         this.hashService = hashService;
         this.auctionRepository = auctionRepository;
         this.getTransactionService = getTransactionService;
@@ -49,6 +48,12 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         List<Long> categoryIds = prepareCategoryIds(searchDto);
         List<Auction> auctions = auctionRepository.findByCategoryIdAndTitle(searchDto.getSearchString(), categoryIds);
         return createDtoListFromEntityList(auctions);
+    }
+
+    @Override
+    public Integer getAuctionsCountByCategory(Long id) {
+        List<Long> ids = getCategoryService.getAllLeafIdsByTopCategoryId(id);
+        return auctionRepository.findAuctionCountByCategoryId(ids);
     }
 
     @Override
@@ -111,6 +116,10 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         } else {
             return getCategoryService.getAllLeafIdsByTopCategoryId(searchDto.getCategoryId());
         }
+    }
+
+    private List<Long> prepareCategoryIds(Long id) {
+        return getCategoryService.getAllLeafIdsByTopCategoryId(id);
     }
 
     private List<AuctionResultDto> createDtoListFromEntityList(List<Auction> auctions) {

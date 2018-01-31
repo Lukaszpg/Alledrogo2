@@ -3,6 +3,7 @@ package pro.lukasgorny.dto.auction;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
 import pro.lukasgorny.model.User;
 
 import java.math.BigDecimal;
@@ -44,6 +45,10 @@ public class AuctionSaveDto {
 
     @NotNull
     private Long auctionDuration;
+
+    private MultipartFile[] photos;
+
+    private String photoStorePath;
 
     public String getTitle() {
         return title;
@@ -147,5 +152,21 @@ public class AuctionSaveDto {
 
     public void setSeller(User seller) {
         this.seller = seller;
+    }
+
+    public MultipartFile[] getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(MultipartFile[] photos) {
+        this.photos = photos;
+    }
+
+    public String getPhotoStorePath() {
+        return photoStorePath;
+    }
+
+    public void setPhotoStorePath(String photoStorePath) {
+        this.photoStorePath = photoStorePath;
     }
 }

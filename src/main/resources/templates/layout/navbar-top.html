@@ -10,7 +10,7 @@
                 <div class="col s3">
                     <a th:href="@{/}"><img class="logo hide-on-med-and-down" th:src="@{/img/auctionify_logo.png}"></a></img>
                 </div>
-                <form action="#" th:action="@{/search}" th:object="${searchDto}" method="post">
+                <form action="#" th:action="@{/search}" th:object="${searchDto}" method="get">
                     <div class="col s3">
                         <div class="input-field search-bar-border search-bar-top">
                             <input id="search" th:field="*{searchString}" type="search"

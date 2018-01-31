@@ -404,3 +404,12 @@ ul.dropdown-content.select-dropdown li span {
 .buyout-label-with-bid {
     margin-top: -8px;
 }
+
+.filter-return-icon {
+    margin-left: 19px;
+    cursor: pointer;
+}
+
+.collection-item {
+    cursor: pointer;
+}
