@@ -64,6 +64,7 @@ public class PhotoServiceImpl implements PhotoService {
         PhotoDto photoDto = new PhotoDto();
         photoDto.setPhotoPath(photo.getStoragePath());
         photoDto.setImage(readImageFromDisk(photoDto.getPhotoPath()));
+        photoDto.setOrder(photo.getPhotoOrder());
         return photoDto;
     }
 }

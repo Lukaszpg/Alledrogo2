@@ -32,14 +32,20 @@ window.onload = function () {
     Vue.component('gallery', {
         data() {
             return {
+                classObject: {
+                    'gallery-thumbnail-fixed-height': true,
+                    col: true,
+                    s3: true
+                },
                 photos: [],
-                currentPhoto: ""
+                currentPhoto: "",
+                currentActiveOrder: 0
             }
         },
         template:
         '<div>' +
             '<div class="row">' +
-                '<div class="col s8 offset-s2">' +
+                '<div class="col s8 offset-s1">' +
                     '<div class="gallery-border row">' +
                         '<div class="col s8 offset-s2">' +
                             '<img @click="openFullscreen()" class="main-gallery-image responsive-img" v-bind:src="currentPhoto.srcPath">' +
@@ -48,15 +54,17 @@ window.onload = function () {
                 '</div>' +
             '</div>' +
             '<div class="row">' +
-                '<div v-for="photo in photos" class="col s4">' +
+                '<div v-for="photo in photos" v-bind:class="{col:true, s3: true, ' +
+                    '\'gallery-thumbnail-fixed-height\':true, \'gallery-thumbnail-active\':(photo.order === currentActiveOrder), ' +
+                    '\'gallery-thumbnail-not-active\':(photo.order !== currentActiveOrder)}">' +
                     '<div class="row">' +
                         '<div class="col s12">' +
-                            '<img @click="setMainPhoto(photo)" class="gallery-thumbnail" v-bind:src="photo.srcPath">' +
+                            '<img @click="setMainPhoto(photo)" class="responsive-img gallery-thumbnail" v-bind:src="photo.srcPath">' +
                         '</div>' +
                     '</div>' +
                 '</div>' +
             '</div>' +
-            '<div id="galleryFullscreenModal" class="modal">' +
+            '<div id="galleryFullscreenModal" class="modal fullscreen-modal">' +
                 '<div class="modal-content">' +
                     '<div class="row">' +
                         '<div class="col s8 offset-s2">' +
@@ -84,12 +92,14 @@ window.onload = function () {
             setMainPhoto: function(photo) {
                 var vm = this;
                 vm.currentPhoto = photo;
+                vm.currentActiveOrder = photo.order;
             },
 
             openFullscreen: function() {
                 $('.modal').modal();
                 $('#galleryFullscreenModal').modal('open');
-            }
+            },
+
         },
 
         mounted() {
@@ -350,7 +360,7 @@ window.onload = function () {
                         '<div v-for="auction in auctions" class="single-auction-result">' +
                             '<div class="row">' +
                                 '<div class="col s4">' +
-                                    '<img class="responsive-img" :src="auction.mainImageSrcPath">' +
+                                    '<img class="responsive-img search-main-image" :src="auction.mainImageSrcPath">' +
                                 '</div>' +
                                 '<div class="col s8">' +
                                     '<div class="row">' +
