@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("storage")
 public class StorageProperties {
 
-    private String location = "D:\\photos";
+    private String location = "C:\\photos";
 
     public String getLocation() {
         return location;

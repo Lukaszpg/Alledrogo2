@@ -26,10 +26,12 @@ public class AuctionResultDto {
 
     @JsonIgnore
     private Category category;
+
     private String endDate;
     private UserResultDto sellerDto;
     private TransactionResultDto winningBid;
     private Integer biddingUsersAmount;
+    private String mainImage;
 
     public String getTitle() {
         return title;
@@ -165,5 +167,13 @@ public class AuctionResultDto {
 
     public void setBiddingUsersAmount(Integer biddingUsersAmount) {
         this.biddingUsersAmount = biddingUsersAmount;
+    }
+
+    public String getMainImage() {
+        return mainImage;
+    }
+
+    public void setMainImage(String mainImage) {
+        this.mainImage = mainImage;
     }
 }

@@ -28,6 +28,7 @@ public class Auction extends Model {
     private List<Transaction> transactions;
     private User seller;
     private List<User> usersObserving;
+    private List<Photo> photos;
 
     public String getTitle() {
         return title;
@@ -163,5 +164,14 @@ public class Auction extends Model {
 
     public void setCurrentAmount(Integer currentAmount) {
         this.currentAmount = currentAmount;
+    }
+
+    @OneToMany(mappedBy = "auction")
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
     }
 }

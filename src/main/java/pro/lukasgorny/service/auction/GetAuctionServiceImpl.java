@@ -8,6 +8,7 @@ import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.SearchDto;
 import pro.lukasgorny.dto.auction.TransactionResultDto;
 import pro.lukasgorny.model.Auction;
+import pro.lukasgorny.model.Photo;
 import pro.lukasgorny.model.Transaction;
 import pro.lukasgorny.repository.AuctionRepository;
 import pro.lukasgorny.service.category.GetCategoryService;
@@ -18,6 +19,7 @@ import pro.lukasgorny.util.DateFormatter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,15 +34,17 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     private final GetTransactionService getTransactionService;
     private final GetCategoryService getCategoryService;
     private final UserService userService;
+    private final PhotoService photoService;
 
     @Autowired
     public GetAuctionServiceImpl(AuctionRepository auctionRepository, HashService hashService, GetTransactionService getTransactionService,
-                                 @Lazy GetCategoryService getCategoryService, UserService userService) {
+            @Lazy GetCategoryService getCategoryService, UserService userService, PhotoService photoService) {
         this.hashService = hashService;
         this.auctionRepository = auctionRepository;
         this.getTransactionService = getTransactionService;
         this.getCategoryService = getCategoryService;
         this.userService = userService;
+        this.photoService = photoService;
     }
 
     @Override
@@ -145,8 +149,20 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setHasEnded(auction.getHasEnded());
         auctionResultDto.setCurrentAmount(auction.getCurrentAmount());
         auctionResultDto.setBiddingUsersAmount(calculateBiddingUserAmount(auction));
+        auctionResultDto.setMainImage(getMainImage(auction));
 
         return auctionResultDto;
+    }
+
+    private String getMainImage(Auction auction) {
+        List<Photo> mainPhoto = auction.getPhotos().stream().filter(Photo::getIsMain).collect(Collectors.toList());
+
+        if(mainPhoto.size() > 0) {
+            byte[] image = photoService.readImageFromDisk(mainPhoto.get(0).getStoragePath());
+            return Base64.getEncoder().encodeToString(image);
+        }
+
+        return null;
     }
 
     private TransactionResultDto getWinningBid(String id) {

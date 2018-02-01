@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pro.lukasgorny.dto.auction.AuctionSaveDto;
 import pro.lukasgorny.model.Auction;
+import pro.lukasgorny.model.Photo;
 import pro.lukasgorny.repository.AuctionRepository;
 import pro.lukasgorny.service.category.GetCategoryService;
 import pro.lukasgorny.service.storage.StorageService;
@@ -21,12 +22,15 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
     private final AuctionRepository auctionRepository;
     private final GetCategoryService getCategoryService;
     private final StorageService storageService;
+    private final PhotoService photoService;
 
     @Autowired
-    public CreateAuctionServiceImpl(AuctionRepository auctionRepository, GetCategoryService getCategoryService, StorageService storageService) {
+    public CreateAuctionServiceImpl(AuctionRepository auctionRepository, GetCategoryService getCategoryService, StorageService storageService,
+            PhotoService photoService) {
         this.auctionRepository = auctionRepository;
         this.getCategoryService = getCategoryService;
         this.storageService = storageService;
+        this.photoService = photoService;
     }
 
     @Override
@@ -34,7 +38,7 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
     public Auction create(AuctionSaveDto auctionSaveDto) {
         Auction auction = createEntityFromDto(auctionSaveDto);
         auction = auctionRepository.save(auction);
-        savePhotos(auctionSaveDto);
+        savePhotos(auctionSaveDto, auction);
         return auction;
     }
 
@@ -58,9 +62,16 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
         return auction;
     }
 
-    private void savePhotos(AuctionSaveDto auctionSaveDto) {
-        for (MultipartFile file : auctionSaveDto.getPhotos()) {
-            storageService.store(file, auctionSaveDto.getPhotoStorePath());
+    private void savePhotos(AuctionSaveDto auctionSaveDto, Auction auction) {
+        for(int i = 0; i < auctionSaveDto.getPhotos().length; i++) {
+            MultipartFile file = auctionSaveDto.getPhotos()[i];
+            String path = storageService.store(file, auction);
+            Photo photo = new Photo();
+            photo.setAuction(auction);
+            photo.setPhotoOrder(i);
+            photo.setStoragePath(path);
+            photo.setIsMain(i == 0);
+            photoService.save(photo);
         }
     }
 

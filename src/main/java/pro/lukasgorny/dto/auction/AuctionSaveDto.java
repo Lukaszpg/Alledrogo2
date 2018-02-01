@@ -48,8 +48,6 @@ public class AuctionSaveDto {
 
     private MultipartFile[] photos;
 
-    private String photoStorePath;
-
     public String getTitle() {
         return title;
     }
@@ -160,13 +158,5 @@ public class AuctionSaveDto {
 
     public void setPhotos(MultipartFile[] photos) {
         this.photos = photos;
-    }
-
-    public String getPhotoStorePath() {
-        return photoStorePath;
-    }
-
-    public void setPhotoStorePath(String photoStorePath) {
-        this.photoStorePath = photoStorePath;
     }
 }

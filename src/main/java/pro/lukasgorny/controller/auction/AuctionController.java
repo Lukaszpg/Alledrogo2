@@ -72,9 +72,8 @@ public class AuctionController {
     }
 
     @PostMapping(Urls.Auction.SELL)
-    public ModelAndView createAuction(@Valid AuctionSaveDto auctionSaveDto, BindingResult bindingResult, Principal principal, HttpServletRequest request) {
+    public ModelAndView createAuction(@Valid AuctionSaveDto auctionSaveDto, BindingResult bindingResult, Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
-        auctionSaveDto.setPhotoStorePath(request.getSession().getServletContext().getRealPath("/"));
 
         auctionSaveDtoValidator.validate(auctionSaveDto, bindingResult);
 

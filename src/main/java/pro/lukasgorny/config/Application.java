@@ -1,5 +1,8 @@
 package pro.lukasgorny.config;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
@@ -23,6 +26,7 @@ import pro.lukasgorny.repository.RoleRepository;
 import pro.lukasgorny.service.auction.CreateAuctionService;
 import pro.lukasgorny.service.registration.RegistrationService;
 import pro.lukasgorny.service.storage.StorageProperties;
+import pro.lukasgorny.service.storage.exception.StorageException;
 import pro.lukasgorny.service.user.UserService;
 
 /**
@@ -41,17 +45,20 @@ public class Application extends SpringBootServletInitializer {
     private final RegistrationService registrationService;
     private final UserService userService;
     private final CreateAuctionService createAuctionService;
+    private final StorageProperties storageProperties;
 
     private final String version = UUID.randomUUID().toString();
     private final Date compilationDate = new Date();
 
     @Autowired
-    public Application(RoleRepository roleRepository, CategoryRepository categoryRepository, RegistrationService registrationService, UserService userService, CreateAuctionService createAuctionService) {
+    public Application(RoleRepository roleRepository, CategoryRepository categoryRepository, RegistrationService registrationService, UserService userService, CreateAuctionService createAuctionService,
+            StorageProperties storageProperties) {
         this.roleRepository = roleRepository;
         this.categoryRepository = categoryRepository;
         this.registrationService = registrationService;
         this.userService = userService;
         this.createAuctionService = createAuctionService;
+        this.storageProperties = storageProperties;
     }
 
     @Override
@@ -157,6 +164,15 @@ public class Application extends SpringBootServletInitializer {
             user.setBlocked(false);
 
             userService.save(user);
+        }
+    }
+
+    @PostConstruct
+    private void createPhotoSaveDirectory() {
+        try {
+            Files.createDirectories(Paths.get(storageProperties.getLocation()));
+        } catch (IOException e) {
+            throw new StorageException("Could not initialize storage", e);
         }
     }
 

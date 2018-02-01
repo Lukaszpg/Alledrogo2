@@ -75,4 +75,8 @@ public class Urls {
         public static final String SEARCH = "/search";
         public static final String SEARCH_REST = "/search-rest";
     }
+
+    public class Photo {
+        public static final String GET_ALL = "/photo/get-all/{id}";
+    }
 }

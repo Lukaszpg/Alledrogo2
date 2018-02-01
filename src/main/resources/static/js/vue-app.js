@@ -29,6 +29,84 @@ window.onload = function () {
         }
     });
 
+    Vue.component('gallery', {
+        data() {
+            return {
+                photos: [],
+                currentPhoto: ""
+            }
+        },
+        template:
+        '<div>' +
+            '<div class="row">' +
+                '<div class="col s8 offset-s2">' +
+                    '<div class="gallery-border row">' +
+                        '<div class="col s8 offset-s2">' +
+                            '<img @click="openFullscreen()" class="main-gallery-image responsive-img" v-bind:src="currentPhoto.srcPath">' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div class="row">' +
+                '<div v-for="photo in photos" class="col s4">' +
+                    '<div class="row">' +
+                        '<div class="col s12">' +
+                            '<img @click="setMainPhoto(photo)" class="gallery-thumbnail" v-bind:src="photo.srcPath">' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div id="galleryFullscreenModal" class="modal">' +
+                '<div class="modal-content">' +
+                    '<div class="row">' +
+                        '<div class="col s8 offset-s2">' +
+                            '<img class="gallery-fullscreen-img" v-bind:src="currentPhoto.srcPath">' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>',
+
+        methods: {
+            prepareSrcAttributes: function() {
+                var vm = this;
+                var photosWithSrcPath = [];
+
+                for(var i = 0; i < vm.photos.length; i++) {
+                    var photo = vm.photos[i];
+                    photo.srcPath = "data:image/png;base64," + photo.image;
+                    photosWithSrcPath.push(photo);
+                }
+
+                vm.photos = photosWithSrcPath;
+            },
+
+            setMainPhoto: function(photo) {
+                var vm = this;
+                vm.currentPhoto = photo;
+            },
+
+            openFullscreen: function() {
+                $('.modal').modal();
+                $('#galleryFullscreenModal').modal('open');
+            }
+        },
+
+        mounted() {
+            var vm = this;
+            var id = $("#auctionId").val();
+            axios.get('/photo/get-all/' + id)
+                .then(function (response) {
+                    vm.photos = response.data;
+                    vm.prepareSrcAttributes();
+                    vm.currentPhoto = vm.photos[0];
+                })
+                .catch(function () {
+                    this.errors.push(e)
+                })
+        }
+    });
+
     Vue.component('auction-observe', {
         template:
         '<a v-if="!isUserObserving" @click="observe" class="right observe-button waves-effect waves-teal btn-flat">' +
@@ -75,7 +153,7 @@ window.onload = function () {
                         }
                     })
                     .catch(function () {
-                        Materialize.toast('Wystąpił błąd podczas dodawania aukcji do obserwowanych.', 3000, 'toast-error')
+                        Materialize.toast('Wystąpił błąd podczas dodawania aukcji do obserwowanych.', 3000, 'toast-error');
                         this.errors.push(e);
                         console.log(e);
                     })
@@ -91,7 +169,7 @@ window.onload = function () {
                         }
                     })
                     .catch(function () {
-                        Materialize.toast('Nie udało się usunąć aukcji z obserwowanych.', 3000, 'toast-error')
+                        Materialize.toast('Nie udało się usunąć aukcji z obserwowanych.', 3000, 'toast-error');
                         this.errors.push(e);
                         console.log(e);
                     })
@@ -266,13 +344,13 @@ window.onload = function () {
                                     '<br/><label>{{ category.itemsAmount }} przedmiotów</label>' +
                                 '</a>' +
                             '</ul>' +
-                            '</div>' +
+                    '</div>' +
                     '<div v-if="auctions.length > 0" class="col s10">' +
                         '<h2>Wyniki wyszukiwania</h2>' +
                         '<div v-for="auction in auctions" class="single-auction-result">' +
                             '<div class="row">' +
                                 '<div class="col s4">' +
-                                    '<img class="single-auction-result-photo" src="/img/placeholder.png">' +
+                                    '<img class="responsive-img" :src="auction.mainImageSrcPath">' +
                                 '</div>' +
                                 '<div class="col s8">' +
                                     '<div class="row">' +
@@ -328,26 +406,14 @@ window.onload = function () {
                     vm.getSearchResults(vm.searchString, vm.previousCategoryId);
                 }
             },
-            constructSearchUrl: function(searchString, categoryId) {
-                let baseUrl = "/search-rest?";
-
-                if(searchString !== undefined || searchString != "") {
-                    baseUrl += "searchString=" + searchString;
-                }
-
-                if(categoryId !== undefined) {
-                    baseUrl += "&categoryId=" + categoryId;
-                }
-
-                return baseUrl;
-            },
             getSearchResults: function(searchString, categoryId) {
-                let vm = this;
-                let url = vm.constructSearchUrl(searchString, categoryId);
+                var vm = this;
+                var restUrl = "/search-rest?searchString=" + searchString + "&categoryId=" + categoryId;
 
-                axios.get(url)
+                axios.get(restUrl)
                     .then(function (response) {
                         vm.auctions = response.data;
+                        vm.prepareSrcAttributes();
                     })
                     .catch(function () {
                         vm.auctions = [];
@@ -355,27 +421,20 @@ window.onload = function () {
                     })
             },
             getCategories: function() {
-                let vm = this;
-
+                var vm = this;
                 if(vm.categoryId == undefined || vm.categoryId == "") {
-                    axios.get('/category-rest/get-all-top')
-                        .then(function (response) {
-                            vm.categories = response.data;
-                            vm.isLoading = false;
-                            vm.showReturn = false;
-                        })
-                        .catch(function () {
-                            this.errors.push(e);
-                            console.log(e);
-                        })
+                    vm.sendGetTopCategoriesRequest();
                 } else {
-                    vm.getChildren(vm.categoryId);
+                    vm.sendGetChildrenRequest(vm.categoryId);
                 }
             },
-
             getChildren: function(id) {
-                let vm = this;
-
+                var vm = this;
+                vm.sendGetChildrenRequest(id);
+                vm.getSearchResults(vm.searchString, id)
+            },
+            sendGetChildrenRequest: function(id) {
+                var vm = this;
                 axios.get('/category-rest/get-children/' + id)
                     .then(function (response) {
                         vm.categories = response.data;
@@ -387,13 +446,32 @@ window.onload = function () {
                         this.errors.push(e);
                         console.log(e);
                     })
+            },
+            sendGetTopCategoriesRequest: function () {
+                var vm = this;
+                axios.get('/category-rest/get-all-top')
+                    .then(function (response) {
+                        vm.categories = response.data;
+                        vm.isLoading = false;
+                        vm.showReturn = false;
+                    })
+                    .catch(function () {
+                        this.errors.push(e);
+                        console.log(e);
+                    })
+            },
+            prepareSrcAttributes : function() {
+                var vm = this;
 
-                vm.getSearchResults(vm.searchString, id);
+                for(var i = 0; i < vm.auctions.length; i++) {
+                    var auction = vm.auctions[i];
+                    auction.mainImageSrcPath = "data:image/png;base64," + auction.mainImage;
+                }
             }
         },
 
         mounted() {
-            let vm = this;
+            var vm = this;
             vm.searchString = $("#searchString").val();
             vm.categoryId = $("#searchCategory").val();
             vm.getSearchResults(vm.searchString, vm.categoryId);
@@ -404,4 +482,4 @@ window.onload = function () {
     var app = new Vue({
         el: '#app',
     });
-}
+};

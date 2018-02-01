@@ -413,3 +413,27 @@ ul.dropdown-content.select-dropdown li span {
 .collection-item {
     cursor: pointer;
 }
+
+.gallery-thumbnail {
+    width: 80%;
+    cursor: pointer;
+}
+
+.gallery-border {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.main-gallery-image {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    cursor: pointer;
+}
+
+.gallery-fullscreen-img {
+    width: 100%;
+}
+
+.card-image {
+    height: 370px;
+}

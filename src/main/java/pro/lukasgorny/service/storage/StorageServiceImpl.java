@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.service.storage.exception.StorageException;
 import pro.lukasgorny.service.storage.exception.StorageFileNotFoundException;
 
@@ -32,7 +34,7 @@ public class StorageServiceImpl implements StorageService {
     }
 
     @Override
-    public String store(MultipartFile file, String storePath) {
+    public String store(MultipartFile file, Auction auction) {
         String filename = StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if (file.isEmpty()) {
@@ -43,10 +45,18 @@ public class StorageServiceImpl implements StorageService {
                         "Cannot store file with relative path outside current directory "
                                 + filename);
             }
-            Path store = Paths.get(storePath + ".png");
-            Files.copy(file.getInputStream(), store, StandardCopyOption.REPLACE_EXISTING);
 
-            return store.toString();
+            Path storeLocation = Paths.get(rootLocation + "\\" + auction.getId());
+
+            if(!Files.exists(storeLocation)) {
+                Files.createDirectories(storeLocation);
+            }
+
+            storeLocation = Paths.get(rootLocation + "\\" + auction.getId() + "\\" + filename);
+
+            Files.copy(file.getInputStream(), storeLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            return storeLocation.toString();
         } catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
@@ -89,14 +99,5 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
-    }
-
-    @Override
-    public void init() {
-        try {
-            Files.createDirectories(rootLocation);
-        } catch (IOException e) {
-            throw new StorageException("Could not initialize storage", e);
-        }
     }
 }

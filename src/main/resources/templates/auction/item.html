@@ -8,6 +8,7 @@
 <body th:replace="layout/template :: bodyFragment">
 <div th:fragment="content">
     <div class="auction-container" th:if="${auctionDto != null}">
+        <input type="hidden" th:value="${auctionDto.id}" id="auctionId">
         <div class="row">
             <div class="col s8">
                 <h3 th:text="${auctionDto.title}"></h3>
@@ -18,11 +19,7 @@
         </div>
         <div class="row">
             <div class="col s6">
-                <div class="row">
-                    <div class="col s6 offset-s2">
-                        <img th:src="@{/img/placeholder.png}"/>
-                    </div>
-                </div>
+                <gallery></gallery>
             </div>
             <div class="col s6">
                 <div th:if="${auctionDto.isBid}" class="row">
