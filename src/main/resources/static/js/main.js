@@ -1,4 +1,7 @@
+"use strict";
+
 $(document).ready(function () {
+    initializeTabs();
     enableSelectValidation();
     searchClearIconClick();
     searchClearIconFadeout();
@@ -9,6 +12,10 @@ $(document).ready(function () {
     initializeMenuButtons();
     initializeSearchSelect();
 });
+
+var initializeTabs = function() {
+    $('ul.tabs').tabs();
+};
 
 var enableSelectValidation = function() {
     $("select[required]").css({display: "block", height: 0, padding: 0, width: 0, position: 'absolute'});
@@ -51,5 +58,5 @@ var initializeMenuButtons = function() {
 
 var initializeSearchSelect = function() {
     $("#searchCategoriesSelect").material_select();
-}
+};
 

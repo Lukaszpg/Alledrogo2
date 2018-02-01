@@ -32,7 +32,7 @@ public class BidDtoValidator implements Validator {
             errors.rejectValue("offeredPrice","error.bid.same.user");
         } else {
             if(bidSaveDto.getOfferedPrice() == null) {
-                errors.rejectValue("offeredPrice", "NotNull.bidDto.offeredPrice");
+                errors.rejectValue("offeredPrice", "NotNull.bidSaveDto.price");
             } else if(createTransactionService.checkOfferLowerThanCurrentPrice(bidSaveDto)) {
                 errors.rejectValue("offeredPrice", "error.bid.price.lower");
             }
