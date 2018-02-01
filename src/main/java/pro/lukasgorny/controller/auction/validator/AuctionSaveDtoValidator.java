@@ -3,6 +3,7 @@ package pro.lukasgorny.controller.auction.validator;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import org.springframework.web.multipart.MultipartFile;
 import pro.lukasgorny.dto.auction.AuctionSaveDto;
 
 @Component
@@ -16,6 +17,17 @@ public class AuctionSaveDtoValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         AuctionSaveDto auctionSaveDto = (AuctionSaveDto) o;
+        if(auctionSaveDto.getPhotos().length > 3) {
+            errors.rejectValue("photos", "error.too.many.photos");
+        }
+
+        for (MultipartFile multipartFile : auctionSaveDto.getPhotos()) {
+            if(multipartFile.getSize() > 2097152) {
+                errors.rejectValue("photos", "error.file.size.exceeded");
+                break;
+            }
+        }
+
         if (auctionSaveDto.getIsBid() == null && auctionSaveDto.getIsBuyout() == null) {
             errors.rejectValue("isBuyout", "error.pick.auction.type");
         }

@@ -32,6 +32,7 @@ public class AuctionResultDto {
     private TransactionResultDto winningBid;
     private Integer biddingUsersAmount;
     private String mainImage;
+    private Integer positiveCommentPercent;
 
     public String getTitle() {
         return title;
@@ -175,5 +176,13 @@ public class AuctionResultDto {
 
     public void setMainImage(String mainImage) {
         this.mainImage = mainImage;
+    }
+
+    public Integer getPositiveCommentPercent() {
+        return positiveCommentPercent;
+    }
+
+    public void setPositiveCommentPercent(Integer positiveCommentPercent) {
+        this.positiveCommentPercent = positiveCommentPercent;
     }
 }

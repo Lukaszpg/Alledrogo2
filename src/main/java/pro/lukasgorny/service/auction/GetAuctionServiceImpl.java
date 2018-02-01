@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.SearchDto;
 import pro.lukasgorny.dto.auction.TransactionResultDto;
+import pro.lukasgorny.enums.RatingTypeEnum;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.Photo;
 import pro.lukasgorny.model.Transaction;
@@ -150,8 +151,24 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setCurrentAmount(auction.getCurrentAmount());
         auctionResultDto.setBiddingUsersAmount(calculateBiddingUserAmount(auction));
         auctionResultDto.setMainImage(getMainImage(auction));
+        auctionResultDto.setPositiveCommentPercent(calculatePositiveCommentPercent(auction));
 
         return auctionResultDto;
+    }
+
+    private Integer calculatePositiveCommentPercent(Auction auction) {
+        Integer commentsAmount = auction.getTransactions().size();
+
+        List<Transaction> transactionsWithBuyerRating = auction.getTransactions().stream().filter(transaction -> transaction.getBuyerRating() != null).collect(Collectors.toList());
+        List<Transaction> positiveCommentsTransactions = transactionsWithBuyerRating.stream().filter(transaction -> RatingTypeEnum.POSITIVE.equals(transaction.getBuyerRating().getRatingTypeEnum())).collect(Collectors.toList());
+
+        if(commentsAmount == 0 || positiveCommentsTransactions.isEmpty()) {
+            return null;
+        }
+
+        Integer positiveCommentsAmount = positiveCommentsTransactions.size();
+
+        return (positiveCommentsAmount * 100) / commentsAmount;
     }
 
     private String getMainImage(Auction auction) {

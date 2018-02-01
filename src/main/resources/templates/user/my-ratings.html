@@ -34,9 +34,9 @@
                     <td th:text="${rating?.auctionName}"></td>
                     <td th:text="${rating?.content}"></td>
                     <td>
-                        <i th:if="${rating?.ratingType == 'positive'}" class="rating-type-positive icon-larger material-icons">sentiment_very_satisfied</i>
-                        <i th:if="${rating?.ratingType == 'neutral'}" class="material-icons">sentiment_neutral</i>
-                        <i th:if="${rating?.ratingType == 'negative'}" class="rating-type-negative icon-larger material-icons">sentiment_very_dissatisfied</i>
+                        <i th:if="${rating?.ratingType == 'positive'}" data-position="right" data-delay="20" th:attr="data-tooltip=#{label.rating.type.positive}" class="tooltipped rating-type-positive icon-larger material-icons">sentiment_very_satisfied</i>
+                        <i th:if="${rating?.ratingType == 'neutral'}" data-position="right" data-delay="20" th:attr="data-tooltip=#{label.rating.type.neutral}" class="tooltipped material-icons icon-larger">sentiment_neutral</i>
+                        <i th:if="${rating?.ratingType == 'negative'}" data-position="right" data-delay="20" th:attr="data-tooltip=#{label.rating.type.negative}" class="tooltipped rating-type-negative icon-larger material-icons">sentiment_very_dissatisfied</i>
                     </td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(receivedRatings)}">
@@ -66,9 +66,9 @@
                     <td th:text="${rating?.auctionName}"></td>
                     <td th:text="${rating?.content}"></td>
                     <td>
-                        <i th:if="${rating?.ratingType == 'positive'}" class="rating-type-positive icon-larger material-icons">sentiment_very_satisfied</i>
-                        <i th:if="${rating?.ratingType == 'neutral'}" class="material-icons">sentiment_neutral</i>
-                        <i th:if="${rating?.ratingType == 'negative'}" class="rating-type-negative icon-larger material-icons">sentiment_very_dissatisfied</i>
+                        <i th:if="${rating?.ratingType == 'positive'}" data-position="right" data-delay="20" th:attr="data-tooltip=#{label.rating.type.positive}" class="tooltipped rating-type-positive icon-larger material-icons">sentiment_very_satisfied</i>
+                        <i th:if="${rating?.ratingType == 'neutral'}" data-position="right" data-delay="20" th:attr="data-tooltip=#{label.rating.type.neutral}" class="tooltipped material-icons icon-larger">sentiment_neutral</i>
+                        <i th:if="${rating?.ratingType == 'negative'}" data-position="right" data-delay="20" th:attr="data-tooltip=#{label.rating.type.negative}" class="tooltipped rating-type-negative icon-larger material-icons">sentiment_very_dissatisfied</i>
                     </td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(issuedRatings)}">

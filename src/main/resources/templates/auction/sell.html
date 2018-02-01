@@ -36,6 +36,7 @@
             </div>
             <div class="row">
                 <div class="col s10">
+                    <label for="photos" th:text="#{label.photos.max.size}"></label>
                     <div class="file-field input-field">
                         <div class="btn">
                             <span th:text="#{section.item.photo}"></span>
@@ -45,6 +46,8 @@
                             <input class="file-path validate" type="text" th:placeholder="#{photo.upload.limit}">
                         </div>
                     </div>
+                    <div class="validation-error-input" th:if="${#fields.hasErrors('photos')}"
+                         th:errors="*{photos}"></div>
                 </div>
             </div>
             <div class="row">

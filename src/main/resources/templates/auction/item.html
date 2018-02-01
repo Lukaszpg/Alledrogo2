@@ -150,6 +150,10 @@
                             <label for="registeredSince" th:text="#{label.registered.since}"></label>
                             <div id="registeredSince" th:text="${auctionDto.sellerDto.registeredSince}"></div>
                         </div>
+                        <div th:if="${auctionDto.positiveCommentPercent != null}" class="row">
+                            <label for="positivePercent" th:text="#{label.mark.seller}"></label>
+                            <div id="positivePercent" th:text="#{label.percent.comments(${auctionDto.positiveCommentPercent})}"></div>
+                        </div>
                     </div>
                 </div>
             </div>
