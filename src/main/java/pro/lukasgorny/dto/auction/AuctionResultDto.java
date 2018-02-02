@@ -31,8 +31,10 @@ public class AuctionResultDto {
     private UserResultDto sellerDto;
     private TransactionResultDto winningBid;
     private Integer biddingUsersAmount;
+    private Integer buyoutUsersAmount;
     private String mainImage;
     private Integer positiveCommentPercent;
+    private Boolean untilOufOfItems;
 
     public String getTitle() {
         return title;
@@ -184,5 +186,21 @@ public class AuctionResultDto {
 
     public void setPositiveCommentPercent(Integer positiveCommentPercent) {
         this.positiveCommentPercent = positiveCommentPercent;
+    }
+
+    public Boolean getUntilOufOfItems() {
+        return untilOufOfItems;
+    }
+
+    public void setUntilOufOfItems(Boolean untilOufOfItems) {
+        this.untilOufOfItems = untilOufOfItems;
+    }
+
+    public Integer getBuyoutUsersAmount() {
+        return buyoutUsersAmount;
+    }
+
+    public void setBuyoutUsersAmount(Integer buyoutUsersAmount) {
+        this.buyoutUsersAmount = buyoutUsersAmount;
     }
 }

@@ -29,6 +29,7 @@ public class Auction extends Model {
     private User seller;
     private List<User> usersObserving;
     private List<Photo> photos;
+    private Boolean untilOutOfItems;
 
     public String getTitle() {
         return title;
@@ -173,5 +174,13 @@ public class Auction extends Model {
 
     public void setPhotos(List<Photo> photos) {
         this.photos = photos;
+    }
+
+    public Boolean getUntilOutOfItems() {
+        return untilOutOfItems;
+    }
+
+    public void setUntilOutOfItems(Boolean untilOutOfItems) {
+        this.untilOutOfItems = untilOutOfItems;
     }
 }

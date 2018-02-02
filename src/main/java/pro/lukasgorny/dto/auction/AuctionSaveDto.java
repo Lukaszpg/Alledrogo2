@@ -34,7 +34,6 @@ public class AuctionSaveDto {
 
     private BigDecimal bidMinimalPrice;
 
-    @NotNull
     private Integer amount;
 
     private Boolean isBuyout;
@@ -43,10 +42,11 @@ public class AuctionSaveDto {
 
     private User seller;
 
-    @NotNull
     private Long auctionDuration;
 
     private MultipartFile[] photos;
+
+    private Boolean untilOutOfItems;
 
     public String getTitle() {
         return title;
@@ -158,5 +158,13 @@ public class AuctionSaveDto {
 
     public void setPhotos(MultipartFile[] photos) {
         this.photos = photos;
+    }
+
+    public Boolean getUntilOutOfItems() {
+        return untilOutOfItems;
+    }
+
+    public void setUntilOutOfItems(Boolean untilOutOfItems) {
+        this.untilOutOfItems = untilOutOfItems;
     }
 }

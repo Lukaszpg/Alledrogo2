@@ -55,10 +55,11 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
         auction.setCurrentAmount(auctionSaveDto.getAmount());
         auction.setBidMinimalPrice(auctionSaveDto.getBidMinimalPrice());
         auction.setBidStartingPrice(auctionSaveDto.getBidStartingPrice());
-        auction.setEndDate(calculateEndDate(auctionSaveDto));
+        auction.setEndDate(calculateEndDateIfNotUntilOutOfItems(auctionSaveDto));
         auction.setSeller(auctionSaveDto.getSeller());
         auction.setDeleted(false);
         auction.setHasEnded(false);
+        auction.setUntilOutOfItems(calculateBooleanFieldValue(auctionSaveDto.getUntilOutOfItems()));
         return auction;
     }
 
@@ -75,8 +76,12 @@ public class CreateAuctionServiceImpl implements CreateAuctionService {
         }
     }
 
-    private LocalDateTime calculateEndDate(AuctionSaveDto auctionSaveDto) {
-        return LocalDateTime.now().plusDays(auctionSaveDto.getAuctionDuration());
+    private LocalDateTime calculateEndDateIfNotUntilOutOfItems(AuctionSaveDto auctionSaveDto) {
+        if(auctionSaveDto.getUntilOutOfItems() == null) {
+            return LocalDateTime.now().plusDays(auctionSaveDto.getAuctionDuration());
+        }
+
+        return null;
     }
 
     private Boolean calculateBooleanFieldValue(Boolean field) {

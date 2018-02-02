@@ -388,6 +388,7 @@ window.onload = function () {
                                         '<div class="row"></div>' +
                                         '<div class="row"></div>' +
                                         '<div class="row">' +
+                                            '<div class="right" v-if="auction.isBuyout && auction.buyoutUsersAmount > 0">{{ auction.buyoutUsersAmount }} osoby kupiły</div>' +
                                             '<div class="right" v-if="auction.isBid && auction.biddingUsersAmount > 0">{{ auction.biddingUsersAmount }} osoby licytują</div>' +
                                             '<div class="right" v-if="auction.isBid && auction.biddingUsersAmount == 0">nikt nie licytuje, bądź pierwszy</div>' +
                                         '</div>' +

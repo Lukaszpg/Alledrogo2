@@ -23,7 +23,7 @@
                 <tr th:if="${!#lists.isEmpty(observedAuctions)}" th:each="auction : ${observedAuctions}">
                     <td th:text="${auction?.sellerDto.email}"></td>
                     <td th:text="${auction?.title}"></td>
-                    <td th:text="${auction?.amount}"></td>
+                    <td th:text="${auction?.currentAmount}"></td>
                     <td><a th:href="@{'/auction/get/' + ${auction.id}}" th:text="#{button.auction.goto}"></a></td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(observedAuctions)}">

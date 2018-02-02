@@ -17,6 +17,11 @@ public class AuctionSaveDtoValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         AuctionSaveDto auctionSaveDto = (AuctionSaveDto) o;
+
+        if(auctionSaveDto.getPhotos().length == 0 || auctionSaveDto.getPhotos()[0].getOriginalFilename().isEmpty()) {
+            errors.rejectValue("photos", "error.no.photos");
+        }
+
         if(auctionSaveDto.getPhotos().length > 3) {
             errors.rejectValue("photos", "error.too.many.photos");
         }
@@ -38,6 +43,14 @@ public class AuctionSaveDtoValidator implements Validator {
 
         if (auctionSaveDto.getIsBuyout() != null && auctionSaveDto.getPrice() == null) {
             errors.rejectValue("price", "error.buyout.price");
+        }
+
+        if(auctionSaveDto.getAuctionDuration() == null && auctionSaveDto.getUntilOutOfItems() == null) {
+            errors.rejectValue("auctionDuration", "NotNull.auctionSaveDto.auctionDuration");
+        }
+
+        if(auctionSaveDto.getAmount() == null || auctionSaveDto.getAmount() == 0 || auctionSaveDto.getAmount() < 0 ) {
+            errors.rejectValue("amount", "NotNull.auctionSaveDto.amount");
         }
     }
 }

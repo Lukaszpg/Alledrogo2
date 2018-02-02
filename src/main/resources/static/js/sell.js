@@ -10,6 +10,7 @@ $(document).ready(function () {
     initializeSelectErrorHide();
     checkBidCheckbox();
     checkBuyoutCheckbox();
+    checkUntilOutOfItemsCheckbox();
 });
 
 var checkBidCheckbox = function () {
@@ -18,19 +19,38 @@ var checkBidCheckbox = function () {
         $(".auction-bid-input").each(function () {
             $(this).removeClass("hide");
         });
+        $(".until-out-of").addClass("hide");
     } else {
         $(".auction-bid-input").each(function () {
             $(this).addClass("hide");
         });
+        $(".until-out-of").removeClass("hide");
     }
+
+    checkShouldDisableItemsAmountAndSetFixedValue(bidCheckbox);
 };
 
 var checkBuyoutCheckbox = function () {
     var buyoutCheckbox = $("#isBuyoutCheckbox");
     if (buyoutCheckbox.is(":checked")) {
-        $(".auction-buyout-input").removeClass("hide");
+        $(".auction-buyout-input").each(function () {
+            $(this).removeClass("hide");
+        });
+        $(".until-out-of").removeClass("hide");
     } else {
-        $(".auction-buyout-input").addClass("hide");
+        $(".auction-buyout-input").each(function () {
+            $(this).addClass("hide");
+        });
+        $(".until-out-of").addClass("hide");
+    }
+};
+
+var checkUntilOutOfItemsCheckbox = function () {
+    var checkbox = $("#untilOutOfItemsCheckbox");
+    if (checkbox.is(":checked")) {
+        $(".auction-duration-row").addClass("hide");
+    } else {
+        $(".auction-duration-row").removeClass("hide");
     }
 };
 
@@ -104,18 +124,31 @@ var initializeRichTextEditor = function () {
         });
     }
 };
+var checkShouldDisableItemsAmountAndSetFixedValue = function(bidCheckbox) {
+    var field = $(".items-amount");
+    if (bidCheckbox.is(":checked")) {
+        field.val("1");
+        field.prop('disabled', true);
+    } else {
+        field.prop('disabled', false);
+        field.val("");
+    }
+};
 
 var initializeCheckboxChangeEvent = function () {
     var isBidCheckbox = $("#isBidCheckbox");
     var isBuyoutCheckbox = $("#isBuyoutCheckbox");
+    var untilCheckbox = $("#untilOutOfItemsCheckbox");
 
     isBuyoutCheckbox.change(function () {
         if (!isBidCheckbox.is(":checked")) {
             isBidCheckbox.prop("checked", true)
+            $(".until-out-of").addClass("hide");
         }
 
         isCheckboxChecked(isBidCheckbox, ".auction-bid-input");
         isCheckboxChecked(isBuyoutCheckbox, ".auction-buyout-input");
+        checkShouldDisableItemsAmountAndSetFixedValue(isBidCheckbox);
     });
 
     isBidCheckbox.change(function () {
@@ -125,7 +158,19 @@ var initializeCheckboxChangeEvent = function () {
 
         isCheckboxChecked(isBidCheckbox, ".auction-bid-input");
         isCheckboxChecked(isBuyoutCheckbox, ".auction-buyout-input");
+        checkShouldDisableItemsAmountAndSetFixedValue(isBidCheckbox);
+
+        if(isBidCheckbox.is(":checked")) {
+            $(".until-out-of").addClass("hide");
+        } else {
+            $(".until-out-of").removeClass("hide");
+        }
     });
+
+    untilCheckbox.change(function() {
+        isCheckboxNotChecked(untilCheckbox, ".auction-duration-row");
+    });
+
 };
 
 var isCheckboxChecked = function (object, classSelector) {
@@ -136,6 +181,19 @@ var isCheckboxChecked = function (object, classSelector) {
     } else {
         $(classSelector).each(function () {
             $(this).addClass("hide");
+        });
+    }
+};
+
+
+var isCheckboxNotChecked = function (object, classSelector) {
+    if (object.is(":checked")) {
+        $(classSelector).each(function () {
+            $(this).addClass("hide");
+        });
+    } else {
+        $(classSelector).each(function () {
+            $(this).removeClass("hide");
         });
     }
 };

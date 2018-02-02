@@ -468,3 +468,12 @@ ul.dropdown-content.select-dropdown li span {
 .search-main-image {
     width: 80%;
 }
+
+.until-out-of-items-tooltip {
+    margin-left: -121%;
+    margin-top: 5px;
+}
+
+.until-out-of-items-text {
+    margin-top: 6%;
+}

@@ -9,6 +9,7 @@
 <div th:fragment="content">
     <div class="auction-container" th:if="${auctionDto != null}">
         <input type="hidden" th:value="${auctionDto.id}" id="auctionId">
+        <input type="hidden" id="auctionEndDate" th:value="${auctionDto.endDate}">
         <div class="row">
             <div class="col s8">
                 <h3 th:text="${auctionDto.title}"></h3>
@@ -50,10 +51,9 @@
                                 <p class="auction-ended" th:if="${auctionDto.winningBid != null}"
                                    th:text="#{auction.ended.winner(${auctionDto.winningBid.username})}"></p>
                             </div>
-                            <div th:if="${!auctionDto.hasEnded}" class="col s3 offset-s3">
+                            <div th:if="${!auctionDto.hasEnded && !auctionDto.untilOufOfItems}" class="col s3 offset-s3">
                                 <label class="right" for="endCountdown" th:text="#{label.auction.to.end}"></label>
                                 <div id="endCountdown" class="right"></div>
-                                <input type="hidden" id="auctionEndDate" th:value="${auctionDto.endDate}">
                             </div>
                         </div>
                         <div class="row right">
@@ -76,7 +76,7 @@
                                 <div id="buyoutPrice" class="auction-price"
                                      th:text="#{label.money.amount(${auctionDto.price})}"></div>
                             </div>
-                            <div th:if="${!auctionDto.hasEnded}" class="col s3">
+                            <div th:if="${!auctionDto.hasEnded}" class="col s2">
                                 <input th:field="*{amountToBuy}" id="amountToBuy" type="text" th:placeholder="#{label.amount}"
                                        class="validate"
                                        th:classappend="${#fields.hasErrors('amountToBuy')}  ? 'invalid' : ''">
@@ -85,6 +85,13 @@
                             </div>
                             <div th:if="${!auctionDto.hasEnded}" class="col s3 amount-to-buy">
                                 <div th:text="#{label.amount.to.buy(${auctionDto.currentAmount})}"></div>
+                            </div>
+                            <div th:if="${!auctionDto.hasEnded && !auctionDto.untilOufOfItems && !auctionDto.isBid}" class="col s3">
+                                <label class="right" for="endCountdown" th:text="#{label.auction.to.end}"></label>
+                                <div id="endCountdown" class="right"></div>
+                            </div>
+                            <div th:if="${!auctionDto.hasEnded && auctionDto.untilOufOfItems}" class="col s4">
+                                <div class="right until-out-of-items-text" th:text="#{label.until.out.of.items}"></div>
                             </div>
                         </div>
                         <div class="row right">

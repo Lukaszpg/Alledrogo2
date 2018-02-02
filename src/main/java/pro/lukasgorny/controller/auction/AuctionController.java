@@ -75,6 +75,10 @@ public class AuctionController {
     public ModelAndView createAuction(@Valid AuctionSaveDto auctionSaveDto, BindingResult bindingResult, Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
 
+        if(auctionSaveDto.getIsBid() != null) {
+            auctionSaveDto.setAmount(1);
+        }
+
         auctionSaveDtoValidator.validate(auctionSaveDto, bindingResult);
 
         if (bindingResult.hasErrors()) {

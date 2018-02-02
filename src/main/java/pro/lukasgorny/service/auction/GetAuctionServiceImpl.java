@@ -4,10 +4,12 @@ import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.SearchDto;
 import pro.lukasgorny.dto.auction.TransactionResultDto;
 import pro.lukasgorny.enums.RatingTypeEnum;
+import pro.lukasgorny.enums.TransactionType;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.Photo;
 import pro.lukasgorny.model.Transaction;
@@ -107,7 +109,7 @@ public class GetAuctionServiceImpl implements GetAuctionService {
 
     @Override
     public List<Auction> getAllAuctionsToEnd() {
-        return auctionRepository.findAllByHasEndedIsFalseAndEndDateBefore(LocalDateTime.now());
+        return auctionRepository.findAllByHasEndedIsFalseAndUntilOutOfItemsIsFalseAndEndDateBefore(LocalDateTime.now());
     }
 
     @Override
@@ -144,7 +146,7 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setCategory(auction.getCategory());
         auctionResultDto.setBidStartingPrice(auction.getBidStartingPrice());
         auctionResultDto.setBidMinimalPrice(auction.getBidMinimalPrice());
-        auctionResultDto.setEndDate(DateFormatter.formatDateToCountdownFormat(auction.getEndDate()));
+        auctionResultDto.setEndDate(formatEndDateIfNotUntilOutOfItems(auction));
         auctionResultDto.setSellerDto(userService.createDtoFromEntity(auction.getSeller()));
         auctionResultDto.setWinningBid(getWinningBid(auctionResultDto.getId()));
         auctionResultDto.setHasEnded(auction.getHasEnded());
@@ -152,17 +154,29 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setBiddingUsersAmount(calculateBiddingUserAmount(auction));
         auctionResultDto.setMainImage(getMainImage(auction));
         auctionResultDto.setPositiveCommentPercent(calculatePositiveCommentPercent(auction));
+        auctionResultDto.setUntilOufOfItems(auction.getUntilOutOfItems());
+        auctionResultDto.setBuyoutUsersAmount(calculateBuyoutUserAmount(auction));
 
         return auctionResultDto;
+    }
+
+    private String formatEndDateIfNotUntilOutOfItems(Auction auction) {
+        if (!auction.getUntilOutOfItems()) {
+            return DateFormatter.formatDateToCountdownFormat(auction.getEndDate());
+        }
+
+        return null;
     }
 
     private Integer calculatePositiveCommentPercent(Auction auction) {
         Integer commentsAmount = auction.getTransactions().size();
 
-        List<Transaction> transactionsWithBuyerRating = auction.getTransactions().stream().filter(transaction -> transaction.getBuyerRating() != null).collect(Collectors.toList());
-        List<Transaction> positiveCommentsTransactions = transactionsWithBuyerRating.stream().filter(transaction -> RatingTypeEnum.POSITIVE.equals(transaction.getBuyerRating().getRatingTypeEnum())).collect(Collectors.toList());
+        List<Transaction> transactionsWithBuyerRating = auction.getTransactions().stream().filter(transaction -> transaction.getBuyerRating() != null)
+                                                               .collect(Collectors.toList());
+        List<Transaction> positiveCommentsTransactions = transactionsWithBuyerRating.stream().filter(transaction -> RatingTypeEnum.POSITIVE
+                .equals(transaction.getBuyerRating().getRatingTypeEnum())).collect(Collectors.toList());
 
-        if(commentsAmount == 0 || positiveCommentsTransactions.isEmpty()) {
+        if (commentsAmount == 0 || positiveCommentsTransactions.isEmpty()) {
             return null;
         }
 
@@ -174,7 +188,7 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     private String getMainImage(Auction auction) {
         List<Photo> mainPhoto = auction.getPhotos().stream().filter(Photo::getIsMain).collect(Collectors.toList());
 
-        if(mainPhoto.size() > 0) {
+        if (mainPhoto.size() > 0) {
             byte[] image = photoService.readImageFromDisk(mainPhoto.get(0).getStoragePath());
             return Base64.getEncoder().encodeToString(image);
         }
@@ -187,7 +201,21 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     }
 
     private Integer calculateBiddingUserAmount(Auction auction) {
-        List<Transaction> bids = auction.getTransactions().stream().filter(CollectionHelper.distinctByKey(a -> a.getUser().getId())).collect(Collectors.toList());
-        return bids.size();
+        List<Transaction> bids = auction.getTransactions().stream()
+                                        .filter(transaction -> TransactionType.BID.equals(transaction.getTransactionType()))
+                                        .collect(Collectors.toList());
+
+        List<Transaction> distinctBids = bids.stream().filter(CollectionHelper.distinctByKey(a -> a.getUser().getId()))
+                                        .collect(Collectors.toList());
+        return distinctBids.size();
+    }
+
+    private Integer calculateBuyoutUserAmount(Auction auction) {
+        List<Transaction> buyouts = auction.getTransactions().stream()
+                                        .filter(transaction -> TransactionType.BUYOUT.equals(transaction.getTransactionType()))
+                                        .collect(Collectors.toList());
+        List<Transaction> distinctBuyouts = buyouts.stream().filter(CollectionHelper.distinctByKey(a -> a.getUser().getId()))
+                                             .collect(Collectors.toList());
+        return distinctBuyouts.size();
     }
 }
