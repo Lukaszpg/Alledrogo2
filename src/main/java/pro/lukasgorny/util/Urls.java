@@ -69,6 +69,7 @@ public class Urls {
         public static final String CREATE_RATING_SUCCESS = RATING + "/create-success";
         public static final String ITEMS_SOLD = "/item/sold";
         public static final String ITEMS_BOUGHT = "/item/bought";
+        public static final String ACCOUNT = "/account";
     }
 
     public class Search {

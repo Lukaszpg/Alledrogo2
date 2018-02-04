@@ -36,6 +36,7 @@ public class Templates {
         public static final String ITEMS_BOUGHT = PREFIX + "items-bought";
         public static final String ITEMS_SOLD = PREFIX + "items-sold";
         public static final String CREATE_RATING_SUCCESS = PREFIX + "create-rating-success";
+        public static final String ACCOUNT = PREFIX + "account";
     }
 
     public class SearchTemplates {

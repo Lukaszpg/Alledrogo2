@@ -327,17 +327,6 @@ window.onload = function () {
     });
 
     Vue.component('search', {
-        data() {
-            return {
-                searchString: "",
-                categoryId: "",
-                auctions: [],
-                categories: [],
-                previousCategoryId: 0,
-                isLoading: false,
-                showReturn: false
-            }
-        },
         template:
             '<div>' +
                 '<div class="row">' +
@@ -347,17 +336,56 @@ window.onload = function () {
                         '<div class="row"></div>' +
                         '<div class="row"></div>' +
                         '<div class="row"></div>' +
-                            '<h5>Podkategorie<i @click="previous" v-if="showReturn" class="filter-return-icon material-icons">undo</i></h5>' +
-                            '<ul class="collection">' +
-                                '<a @click="getChildren(category.id)" v-for="category in categories" class="collection-item">' +
+                            '<h5>Podkategorie</h5>' +
+                            '<div v-bind:class="{ col:true,  \'offset-s3\': true, hide: !isLoadingCategories }">' +
+                            '<div v-bind:class="{ \'preloader-wrapper\': true, small: true, active: true, \'search-categories-preloader\': true}">' +
+                            '<div class="spinner-layer spinner-blue-only">' +
+                            '<div class="circle-clipper left">' +
+                            '<div class="circle"></div>' +
+                            '</div>' +
+                            '<div class="gap-patch">' +
+                            '<div class="circle"></div>' +
+                            '</div>' +
+                            '<div class="circle-clipper right">' +
+                            '<div class="circle"></div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '<a v-bind:class="{ hide: isLoadingCategories, \'category-previous\': true}" @click="previous" v-if="showReturn">Wyżej</a>' +
+                            '<ul v-bind:class="{ hide: isLoadingCategories, collection: true}">' +
+                                '<a @click="getChildren(category)" v-for="category in categories" class="collection-item">' +
                                     '<span class="title">{{ category.name }}</span>' +
                                     '<br/><label>{{ category.itemsAmount }} przedmiotów</label>' +
                                 '</a>' +
                             '</ul>' +
                     '</div>' +
                     '<div v-if="auctions.length > 0" class="col s10">' +
-                        '<h2>Wyniki wyszukiwania</h2>' +
-                        '<div v-for="auction in auctions" class="single-auction-result">' +
+                        '<div class="row">' +
+                            '<div class="col s12">' +
+                                '<h2>Szukasz "{{ searchString }}"</h2>' +
+                                '<div v-if="parentNames.length > 0" class="br search-breadcrumbs">' +
+                                    '<a v-for="parentName in parentNames" class="breadcrumb-category breadcrumb">{{ parentName }}</a>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="divider"></div>' +
+                        '<div v-bind:class="{ col:true,  \'offset-s5\': true, hide: !isLoadingSearchResults }">' +
+                            '<div v-bind:class="{ \'preloader-wrapper\': true, big: true, active: true, \'search-preloader\': true}">' +
+                                '<div class="spinner-layer spinner-blue-only">' +
+                                    '<div class="circle-clipper left">' +
+                                        '<div class="circle"></div>' +
+                                        '</div>' +
+                                        '<div class="gap-patch">' +
+                                        '<div class="circle"></div>' +
+                                        '</div>' +
+                                        '<div class="circle-clipper right">' +
+                                        '<div class="circle"></div>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div v-bind:class="{ hide: isLoadingSearchResults }" v-for="auction in auctions" class="single-auction-result">' +
                             '<div class="row">' +
                                 '<div class="col s4">' +
                                     '<img class="responsive-img search-main-image" :src="auction.mainImageSrcPath">' +
@@ -385,45 +413,62 @@ window.onload = function () {
                                                 '<div class="buyout-label">Kup teraz</div>' +
                                                 '</div>' +
                                             '</div>' +
-                                        '<div class="row"></div>' +
-                                        '<div class="row"></div>' +
                                         '<div class="row">' +
                                             '<div class="right" v-if="auction.isBuyout && auction.buyoutUsersAmount > 0">{{ auction.buyoutUsersAmount }} osoby kupiły</div>' +
                                             '<div class="right" v-if="auction.isBid && auction.biddingUsersAmount > 0">{{ auction.biddingUsersAmount }} osoby licytują</div>' +
                                             '<div class="right" v-if="auction.isBid && auction.biddingUsersAmount == 0">nikt nie licytuje, bądź pierwszy</div>' +
                                         '</div>' +
-                                    '<div class="row"></div>' +
                                 '</div>' +
                             '</div>' +
                             '<div class="divider"></div>' +
                         '</div>' +
                     '</div>' +
                     '<div v-else-if="auctions.length == 0" class="col s10">' +
-                        '<h2>Wyniki wyszukiwania</h2>' +
+                        '<h2>Szukasz \"{{ searchString }}\"</h2>' +
+                        '<div v-if="parentNames.length > 0" class="br search-breadcrumbs-no-results">' +
+                            '<a v-for="parentName in parentNames" class="breadcrumb-category breadcrumb">{{ parentName }}</a>' +
+                        '</div>' +
+                        '<div class="divider"></div>' +
                         '<h5>Brak wyników wyszukiwania</h5>' +
                     '</div>' +
                 '</div>' +
             '</div>',
 
+        data() {
+            return {
+                searchString: "",
+                categoryId: "",
+                auctions: [],
+                categories: [],
+                parentNames: ["Auctionify"],
+                previousCategoryId: 0,
+                isLoadingCategories: false,
+                showReturn: false,
+                isLoadingSearchResults: false
+            }
+        },
         methods: {
             previous: function() {
                 var vm = this;
-                if (vm.previousCategoryId === 0) {
+                vm.parentNames = ["Auctionify"];
+                if (vm.previousCategoryId == 0) {
                     vm.getCategories();
                     vm.showReturn = false;
-                    vm.getSearchResults(vm.searchString, undefined);
+                    vm.getSearchResults(vm.searchString, "");
                 } else {
-                    vm.getChildren(vm.previousCategoryId);
+                    vm.getChildrenById(vm.previousCategoryId);
                     vm.getSearchResults(vm.searchString, vm.previousCategoryId);
                 }
             },
             getSearchResults: function(searchString, categoryId) {
                 var vm = this;
                 var restUrl = "/search-rest?searchString=" + searchString + "&categoryId=" + categoryId;
+                vm.isLoadingSearchResults = true;
 
                 axios.get(restUrl)
                     .then(function (response) {
                         vm.auctions = response.data;
+                        vm.isLoadingSearchResults = false;
                         vm.prepareSrcAttributes();
                     })
                     .catch(function () {
@@ -439,19 +484,36 @@ window.onload = function () {
                     vm.sendGetChildrenRequest(vm.categoryId);
                 }
             },
-            getChildren: function(id) {
+            getChildren: function(category) {
                 var vm = this;
-                vm.sendGetChildrenRequest(id);
+
+                vm.isLoadingCategories = true;
+                vm.sendGetChildrenRequest(category.id, category);
+                vm.getSearchResults(vm.searchString, category.id)
+            },
+            getChildrenById: function(id) {
+                var vm = this;
+
+                vm.isLoadingCategories = true;
+                vm.sendGetChildrenRequest(id, undefined);
                 vm.getSearchResults(vm.searchString, id)
             },
-            sendGetChildrenRequest: function(id) {
+            sendGetChildrenRequest: function(id, category) {
                 var vm = this;
                 axios.get('/category-rest/get-children/' + id)
                     .then(function (response) {
-                        vm.categories = response.data;
-                        vm.previousCategoryId = vm.categories[0].parentOfParentId !== null ? vm.categories[0].parentOfParentId : 0;
-                        vm.isLoading = false;
-                        vm.showReturn = true;
+                        if(response.data) {
+                            vm.categories = response.data;
+                            vm.previousCategoryId = vm.categories[0].parentOfParentId !== null ? vm.categories[0].parentOfParentId : 0;
+                            vm.isLoadingCategories = false;
+                            vm.showReturn = true;
+                            vm.addParentNameToArray();
+                        } else {
+                            vm.categories = [];
+                            vm.isLoadingCategories = false;
+                            vm.categories.push(category);
+                            vm.parentNames.push(category.name);
+                        }
                     })
                     .catch(function () {
                         this.errors.push(e);
@@ -462,14 +524,21 @@ window.onload = function () {
                 var vm = this;
                 axios.get('/category-rest/get-all-top')
                     .then(function (response) {
-                        vm.categories = response.data;
-                        vm.isLoading = false;
-                        vm.showReturn = false;
+                        if(response.data) {
+                            vm.categories = response.data;
+                            vm.isLoadingCategories = false;
+                            vm.showReturn = false;
+                            vm.parentNames = ["Auctionify"];
+                        }
                     })
                     .catch(function () {
                         this.errors.push(e);
                         console.log(e);
                     })
+            },
+            addParentNameToArray: function() {
+                var vm = this;
+                vm.parentNames.push(vm.categories[0].parentName !== null ? vm.categories[0].parentName : null);
             },
             prepareSrcAttributes : function() {
                 var vm = this;
@@ -487,6 +556,7 @@ window.onload = function () {
             vm.categoryId = $("#searchCategory").val();
             vm.getSearchResults(vm.searchString, vm.categoryId);
             vm.getCategories();
+            vm.categoryId = "";
         }
     });
 

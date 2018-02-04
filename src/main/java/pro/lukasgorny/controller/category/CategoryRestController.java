@@ -37,7 +37,7 @@ public class CategoryRestController {
             return new ResponseEntity<>(list, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(Urls.CategoryRest.GET_CHILDREN)
@@ -48,7 +48,7 @@ public class CategoryRestController {
             return new ResponseEntity<>(list, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

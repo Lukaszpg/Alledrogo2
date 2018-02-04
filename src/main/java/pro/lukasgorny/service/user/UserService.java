@@ -1,5 +1,6 @@
 package pro.lukasgorny.service.user;
 
+import pro.lukasgorny.dto.UserExtendedDto;
 import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.model.VerificationToken;
@@ -14,4 +15,6 @@ public interface UserService {
     void createVerificationToken(User user, String token);
     VerificationToken getVerificationToken(String VerificationToken);
     UserResultDto createDtoFromEntity(User user);
+    UserExtendedDto getUserData(String email);
+    void setAndSaveUserData(UserExtendedDto userExtendedDto);
 }

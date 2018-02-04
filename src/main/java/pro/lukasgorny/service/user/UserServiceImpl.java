@@ -5,6 +5,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
+import pro.lukasgorny.dto.UserExtendedDto;
 import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.model.VerificationToken;
@@ -58,7 +59,43 @@ public class UserServiceImpl implements UserService {
         UserResultDto userResultDto = new UserResultDto();
         userResultDto.setEmail(user.getEmail());
         userResultDto.setRegisteredSince(calculateAndFormatDateDifference(user));
+        userResultDto.setUserExtendedDto(createExtendedDtoFromEntity(user));
         return userResultDto;
+    }
+
+    @Override
+    public UserExtendedDto getUserData(String email) {
+        User user = getByEmail(email);
+        return createExtendedDtoFromEntity(user);
+    }
+
+    @Override
+    public void setAndSaveUserData(UserExtendedDto userExtendedDto) {
+        User user = getByEmail(userExtendedDto.getEmail());
+        user.setName(userExtendedDto.getName());
+        user.setSurname(userExtendedDto.getSurname());
+        user.setCompanyName(userExtendedDto.getCompanyName());
+        user.setAddress(userExtendedDto.getAddress());
+        user.setZipCode(userExtendedDto.getZipCode());
+        user.setCity(userExtendedDto.getCity());
+        user.setVoivodeship(userExtendedDto.getVoivodeship());
+        user.setFirstPhoneNumber(userExtendedDto.getFirstPhoneNumber());
+        user.setSecondPhoneNumber(userExtendedDto.getSecondPhoneNumber());
+        userRepository.save(user);
+    }
+
+    private UserExtendedDto createExtendedDtoFromEntity(User user) {
+        UserExtendedDto userExtendedDto = new UserExtendedDto();
+        userExtendedDto.setName(user.getName());
+        userExtendedDto.setSurname(user.getSurname());
+        userExtendedDto.setCompanyName(user.getCompanyName());
+        userExtendedDto.setAddress(user.getAddress());
+        userExtendedDto.setZipCode(user.getZipCode());
+        userExtendedDto.setCity(user.getCity());
+        userExtendedDto.setVoivodeship(user.getVoivodeship());
+        userExtendedDto.setFirstPhoneNumber(user.getFirstPhoneNumber());
+        userExtendedDto.setSecondPhoneNumber(user.getSecondPhoneNumber());
+        return userExtendedDto;
     }
 
     private String calculateAndFormatDateDifference(User user) {

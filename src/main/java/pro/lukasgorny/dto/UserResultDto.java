@@ -7,6 +7,7 @@ public class UserResultDto {
     private String email;
     private String registeredSince;
     private String lastLogin;
+    private UserExtendedDto userExtendedDto;
 
     public String getEmail() {
         return email;
@@ -30,5 +31,13 @@ public class UserResultDto {
 
     public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
+    }
+
+    public UserExtendedDto getUserExtendedDto() {
+        return userExtendedDto;
+    }
+
+    public void setUserExtendedDto(UserExtendedDto userExtendedDto) {
+        this.userExtendedDto = userExtendedDto;
     }
 }

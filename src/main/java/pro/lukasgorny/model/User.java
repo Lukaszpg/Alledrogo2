@@ -1,5 +1,7 @@
 package pro.lukasgorny.model;
 
+import pro.lukasgorny.enums.VoivodeshipEnum;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +21,15 @@ public class User extends Model {
     private Integer birthdayDay;
     private Integer birthdayMonth;
     private Integer birthdayYear;
+    private String name;
+    private String surname;
+    private String companyName;
+    private String address;
+    private String zipCode;
+    private String city;
+    private VoivodeshipEnum voivodeship;
+    private String firstPhoneNumber;
+    private String secondPhoneNumber;
 
     public String getEmail() {
         return email;
@@ -92,5 +103,78 @@ public class User extends Model {
 
     public void setSellingBlocked(Boolean sellingBlocked) {
         this.sellingBlocked = sellingBlocked;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @Enumerated(EnumType.STRING)
+    public VoivodeshipEnum getVoivodeship() {
+        return voivodeship;
+    }
+
+    public void setVoivodeship(VoivodeshipEnum voivodeship) {
+        this.voivodeship = voivodeship;
+    }
+
+    public String getFirstPhoneNumber() {
+        return firstPhoneNumber;
+    }
+
+    public void setFirstPhoneNumber(String firstPhoneNumber) {
+        this.firstPhoneNumber = firstPhoneNumber;
+    }
+
+    public String getSecondPhoneNumber() {
+        return secondPhoneNumber;
+    }
+
+    public void setSecondPhoneNumber(String secondPhoneNumber) {
+        this.secondPhoneNumber = secondPhoneNumber;
     }
 }

@@ -11,6 +11,8 @@ $(document).ready(function () {
     initializeInputMasks();
     initializeMenuButtons();
     initializeSearchSelect();
+    initializeModals();
+    initializeUserCopyToClipboardButton();
 });
 
 var initializeTabs = function() {
@@ -59,4 +61,23 @@ var initializeMenuButtons = function() {
 var initializeSearchSelect = function() {
     $("#searchCategoriesSelect").material_select();
 };
+
+var initializeModals = function() {
+    $('.modal').modal();
+};
+
+var initializeUserCopyToClipboardButton = function() {
+    $(".user-details-copy-to-clipboard").click(function() {
+        var name = $("#name").html();
+        var surname = $("#surname").html();
+        var address = $("#address").html();
+        var zipCode = $("#zipCode").html();
+        var city = $("#city").html();
+        var voivodeship = $("#voivodeship").html();
+        var firstPhoneNumber = $("#firstPhoneNumber").html();
+        var secondPhoneNumber = $("#secondPhoneNumber").html();
+        var company = $("#company").html();
+
+    });
+}
 
