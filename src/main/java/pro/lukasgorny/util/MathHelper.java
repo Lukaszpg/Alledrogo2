@@ -13,4 +13,8 @@ public class MathHelper {
         return firstValue.compareTo(secondValue) == BIG_DECIMAL_EQUAL_CODE
                 || firstValue.compareTo(secondValue) == BIG_DECIMAL_GREATER_CODE;
     }
+
+    public static Boolean bigDecimalLessThanFirstValue(BigDecimal firstValue, BigDecimal secondValue) {
+        return firstValue.compareTo(secondValue) == BIG_DECIMAL_GREATER_CODE;
+    }
 }

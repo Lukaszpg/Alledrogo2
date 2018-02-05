@@ -68,6 +68,7 @@ public class CreateTransactionServiceImpl implements CreateTransactionService {
         bid.setUser(userService.getByEmail(bidSaveDto.getUsername()));
         bid.setTransactionType(TransactionType.BID);
         bid.setIsWinning(bidSaveDto.getWinning() != null ? bidSaveDto.getWinning() : false);
+        bid.setOfferAccepted(true);
 
         return bid;
     }

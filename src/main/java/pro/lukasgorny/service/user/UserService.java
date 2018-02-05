@@ -23,4 +23,5 @@ public interface UserService {
     void changeUserPassword(ChangePasswordDto changePasswordDto);
     boolean isNewPasswordSameAsOldPassword(ChangePasswordDto changePasswordDto);
     void changeUserEmail(ChangeEmailDto changeEmailDto);
+    User getById(Long id);
 }

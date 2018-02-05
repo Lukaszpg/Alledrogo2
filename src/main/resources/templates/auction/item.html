@@ -49,7 +49,7 @@
                                 <p class="auction-ended" th:if="${auctionDto.winningBid == null}"
                                    th:text="#{auction.ended.no.bids}"></p>
                                 <p class="auction-ended" th:if="${auctionDto.winningBid != null}"
-                                   th:text="#{auction.ended.winner(${auctionDto.winningBid.username})}"></p>
+                                   th:text="#{auction.ended.winner(${auctionDto.winningBid.buyerName})}"></p>
                             </div>
                             <div th:if="${!auctionDto.hasEnded && !auctionDto.untilOufOfItems}" class="col s3 offset-s3">
                                 <label class="right" for="endCountdown" th:text="#{label.auction.to.end}"></label>

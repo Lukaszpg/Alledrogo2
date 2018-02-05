@@ -97,6 +97,11 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     }
 
     @Override
+    public Auction getOneEntity(Long id) {
+        return auctionRepository.findOne(id);
+    }
+
+    @Override
     public Boolean auctionExists(String id) {
         return getOne(id) != null;
     }

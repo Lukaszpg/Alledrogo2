@@ -55,6 +55,11 @@ public class GetTransactionServiceImpl implements GetTransactionService {
     }
 
     @Override
+    public Transaction getWinningBidEntityForAuction(Long id) {
+        return transactionRepository.findWinningBidForAuction(id);
+    }
+
+    @Override
     public List<TransactionResultDto> getAllBoughtItemsByUserEmail(String email) {
         User user = userService.getByEmail(email);
         List<Transaction> transactions = new ArrayList<>();

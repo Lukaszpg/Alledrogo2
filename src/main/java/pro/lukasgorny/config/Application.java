@@ -14,6 +14,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import pro.lukasgorny.dto.UserSaveDto;
@@ -38,6 +39,7 @@ import pro.lukasgorny.service.user.UserService;
 @EntityScan(basePackages = "pro.lukasgorny")
 @EnableScheduling
 @EnableConfigurationProperties(StorageProperties.class)
+@EnableAsync
 public class Application extends SpringBootServletInitializer {
 
     private final RoleRepository roleRepository;

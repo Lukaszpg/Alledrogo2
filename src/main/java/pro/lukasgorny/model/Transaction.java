@@ -20,6 +20,7 @@ public class Transaction extends Model {
     private TransactionType transactionType;
     private Rating buyerRating;
     private Rating sellerRating;
+    private Boolean offerAccepted;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="auction_id")
@@ -92,5 +93,13 @@ public class Transaction extends Model {
 
     public void setSellerRating(Rating sellerRating) {
         this.sellerRating = sellerRating;
+    }
+
+    public Boolean getOfferAccepted() {
+        return offerAccepted;
+    }
+
+    public void setOfferAccepted(Boolean offerAccepted) {
+        this.offerAccepted = offerAccepted;
     }
 }

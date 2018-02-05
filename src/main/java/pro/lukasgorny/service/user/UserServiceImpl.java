@@ -110,6 +110,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getById(Long id) {
+        return userRepository.findOne(id);
+    }
+
+    @Override
     public void changeUserPassword(ChangePasswordDto changePasswordDto) {
         User user = getByEmail(changePasswordDto.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(changePasswordDto.getNewPassword()));

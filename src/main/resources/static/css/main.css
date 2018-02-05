@@ -494,3 +494,8 @@ ul.dropdown-content.select-dropdown li span {
 .search-preloader {
     margin-top: 20px;
 }
+
+.home-auction-image {
+    width: 90%;
+    margin-left: 5%;
+}
