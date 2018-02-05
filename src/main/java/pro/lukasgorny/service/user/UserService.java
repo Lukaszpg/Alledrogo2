@@ -1,5 +1,6 @@
 package pro.lukasgorny.service.user;
 
+import pro.lukasgorny.dto.ChangePasswordDto;
 import pro.lukasgorny.dto.UserExtendedDto;
 import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.model.User;
@@ -17,4 +18,7 @@ public interface UserService {
     UserResultDto createDtoFromEntity(User user);
     UserExtendedDto getUserData(String email);
     void setAndSaveUserData(UserExtendedDto userExtendedDto);
+    boolean isUserPasswordMatchWithInput(ChangePasswordDto changePasswordDto);
+    void changeUserPassword(ChangePasswordDto changePasswordDto);
+    boolean isNewPasswordSameAsOldPassword(ChangePasswordDto changePasswordDto);
 }

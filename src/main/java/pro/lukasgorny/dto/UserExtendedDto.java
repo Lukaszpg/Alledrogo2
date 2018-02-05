@@ -3,7 +3,6 @@ package pro.lukasgorny.dto;
 import pro.lukasgorny.enums.VoivodeshipEnum;
 
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Created by Łukasz on 04.02.2018.
@@ -12,27 +11,27 @@ public class UserExtendedDto {
 
     private String email;
 
-    @NotBlank
+    @NotNull
     private String firstName;
 
-    @NotBlank
+    @NotNull
     private String surname;
 
     private String companyName;
 
-    @NotBlank
+    @NotNull
     private String address;
 
-    @NotBlank
+    @NotNull
     private String zipCode;
 
-    @NotBlank
+    @NotNull
     private String city;
 
     @NotNull
     private VoivodeshipEnum voivodeship;
 
-    @NotBlank
+    @NotNull
     private String firstPhoneNumber;
 
     private String secondPhoneNumber;

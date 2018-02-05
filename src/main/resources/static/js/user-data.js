@@ -5,6 +5,7 @@ $(document).ready(function () {
     initializeInputMasks();
     initializeInputErrorHide();
     initializeSelectErrorHide();
+    checkShouldChangeToPasswordChangeTab();
 });
 
 var enableMaterializeSelect = function () {
@@ -30,4 +31,12 @@ var initializeSelectErrorHide = function () {
             $(this).parent().parent().find(".validation-error-input").addClass("hide");
         });
     });
+};
+
+var checkShouldChangeToPasswordChangeTab = function() {
+    var tabValue = $("#changePasswordTab").val();
+
+    if(tabValue == "true") {
+        $('ul.tabs').tabs('select_tab', 'changePassword');
+    }
 };

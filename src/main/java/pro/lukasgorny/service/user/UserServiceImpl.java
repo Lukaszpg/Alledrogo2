@@ -3,8 +3,10 @@ package pro.lukasgorny.service.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import pro.lukasgorny.dto.ChangePasswordDto;
 import pro.lukasgorny.dto.UserExtendedDto;
 import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.model.User;
@@ -25,12 +27,15 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MessageSource messageSource;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, MessageSource messageSource) {
+    public UserServiceImpl(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, MessageSource messageSource,
+            BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.messageSource = messageSource;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
@@ -81,7 +86,26 @@ public class UserServiceImpl implements UserService {
         user.setVoivodeship(userExtendedDto.getVoivodeship());
         user.setFirstPhoneNumber(userExtendedDto.getFirstPhoneNumber());
         user.setSecondPhoneNumber(userExtendedDto.getSecondPhoneNumber());
-        userRepository.save(user);
+        save(user);
+    }
+
+    @Override
+    public boolean isUserPasswordMatchWithInput(ChangePasswordDto changePasswordDto) {
+        User user = getByEmail(changePasswordDto.getEmail());
+        return bCryptPasswordEncoder.matches(changePasswordDto.getActualPassword(), user.getPassword());
+    }
+
+    @Override
+    public boolean isNewPasswordSameAsOldPassword(ChangePasswordDto changePasswordDto) {
+        User user = getByEmail(changePasswordDto.getEmail());
+        return bCryptPasswordEncoder.matches(changePasswordDto.getNewPassword(), user.getPassword());
+    }
+
+    @Override
+    public void changeUserPassword(ChangePasswordDto changePasswordDto) {
+        User user = getByEmail(changePasswordDto.getEmail());
+        user.setPassword(bCryptPasswordEncoder.encode(changePasswordDto.getNewPassword()));
+        save(user);
     }
 
     private UserExtendedDto createExtendedDtoFromEntity(User user) {

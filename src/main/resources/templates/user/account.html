@@ -6,6 +6,7 @@
 </head>
 <body th:replace="layout/template :: bodyFragment">
 <div th:fragment="content">
+    <input type="hidden" id="changePasswordTab" th:value="${changePasswordTab}">
     <div class="row">
         <div class="col s12">
             <ul class="tabs">
@@ -122,9 +123,36 @@
     </div>
     <div id="changePassword">
         <div class="row">
-            <h2 th:text="#{menu.label.change.password}"></h2>
-        </div>
-        <div class="row">
+            <form action="#" th:action="@{/user/change-password}" th:object="${changePasswordDto}" method="post" class="col s10 offset-s2">
+                <div class="row">
+                    <h2 th:text="#{menu.label.change.password}"></h2>
+                    <div class="input-field col s5">
+                        <input th:field="*{actualPassword}" id="actualPassword" type="password"
+                               th:placeholder="#{placeholder.user.actual.password}"
+                               class="validate" th:classappend="${#fields.hasErrors('actualPassword')}  ? 'invalid' : ''">
+                        <label for="firstName" th:text="#{label.user.actual.password}"></label>
+                        <div class="validation-error-input" th:if="${#fields.hasErrors('actualPassword')}"
+                             th:errors="*{actualPassword}"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s5">
+                        <input th:field="*{newPassword}" id="registrationPassword" type="password"
+                               th:placeholder="#{placeholder.user.new.password}" data-delay="50"
+                               th:attr="data-tooltip=#{registration.password.tooltip}" data-length="40"
+                               class="tooltipped validate" th:classappend="${#fields.hasErrors('newPassword')}  ? 'invalid' : ''">
+                        <label for="registrationPassword" th:text="#{label.user.new.password}"></label>
+                        <div class="validation-error-input" th:if="${#fields.hasErrors('newPassword')}"
+                             th:errors="*{newPassword}"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s10">
+                        <button class="btn waves-light waves-effect right" type="submit"
+                                th:text="#{button.save}"></button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

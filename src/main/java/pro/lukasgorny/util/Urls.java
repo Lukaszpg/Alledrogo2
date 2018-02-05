@@ -73,6 +73,9 @@ public class Urls {
         public static final String ITEMS_SOLD = "/item/sold";
         public static final String ITEMS_BOUGHT = "/item/bought";
         public static final String ACCOUNT = "/my-account";
+        public static final String CHANGE_PASSWORD = "/change-password";
+        public static final String CHANGE_PASSWORD_SUCCESS = "/change-password-success";
+        public static final String CHANGE_PASSWORD_SUCCESS_REDIRECT = "redirect:" + MAIN + "/change-password-success";
     }
 
     public class Search {

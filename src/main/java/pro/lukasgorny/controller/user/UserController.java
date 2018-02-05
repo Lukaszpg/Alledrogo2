@@ -8,8 +8,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import pro.lukasgorny.dto.ChangePasswordDto;
 import pro.lukasgorny.dto.Rating.RatingSaveDto;
 import pro.lukasgorny.dto.UserExtendedDto;
+import pro.lukasgorny.model.Model;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.service.auction.GetAuctionService;
 import pro.lukasgorny.service.auction.GetTransactionService;
@@ -116,17 +118,20 @@ public class UserController {
     @GetMapping(Urls.User.ACCOUNT)
     public ModelAndView getMyAccount(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.ACCOUNT);
-        UserExtendedDto userExtendedDto = userService.getUserData(principal.getName());
-        modelAndView.addObject("userExtendedDto", userExtendedDto);
+        modelAndView.addObject("userExtendedDto", userService.getUserData(principal.getName()));
+        modelAndView.addObject("changePasswordDto", new ChangePasswordDto());
+        modelAndView.addObject("changePasswordTab", false);
         return modelAndView;
     }
 
     @PostMapping(Urls.User.ACCOUNT)
     public ModelAndView saveUserData(@Valid @ModelAttribute("userExtendedDto") UserExtendedDto userExtendedDto, Principal principal, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("changePasswordTab", false);
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.UserTemplates.ACCOUNT);
+            modelAndView.addObject("changePasswordDto", new ChangePasswordDto());
             return modelAndView;
         }
 
@@ -135,5 +140,35 @@ public class UserController {
         modelAndView.setViewName(Templates.INDEX);
 
         return modelAndView;
+    }
+
+    @PostMapping(Urls.User.CHANGE_PASSWORD)
+    public ModelAndView changeUserPassword(@Valid ChangePasswordDto changePasswordDto, BindingResult bindingResult, Principal principal) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("userExtendedDto", userService.getUserData(principal.getName()));
+        changePasswordDto.setEmail(principal.getName());
+
+        if(!userService.isUserPasswordMatchWithInput(changePasswordDto)) {
+            bindingResult.rejectValue("actualPassword", "error.password.actual.no.match");
+        }
+
+        if(userService.isNewPasswordSameAsOldPassword(changePasswordDto)) {
+            bindingResult.rejectValue("newPassword", "error.password.same.as.old");
+        }
+
+        if(bindingResult.hasErrors()) {
+            modelAndView.setViewName(Templates.UserTemplates.ACCOUNT);
+            modelAndView.addObject("changePasswordTab", true);
+            return modelAndView;
+        }
+
+        userService.changeUserPassword(changePasswordDto);
+        modelAndView.setViewName(Urls.User.CHANGE_PASSWORD_SUCCESS_REDIRECT);
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.CHANGE_PASSWORD_SUCCESS)
+    public ModelAndView changeUserPasswordSuccess() {
+        return new ModelAndView(Templates.UserTemplates.CHANGE_PASSWORD_SUCCESS);
     }
 }
