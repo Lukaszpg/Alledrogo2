@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pro.lukasgorny.controller.register.validator.UserDtoValidator;
+import pro.lukasgorny.dto.ResetPasswordDto;
 import pro.lukasgorny.dto.UserSaveDto;
 import pro.lukasgorny.enums.RoleEnum;
 import pro.lukasgorny.util.Templates;
@@ -26,6 +27,7 @@ import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.Urls;
 
 import javax.validation.Valid;
+import com.mysql.jdbc.StringUtils;
 
 /**
  * Created by Łukasz on 24.10.2017.
@@ -61,7 +63,7 @@ public class RegistrationController {
     }
 
     @PostMapping(Urls.Registration.REGISTER)
-    public ModelAndView createNewUser(@Valid UserSaveDto userSaveDto, BindingResult bindingResult, WebRequest request) {
+    public ModelAndView createNewUser(@ModelAttribute("userDto") @Valid UserSaveDto userSaveDto, BindingResult bindingResult, WebRequest request) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("months", helperService.prepareMonthsList());
 
@@ -150,5 +152,50 @@ public class RegistrationController {
         }
 
         return Urls.Login.LOGIN_REDIRECT;
+    }
+
+    @GetMapping(Urls.Registration.RESET_PASSWORD)
+    public ModelAndView getResetPasswordForm() {
+        ModelAndView modelAndView = new ModelAndView(Templates.RESET_PASSWORD);
+        modelAndView.addObject("resetPasswordDto", new ResetPasswordDto());
+        return modelAndView;
+    }
+
+    @PostMapping(Urls.Registration.RESET_PASSWORD)
+    public ModelAndView resetUserPassword(@ModelAttribute ResetPasswordDto resetPasswordDto, BindingResult bindingResult, WebRequest request) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (StringUtils.isNullOrEmpty(resetPasswordDto.getEmail()) || !registrationService.validateEmail(resetPasswordDto.getEmail())) {
+            bindingResult.rejectValue("email", "error.email.invalid.format");
+        } else {
+            if(userService.getByEmail(resetPasswordDto.getEmail()) == null) {
+                bindingResult.rejectValue("email", "error.email.not.found");
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName(Templates.RESET_PASSWORD);
+            return modelAndView;
+        }
+
+        resetPasswordDto.setLocale(request.getLocale());
+
+        if(registrationService.resetUserPassword(resetPasswordDto)) {
+            ModelMap modelMap = new ModelMap();
+            modelMap.addAttribute("email", resetPasswordDto.getEmail());
+            return new ModelAndView(Urls.Registration.RESET_PASSWORD_SUCCESS_REDIRECT, modelMap);
+        } else {
+            modelAndView.setViewName(Urls.Registration.EMAIL_ERROR_REDIRECT);
+        }
+
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.Registration.RESET_PASSWORD_SUCCESS)
+    public ModelAndView resetPasswordSuccess(@ModelAttribute("email") String email) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(Templates.RESET_PASSWORD_SUCCESS);
+        modelAndView.addObject("email", email);
+        return modelAndView;
     }
 }

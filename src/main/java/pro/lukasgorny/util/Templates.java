@@ -4,6 +4,8 @@ package pro.lukasgorny.util;
  * Created by Łukasz on 24.10.2017.
  */
 public class Templates {
+    public static final String RESET_PASSWORD = "reset-password";
+    public static final String RESET_PASSWORD_SUCCESS = "reset-password-success";
     public static final String REGISTRATION = "registration";
     public static final String EMAIL_ERROR = "email_error";
     public static final String TOKEN_ACTIVATE = "activate";

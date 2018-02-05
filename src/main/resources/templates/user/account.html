@@ -16,16 +16,16 @@
     </div>
     <div id="userData">
         <div class="row">
-            <form action="#" th:action="@{/user/account}" th:object="${userExtendedDto}" method="post" class="col s10 offset-s2">
+            <form action="#" th:action="@{/user/my-account#userData}" th:object="${userExtendedDto}" method="post" class="col s10 offset-s2">
                 <div class="row">
                     <h2 th:text="#{menu.label.user.data}"></h2>
                     <div class="input-field col s5">
-                        <input th:field="*{name}" id="name" type="text"
+                        <input th:field="*{firstName}" id="firstName" type="text"
                                th:placeholder="#{placeholder.user.name}"
-                               class="validate" th:classappend="${#fields.hasErrors('name')}  ? 'invalid' : ''">
-                        <label for="name" th:text="#{label.user.name}"></label>
-                        <div class="validation-error-input" th:if="${#fields.hasErrors('name')}"
-                             th:errors="*{name}"></div>
+                               class="validate" th:classappend="${#fields.hasErrors('firstName')}  ? 'invalid' : ''">
+                        <label for="firstName" th:text="#{label.user.name}"></label>
+                        <div class="validation-error-input" th:if="${#fields.hasErrors('firstName')}"
+                             th:errors="*{firstName}"></div>
                     </div>
                 </div>
                 <div class="row">
@@ -33,7 +33,7 @@
                         <input th:field="*{surname}" id="surname" type="text"
                                th:placeholder="#{placeholder.user.surname}"
                                class="validate" th:classappend="${#fields.hasErrors('surname')}  ? 'invalid' : ''">
-                        <label for="name" th:text="#{label.user.surname}"></label>
+                        <label for="surname" th:text="#{label.user.surname}"></label>
                         <div class="validation-error-input" th:if="${#fields.hasErrors('surname')}"
                              th:errors="*{surname}"></div>
                     </div>
@@ -43,7 +43,7 @@
                         <input th:field="*{companyName}" id="company" type="text"
                                th:placeholder="#{placeholder.user.company}"
                                class="validate" th:classappend="${#fields.hasErrors('companyName')}  ? 'invalid' : ''">
-                        <label for="name" th:text="#{label.user.company}"></label>
+                        <label for="company" th:text="#{label.user.company}"></label>
                         <div class="validation-error-input" th:if="${#fields.hasErrors('companyName')}"
                              th:errors="*{companyName}"></div>
                     </div>
@@ -53,7 +53,7 @@
                         <input th:field="*{address}" id="address" type="text"
                                th:placeholder="#{placeholder.user.address}"
                                class="validate" th:classappend="${#fields.hasErrors('address')}  ? 'invalid' : ''">
-                        <label for="name" th:text="#{label.user.address}"></label>
+                        <label for="address" th:text="#{label.user.address}"></label>
                         <div class="validation-error-input" th:if="${#fields.hasErrors('address')}"
                              th:errors="*{address}"></div>
                     </div>
@@ -63,7 +63,7 @@
                         <input th:field="*{zipCode}" id="zipcode" type="text"
                                th:placeholder="#{placeholder.user.zip.code}"
                                class="validate" th:classappend="${#fields.hasErrors('zipCode')}  ? 'invalid' : ''">
-                        <label for="name" th:text="#{label.user.zip.code}"></label>
+                        <label for="zipcode" th:text="#{label.user.zip.code}"></label>
                         <div class="validation-error-input" th:if="${#fields.hasErrors('zipCode')}"
                              th:errors="*{zipCode}"></div>
                     </div>
@@ -73,7 +73,7 @@
                         <input th:field="*{city}" id="city" type="text"
                                th:placeholder="#{placeholder.user.city}"
                                class="validate" th:classappend="${#fields.hasErrors('city')}  ? 'invalid' : ''">
-                        <label for="name" th:text="#{label.user.city}"></label>
+                        <label for="city" th:text="#{label.user.city}"></label>
                         <div class="validation-error-input" th:if="${#fields.hasErrors('city')}"
                              th:errors="*{city}"></div>
                     </div>
@@ -96,7 +96,7 @@
                         <input th:field="*{firstPhoneNumber}" id="phone" type="text"
                                th:placeholder="#{placeholder.user.phone}"
                                class="validate" th:classappend="${#fields.hasErrors('firstPhoneNumber')}  ? 'invalid' : ''">
-                        <label for="name" th:text="#{label.user.phone}"></label>
+                        <label for="phone" th:text="#{label.user.phone}"></label>
                         <div class="validation-error-input" th:if="${#fields.hasErrors('firstPhoneNumber')}"
                              th:errors="*{firstPhoneNumber}"></div>
                     </div>
@@ -106,7 +106,7 @@
                         <input th:field="*{secondPhoneNumber}" id="secondPhone" type="text"
                                th:placeholder="#{placeholder.user.phone}"
                                class="validate" th:classappend="${#fields.hasErrors('secondPhoneNumber')}  ? 'invalid' : ''">
-                        <label for="name" th:text="#{label.user.second.phone}"></label>
+                        <label for="secondPhone" th:text="#{label.user.second.phone}"></label>
                         <div class="validation-error-input" th:if="${#fields.hasErrors('secondPhoneNumber')}"
                              th:errors="*{secondPhoneNumber}"></div>
                     </div>

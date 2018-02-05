@@ -2,19 +2,14 @@ package pro.lukasgorny.controller.user;
 
 import java.security.Principal;
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import pro.lukasgorny.dto.Rating.RatingSaveDto;
 import pro.lukasgorny.dto.UserExtendedDto;
-import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.service.auction.GetAuctionService;
 import pro.lukasgorny.service.auction.GetTransactionService;
@@ -40,7 +35,7 @@ public class UserController {
 
     @Autowired
     public UserController(UserService userService, GetAuctionService getAuctionService, GetTransactionService getTransactionService,
-                          CreateRatingService createRatingService, GetRatingService getRatingService) {
+            CreateRatingService createRatingService, GetRatingService getRatingService) {
         this.userService = userService;
         this.getAuctionService = getAuctionService;
         this.getTransactionService = getTransactionService;
@@ -127,7 +122,7 @@ public class UserController {
     }
 
     @PostMapping(Urls.User.ACCOUNT)
-    public ModelAndView saveUserData(@Valid UserExtendedDto userExtendedDto, Principal principal, BindingResult bindingResult) {
+    public ModelAndView saveUserData(@Valid @ModelAttribute("userExtendedDto") UserExtendedDto userExtendedDto, Principal principal, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
 
         if (bindingResult.hasErrors()) {

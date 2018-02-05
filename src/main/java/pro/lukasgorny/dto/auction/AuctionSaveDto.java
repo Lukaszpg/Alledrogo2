@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pro.lukasgorny.model.User;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by Łukasz on 26.10.2017.
@@ -47,6 +48,8 @@ public class AuctionSaveDto {
     private MultipartFile[] photos;
 
     private Boolean untilOutOfItems;
+
+    private List<ShippingDto> shippingDtos;
 
     public String getTitle() {
         return title;
@@ -166,5 +169,13 @@ public class AuctionSaveDto {
 
     public void setUntilOutOfItems(Boolean untilOutOfItems) {
         this.untilOutOfItems = untilOutOfItems;
+    }
+
+    public List<ShippingDto> getShippingDtos() {
+        return shippingDtos;
+    }
+
+    public void setShippingDtos(List<ShippingDto> shippingDtos) {
+        this.shippingDtos = shippingDtos;
     }
 }

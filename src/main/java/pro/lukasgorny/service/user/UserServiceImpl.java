@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void setAndSaveUserData(UserExtendedDto userExtendedDto) {
         User user = getByEmail(userExtendedDto.getEmail());
-        user.setName(userExtendedDto.getName());
+        user.setName(userExtendedDto.getFirstName());
         user.setSurname(userExtendedDto.getSurname());
         user.setCompanyName(userExtendedDto.getCompanyName());
         user.setAddress(userExtendedDto.getAddress());
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
     private UserExtendedDto createExtendedDtoFromEntity(User user) {
         UserExtendedDto userExtendedDto = new UserExtendedDto();
-        userExtendedDto.setName(user.getName());
+        userExtendedDto.setFirstName(user.getName());
         userExtendedDto.setSurname(user.getSurname());
         userExtendedDto.setCompanyName(user.getCompanyName());
         userExtendedDto.setAddress(user.getAddress());

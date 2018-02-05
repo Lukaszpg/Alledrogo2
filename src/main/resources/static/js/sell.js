@@ -1,7 +1,7 @@
 "use strict";
 
 $(document).ready(function () {
-    enableMaterializeSelect();
+    enableSelects();
     initializeRichTextEditor();
     initializeInputMasks();
     initializeCheckboxChangeEvent();
@@ -78,7 +78,7 @@ var initializeTitleInputChangeEvent = function () {
     });
 };
 
-var enableMaterializeSelect = function () {
+var enableSelects = function () {
     $("#itemStateSelect").material_select();
     $("#auctionDurationSelect").material_select();
 };

@@ -47,6 +47,9 @@ public class Urls {
         public static final String TOKEN_ERROR = "/token-error";
         public static final String ACTIVATE = "/activate";
         public static final String REGISTER_SUCCESS = "/register-success";
+        public static final String RESET_PASSWORD = "/reset-password";
+        public static final String RESET_PASSWORD_SUCCESS = "/reset-password-success";
+        public static final String RESET_PASSWORD_SUCCESS_REDIRECT = "redirect:/reset-password-success";
     }
 
     public class Util {
@@ -69,7 +72,7 @@ public class Urls {
         public static final String CREATE_RATING_SUCCESS = RATING + "/create-success";
         public static final String ITEMS_SOLD = "/item/sold";
         public static final String ITEMS_BOUGHT = "/item/bought";
-        public static final String ACCOUNT = "/account";
+        public static final String ACCOUNT = "/my-account";
     }
 
     public class Search {
