@@ -7,24 +7,26 @@
 <body th:replace="layout/template :: bodyFragment">
 <div th:fragment="content">
     <input type="hidden" id="changePasswordTab" th:value="${changePasswordTab}">
+    <input type="hidden" id="changeEmailTab" th:value="${changeEmailTab}">
     <div class="row">
         <div class="col s12">
             <ul class="tabs">
                 <li class="tab col s3"><a href="#userData" th:text="#{menu.label.user.data}"></a></li>
                 <li class="tab col s3"><a href="#changePassword" th:text="#{menu.label.change.password}"></a></li>
+                <li class="tab col s3"><a href="#changeEmail" th:text="#{menu.label.change.email}"></a></li>
             </ul>
         </div>
     </div>
     <div id="userData">
         <div class="row">
-            <form action="#" th:action="@{/user/my-account#userData}" th:object="${userExtendedDto}" method="post" class="col s10 offset-s2">
+            <form action="#" th:action="@{/user/my-account#userData}" th:object="${userExtendedDto}" method="post" class="col s8 offset-s4">
                 <div class="row">
                     <h2 th:text="#{menu.label.user.data}"></h2>
                     <div class="input-field col s5">
                         <input th:field="*{firstName}" id="firstName" type="text"
                                th:placeholder="#{placeholder.user.name}"
                                class="validate" th:classappend="${#fields.hasErrors('firstName')}  ? 'invalid' : ''">
-                        <label for="firstName" th:text="#{label.user.name}"></label>
+                        <label for="firstName" th:text="#{label.user.firstName}"></label>
                         <div class="validation-error-input" th:if="${#fields.hasErrors('firstName')}"
                              th:errors="*{firstName}"></div>
                     </div>
@@ -123,7 +125,7 @@
     </div>
     <div id="changePassword">
         <div class="row">
-            <form action="#" th:action="@{/user/change-password}" th:object="${changePasswordDto}" method="post" class="col s10 offset-s2">
+            <form action="#" th:action="@{/user/change-password}" th:object="${changePasswordDto}" method="post" class="col s8 offset-s4">
                 <div class="row">
                     <h2 th:text="#{menu.label.change.password}"></h2>
                     <div class="input-field col s5">
@@ -144,6 +146,39 @@
                         <label for="registrationPassword" th:text="#{label.user.new.password}"></label>
                         <div class="validation-error-input" th:if="${#fields.hasErrors('newPassword')}"
                              th:errors="*{newPassword}"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s10">
+                        <button class="btn waves-light waves-effect right" type="submit"
+                                th:text="#{button.save}"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="changeEmail">
+        <div class="row">
+            <form action="#" th:action="@{/user/change-email}" th:object="${changeEmailDto}" method="post" class="col s8 offset-s4">
+                <div class="row">
+                    <h2 th:text="#{menu.label.change.email}"></h2>
+                    <div class="input-field col s5">
+                        <input th:field="*{actualPassword}" id="actualPassword" type="password"
+                               th:placeholder="#{placeholder.user.actual.password}"
+                               class="validate" th:classappend="${#fields.hasErrors('actualPassword')}  ? 'invalid' : ''">
+                        <label for="firstName" th:text="#{label.user.actual.password}"></label>
+                        <div class="validation-error-input" th:if="${#fields.hasErrors('actualPassword')}"
+                             th:errors="*{actualPassword}"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s5">
+                        <input th:field="*{newEmail}" id="newEmail" type="email"
+                               th:placeholder="#{placeholder.user.new.email}"
+                               class="validate" th:classappend="${#fields.hasErrors('newEmail')}  ? 'invalid' : ''">
+                        <label for="newEmail" th:text="#{label.user.new.email}"></label>
+                        <div class="validation-error-input" th:if="${#fields.hasErrors('newEmail')}"
+                             th:errors="*{newEmail}"></div>
                     </div>
                 </div>
                 <div class="row">

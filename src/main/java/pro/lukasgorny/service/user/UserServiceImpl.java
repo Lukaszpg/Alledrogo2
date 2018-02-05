@@ -6,6 +6,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import pro.lukasgorny.dto.ChangeEmailDto;
 import pro.lukasgorny.dto.ChangePasswordDto;
 import pro.lukasgorny.dto.UserExtendedDto;
 import pro.lukasgorny.dto.UserResultDto;
@@ -90,15 +91,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isUserPasswordMatchWithInput(ChangePasswordDto changePasswordDto) {
-        User user = getByEmail(changePasswordDto.getEmail());
-        return bCryptPasswordEncoder.matches(changePasswordDto.getActualPassword(), user.getPassword());
+    public boolean isUserPasswordMatchWithInput(String inputPassword, String email) {
+        User user = getByEmail(email);
+        return bCryptPasswordEncoder.matches(inputPassword, user.getPassword());
     }
 
     @Override
     public boolean isNewPasswordSameAsOldPassword(ChangePasswordDto changePasswordDto) {
         User user = getByEmail(changePasswordDto.getEmail());
         return bCryptPasswordEncoder.matches(changePasswordDto.getNewPassword(), user.getPassword());
+    }
+
+    @Override
+    public void changeUserEmail(ChangeEmailDto changeEmailDto) {
+        User user = getByEmail(changeEmailDto.getEmail());
+        user.setEmail(changeEmailDto.getNewEmail());
+        save(user);
     }
 
     @Override

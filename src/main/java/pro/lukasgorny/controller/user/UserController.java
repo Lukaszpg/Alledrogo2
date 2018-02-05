@@ -1,6 +1,7 @@
 package pro.lukasgorny.controller.user;
 
 import java.security.Principal;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import pro.lukasgorny.dto.ChangeEmailDto;
 import pro.lukasgorny.dto.ChangePasswordDto;
 import pro.lukasgorny.dto.Rating.RatingSaveDto;
 import pro.lukasgorny.dto.UserExtendedDto;
@@ -120,7 +122,9 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.ACCOUNT);
         modelAndView.addObject("userExtendedDto", userService.getUserData(principal.getName()));
         modelAndView.addObject("changePasswordDto", new ChangePasswordDto());
+        modelAndView.addObject("changeEmailDto", new ChangeEmailDto());
         modelAndView.addObject("changePasswordTab", false);
+        modelAndView.addObject("changeEmailTab", false);
         return modelAndView;
     }
 
@@ -128,10 +132,12 @@ public class UserController {
     public ModelAndView saveUserData(@Valid @ModelAttribute("userExtendedDto") UserExtendedDto userExtendedDto, Principal principal, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("changePasswordTab", false);
+        modelAndView.addObject("changeEmailTab", false);
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.UserTemplates.ACCOUNT);
             modelAndView.addObject("changePasswordDto", new ChangePasswordDto());
+            modelAndView.addObject("changeEmailDto", new ChangeEmailDto());
             return modelAndView;
         }
 
@@ -143,12 +149,14 @@ public class UserController {
     }
 
     @PostMapping(Urls.User.CHANGE_PASSWORD)
-    public ModelAndView changeUserPassword(@Valid ChangePasswordDto changePasswordDto, BindingResult bindingResult, Principal principal) {
+    public ModelAndView changeUserPassword(@Valid ChangePasswordDto changePasswordDto, BindingResult bindingResult, Principal principal, HttpSession httpSession) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("userExtendedDto", userService.getUserData(principal.getName()));
+        modelAndView.addObject("changeEmailDto", new ChangeEmailDto());
+
         changePasswordDto.setEmail(principal.getName());
 
-        if(!userService.isUserPasswordMatchWithInput(changePasswordDto)) {
+        if(!userService.isUserPasswordMatchWithInput(changePasswordDto.getActualPassword(), changePasswordDto.getEmail())) {
             bindingResult.rejectValue("actualPassword", "error.password.actual.no.match");
         }
 
@@ -159,16 +167,53 @@ public class UserController {
         if(bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.UserTemplates.ACCOUNT);
             modelAndView.addObject("changePasswordTab", true);
+            modelAndView.addObject("changeEmailTab", false);
             return modelAndView;
         }
 
         userService.changeUserPassword(changePasswordDto);
         modelAndView.setViewName(Urls.User.CHANGE_PASSWORD_SUCCESS_REDIRECT);
+        httpSession.invalidate();
+
         return modelAndView;
     }
 
     @GetMapping(Urls.User.CHANGE_PASSWORD_SUCCESS)
     public ModelAndView changeUserPasswordSuccess() {
         return new ModelAndView(Templates.UserTemplates.CHANGE_PASSWORD_SUCCESS);
+    }
+
+    @PostMapping(Urls.User.CHANGE_EMAIL)
+    public ModelAndView changeUserEmail(@Valid ChangeEmailDto changeEmailDto, BindingResult bindingResult, Principal principal, HttpSession httpSession) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("userExtendedDto", userService.getUserData(principal.getName()));
+        modelAndView.addObject("changePasswordDto", new ChangePasswordDto());
+        changeEmailDto.setEmail(principal.getName());
+
+        if(!userService.isUserPasswordMatchWithInput(changeEmailDto.getActualPassword(), principal.getName())) {
+            bindingResult.rejectValue("actualPassword", "error.password.actual.no.match");
+        }
+
+        if(userService.getByEmail(changeEmailDto.getNewEmail()) != null) {
+            bindingResult.rejectValue("newEmail", "error.user.exists");
+        }
+
+        if(bindingResult.hasErrors()) {
+            modelAndView.setViewName(Templates.UserTemplates.ACCOUNT);
+            modelAndView.addObject("changePasswordTab", false);
+            modelAndView.addObject("changeEmailTab", true);
+            return modelAndView;
+        }
+
+        userService.changeUserEmail(changeEmailDto);
+        modelAndView.setViewName(Urls.User.CHANGE_EMAIL_SUCCESS_REDIRECT);
+        httpSession.invalidate();
+
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.CHANGE_EMAIL_SUCCESS)
+    public ModelAndView changeUserEmailSuccess() {
+        return new ModelAndView(Templates.UserTemplates.CHANGE_EMAIL_SUCCESS);
     }
 }

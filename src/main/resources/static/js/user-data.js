@@ -6,6 +6,7 @@ $(document).ready(function () {
     initializeInputErrorHide();
     initializeSelectErrorHide();
     checkShouldChangeToPasswordChangeTab();
+    checkShouldChangeToEmailChangeTab();
 });
 
 var enableMaterializeSelect = function () {
@@ -31,6 +32,14 @@ var initializeSelectErrorHide = function () {
             $(this).parent().parent().find(".validation-error-input").addClass("hide");
         });
     });
+};
+
+var checkShouldChangeToEmailChangeTab = function() {
+    var tabValue = $("#changeEmailTab").val();
+
+    if(tabValue == "true") {
+        $('ul.tabs').tabs('select_tab', 'changeEmail');
+    }
 };
 
 var checkShouldChangeToPasswordChangeTab = function() {

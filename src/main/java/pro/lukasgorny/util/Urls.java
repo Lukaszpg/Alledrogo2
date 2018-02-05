@@ -76,6 +76,9 @@ public class Urls {
         public static final String CHANGE_PASSWORD = "/change-password";
         public static final String CHANGE_PASSWORD_SUCCESS = "/change-password-success";
         public static final String CHANGE_PASSWORD_SUCCESS_REDIRECT = "redirect:" + MAIN + "/change-password-success";
+        public static final String CHANGE_EMAIL = "/change-email";
+        public static final String CHANGE_EMAIL_SUCCESS = "/change-email-success";
+        public static final String CHANGE_EMAIL_SUCCESS_REDIRECT = "redirect:" + MAIN + "/change-email-success";
     }
 
     public class Search {
