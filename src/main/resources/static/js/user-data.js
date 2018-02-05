@@ -14,8 +14,9 @@ var enableMaterializeSelect = function () {
 };
 
 var initializeInputMasks = function () {
-    $('.money').mask('###0.00', {reverse: true});
-    $('.amount').mask('#####0');
+    $('#phone').mask('000-000-000');
+    $('#secondPhone').mask('000-000-000');
+    $("#zipcode").mask("00-000");
 };
 
 var initializeInputErrorHide = function () {

@@ -22,11 +22,53 @@
             </thead>
             <tbody>
             <tr th:if="${!#lists.isEmpty(transactions)}" th:each="transaction : ${transactions}">
-                <td th:text="${transaction?.buyerName}"></td>
+                <td><a href="#detailsModal" class="modal-trigger" th:text="${transaction?.buyerName}"></a></td>
                 <td th:text="${transaction?.created}"></td>
                 <td th:text="${transaction?.auctionTitle}"></td>
                 <td th:text="${transaction?.amountBought}"></td>
                 <td th:text="${transaction?.price}"></td>
+                <div id="detailsModal" class="modal">
+                    <div class="modal-content">
+                        <h4 th:text="#{label.user.details.buyer}"></h4>
+                        <div class="row">
+                            <div class="col s6">
+                                <label for="name" th:text="#{label.user.name}"></label>
+                                <p id="name" th:text="${transaction?.buyerDetails?.name}"></p>
+                                <label for="surname" th:text="#{label.user.surname}"></label>
+                                <p id="surname" th:text="${transaction?.buyerDetails?.surname}"></p>
+                                <label for="company"
+                                       th:if="${transaction?.buyerDetails?.companyName != null}"
+                                       th:text="#{label.user.company}"></label>
+                                <p id="company" th:if="${transaction?.buyerDetails?.companyName != null}"
+                                   th:text="${transaction?.buyerDetails?.companyName}"></p>
+                                <label for="address" th:text="#{label.user.address}"></label>
+                                <p id="address" th:text="${transaction?.buyerDetails?.address}"></p>
+                                <label for="zipCode" th:text="#{label.user.zip.code}"></label>
+                                <p id="zipCode" th:text="${transaction?.buyerDetails?.zipCode}"></p>
+                            </div>
+                            <div class="col s6">
+                                <label for="city" th:text="#{label.user.city}"></label>
+                                <p id="city" th:text="${transaction?.buyerDetails?.city}"></p>
+                                <label for="voivodeship" th:text="#{label.user.voivodeship}"></label>
+                                <p id="voivodeship"
+                                   th:text="${transaction?.buyerDetails?.voivodeship?.name}"></p>
+                                <label for="firstPhoneNumber" th:text="#{label.user.phone}"></label>
+                                <p id="firstPhoneNumber"
+                                   th:text="${transaction?.buyerDetails?.firstPhoneNumber}"></p>
+                                <label for="secondPhoneNumber"
+                                       th:if="${transaction?.buyerDetails?.secondPhoneNumber != null}"
+                                       th:text="#{label.user.second.phone}"></label>
+                                <p id="secondPhoneNumber"
+                                   th:if="${transaction?.buyerDetails?.secondPhoneNumber != null}"
+                                   th:text="${transaction?.buyerDetails?.secondPhoneNumber}"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="tempCopyInput">
+                        <a href="#!" class="user-details-copy-to-clipboard modal-action waves-effect waves-green btn-flat" th:text="#{label.copy.to.clipboard}"></a>
+                    </div>
+                </div>
             </tr>
             <tr th:if="${#lists.isEmpty(transactions)}">
                 <td th:text="#{label.no.sold.items}"></td>

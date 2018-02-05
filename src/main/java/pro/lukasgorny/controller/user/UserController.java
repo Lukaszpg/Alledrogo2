@@ -1,19 +1,16 @@
 package pro.lukasgorny.controller.user;
 
-import java.security.Principal;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import pro.lukasgorny.dto.ChangeEmailDto;
 import pro.lukasgorny.dto.ChangePasswordDto;
+import pro.lukasgorny.dto.Rating.RatingResultDto;
 import pro.lukasgorny.dto.Rating.RatingSaveDto;
 import pro.lukasgorny.dto.UserExtendedDto;
-import pro.lukasgorny.model.Model;
+import pro.lukasgorny.enums.RatingTypeEnum;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.service.auction.GetAuctionService;
 import pro.lukasgorny.service.auction.GetTransactionService;
@@ -22,6 +19,11 @@ import pro.lukasgorny.service.rating.GetRatingService;
 import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.util.Urls;
+
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.security.Principal;
+import java.util.List;
 
 /**
  * Created by Łukasz on 25.10.2017.
@@ -112,8 +114,15 @@ public class UserController {
     @GetMapping(Urls.User.MY_RATINGS)
     public ModelAndView getUserRatings(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.MY_RATINGS);
-        modelAndView.addObject("receivedRatings", getRatingService.getReceivedRatingsForUser(principal.getName()));
-        modelAndView.addObject("issuedRatings", getRatingService.getIssuedRatingsForUser(principal.getName()));
+        List<RatingResultDto> receivedRatings = getRatingService.getReceivedRatingsForUser(principal.getName());
+        List<RatingResultDto> issuedRatings = getRatingService.getIssuedRatingsForUser(principal.getName());
+        modelAndView.addObject("receivedRatings", receivedRatings);
+        modelAndView.addObject("receivedRatingsCountPositive", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.POSITIVE));
+        modelAndView.addObject("receivedRatingsCountNegative", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.NEGATIVE));
+        modelAndView.addObject("receivedRatingsCountNeutral", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.NEUTRAL));
+        modelAndView.addObject("issuedRatingsCountPositive", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.POSITIVE));
+        modelAndView.addObject("issuedRatingsCountNegative", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.NEGATIVE));
+        modelAndView.addObject("issuedRatingsCountNeutral", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.NEUTRAL));
         return modelAndView;
     }
 

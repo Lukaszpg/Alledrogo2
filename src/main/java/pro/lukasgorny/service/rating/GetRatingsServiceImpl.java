@@ -3,10 +3,12 @@ package pro.lukasgorny.service.rating;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pro.lukasgorny.dto.Rating.RatingResultDto;
+import pro.lukasgorny.enums.RatingTypeEnum;
 import pro.lukasgorny.model.Rating;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.RatingRepository;
@@ -38,6 +40,13 @@ public class GetRatingsServiceImpl implements GetRatingService {
     public List<RatingResultDto> getIssuedRatingsForUser(String email) {
         User user = userService.getByEmail(email);
         return createDtoListFromEntityList(ratingRepository.findAllIssuedRatingsByUserId(user.getId()));
+    }
+
+    @Override
+    public Integer getCommentCountByType(List<RatingResultDto> ratings, RatingTypeEnum ratingTypeEnum) {
+        return ratings.stream().filter(ratingResultDto ->
+                ratingTypeEnum.equals(RatingTypeEnum.valueOf(ratingResultDto.getRatingType().toUpperCase())))
+                .collect(Collectors.toList()).size();
     }
 
     private List<RatingResultDto> createDtoListFromEntityList(List<Rating> ratings) {

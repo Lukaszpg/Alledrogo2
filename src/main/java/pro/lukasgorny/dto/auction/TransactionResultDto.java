@@ -1,5 +1,6 @@
 package pro.lukasgorny.dto.auction;
 
+import pro.lukasgorny.dto.UserExtendedDto;
 import pro.lukasgorny.dto.UserResultDto;
 import pro.lukasgorny.enums.TransactionType;
 
@@ -18,6 +19,7 @@ public class TransactionResultDto {
     private String created;
     private String auctionTitle;
     private UserResultDto sellerDto;
+    private UserExtendedDto buyerDetails;
 
     public TransactionResultDto() {
     }
@@ -84,5 +86,13 @@ public class TransactionResultDto {
 
     public void setSellerDto(UserResultDto sellerDto) {
         this.sellerDto = sellerDto;
+    }
+
+    public UserExtendedDto getBuyerDetails() {
+        return buyerDetails;
+    }
+
+    public void setBuyerDetails(UserExtendedDto buyerDetails) {
+        this.buyerDetails = buyerDetails;
     }
 }

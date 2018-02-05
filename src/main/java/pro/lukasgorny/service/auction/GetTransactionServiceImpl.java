@@ -94,6 +94,7 @@ public class GetTransactionServiceImpl implements GetTransactionService {
         transactionResultDto.setId(hashService.encode(transaction.getId()));
         transactionResultDto.setPrice(transaction.getOffer());
         transactionResultDto.setBuyerName(transaction.getUser().getEmail());
+        transactionResultDto.setBuyerDetails(userService.getUserData(transaction.getUser().getEmail()));
         transactionResultDto.setTransactionType(transaction.getTransactionType());
         transactionResultDto.setCreated(DateFormatter.formatDateToHourMinuteFormat(transaction.getCreateDate()));
         transactionResultDto.setAmountBought(transaction.getAmountBought());
