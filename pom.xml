@@ -4,8 +4,8 @@
 
     <groupId>pro.lukasgorny</groupId>
     <artifactId>alledrogo</artifactId>
-    <version>0.1.0.0</version>
-    <packaging>war</packaging>
+    <version>1.0.0.0</version>
+    <packaging>jar</packaging>
 
     <url>http://lukasgorny.pro</url>
 
