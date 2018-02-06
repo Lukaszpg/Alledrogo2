@@ -3,6 +3,7 @@ package pro.lukasgorny.controller;
 import java.security.Principal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -17,6 +18,9 @@ import pro.lukasgorny.service.category.GetCategoryService;
 public class GlobalController {
 
     private final GetCategoryService getCategoryService;
+
+    @Value("${main.app.url}")
+    private String mainUrl;
 
     @Autowired
     public GlobalController(GetCategoryService getCategoryService) {
@@ -37,4 +41,7 @@ public class GlobalController {
     public String getCurrentLoggedInUsername(Principal principal) {
         return principal != null ? principal.getName() : null;
 }
+
+    @ModelAttribute("appMainUrl")
+    public String getAppMainUrl() { return mainUrl; }
 }

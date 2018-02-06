@@ -45,7 +45,7 @@ var searchClearIconFadeout = function () {
 };
 
 var setAxiosBaseURL = function () {
-    axios.defaults.baseURL = 'http://localhost:8080';
+    axios.defaults.baseURL = $("#appMainUrl").val();
 };
 
 var initializeInputMasks = function () {

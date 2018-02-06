@@ -1,6 +1,7 @@
 package pro.lukasgorny.event.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,9 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     private final MessageSource messages;
     private final EmailSenderService emailSenderService;
 
+    @Value("${main.app.url}")
+    private String mainUrl;
+
     @Autowired
     public RegistrationListener(UserService service, MessageSource messages, EmailSenderService emailSenderService) {
         this.service = service;
@@ -42,7 +46,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         String recipientAddress = user.getEmail();
         String subject = messages.getMessage("email.registration.success.title", null, event.getLocale());
         String confirmationUrl = event.getAppUrl() + "/" + Templates.TOKEN_ACTIVATE + "?token=" + token;
-        String message = messages.getMessage("email.registration.success", null, event.getLocale()) + " " + "http://localhost:8080" + confirmationUrl;
+        String message = messages.getMessage("email.registration.success", null, event.getLocale()) + " " + mainUrl + confirmationUrl;
 
         emailSenderService.sendEmail(recipientAddress, subject, message);
     }
