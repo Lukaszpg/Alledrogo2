@@ -1,5 +1,6 @@
 package pro.lukasgorny.service.storage;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -9,7 +10,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("storage")
 public class StorageProperties {
 
-    private String location = "C:\\photos";
+    @Value("${photos.path}")
+    private String location;
 
     public String getLocation() {
         return location;
