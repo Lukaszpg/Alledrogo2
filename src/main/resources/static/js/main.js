@@ -7,7 +7,6 @@ $(document).ready(function () {
     searchClearIconFadeout();
     searchBarOnFocusIn();
     searchBarOnFocusOut();
-    setAxiosBaseURL();
     initializeInputMasks();
     initializeMenuButtons();
     initializeSearchSelect();
@@ -42,10 +41,6 @@ var searchBarOnFocusOut = function () {
 
 var searchClearIconFadeout = function () {
     $(".search-clear-icon").fadeOut(300);
-};
-
-var setAxiosBaseURL = function () {
-    axios.defaults.baseURL = $("#appMainUrl").val();
 };
 
 var initializeInputMasks = function () {

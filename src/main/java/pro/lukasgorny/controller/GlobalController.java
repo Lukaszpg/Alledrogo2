@@ -19,9 +19,6 @@ public class GlobalController {
 
     private final GetCategoryService getCategoryService;
 
-    @Value("${main.app.url}")
-    private String mainUrl;
-
     @Autowired
     public GlobalController(GetCategoryService getCategoryService) {
         this.getCategoryService = getCategoryService;
@@ -41,7 +38,4 @@ public class GlobalController {
     public String getCurrentLoggedInUsername(Principal principal) {
         return principal != null ? principal.getName() : null;
 }
-
-    @ModelAttribute("appMainUrl")
-    public String getAppMainUrl() { return mainUrl; }
 }
