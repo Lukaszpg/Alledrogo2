@@ -28,7 +28,7 @@ public class BuyoutDtoValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         BuyoutSaveDto buyoutSaveDto = (BuyoutSaveDto) o;
-        if(auctionService.checkIsBiddingUserAuctionCreator(buyoutSaveDto.getAuctionId(), buyoutSaveDto.getUsername())) {
+        if(auctionService.checkIsUserAuctionCreator(buyoutSaveDto.getAuctionId(), buyoutSaveDto.getUsername())) {
             errors.rejectValue("amountToBuy","error.buyout.same.user");
         } else {
             Integer currentItemsAmount = getAuctionService.getAuctionCurrentItemAmount(buyoutSaveDto.getAuctionId());

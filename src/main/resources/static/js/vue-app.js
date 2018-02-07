@@ -155,16 +155,12 @@ window.onload = function () {
                 var id = vm.auctionId;
                 axios.get('/auction-rest/observe/' + id)
                     .then(function (response) {
-                        if(response.data) {
-                            vm.isUserObserving = true;
-                            Materialize.toast('Pomyślnie dodano aukcję do obserwowanych.', 3000, 'toast-success')
-                        } else {
-                            Materialize.toast('Nie możesz obserwować własnej aukcji.', 3000, 'toast-error')
-                        }
+                            vm.isUserObserving = response.data.success;
+                            var clazz = response.data.success ? 'toast-success' : 'toast-error';
+                            Materialize.toast(response.data.message, 3000, clazz);
                     })
                     .catch(function () {
                         Materialize.toast('Wystąpił błąd podczas dodawania aukcji do obserwowanych.', 3000, 'toast-error');
-                        this.errors.push(e);
                         console.log(e);
                     })
             },

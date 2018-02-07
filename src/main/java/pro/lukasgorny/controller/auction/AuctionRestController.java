@@ -1,10 +1,13 @@
 package pro.lukasgorny.controller.auction;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import pro.lukasgorny.dto.ObserveResponseDto;
 import pro.lukasgorny.dto.auction.ObserveDto;
 import pro.lukasgorny.service.auction.AuctionService;
 import pro.lukasgorny.util.Urls;
@@ -26,7 +29,7 @@ public class AuctionRestController {
     }
 
     @GetMapping(Urls.AuctionRest.OBSERVE)
-    public Boolean observe(@PathVariable String id, Principal principal) {
+    public ResponseEntity<ObserveResponseDto> observe(@PathVariable String id, Principal principal) {
         ObserveDto observeDto = new ObserveDto();
         observeDto.setUsername(principal.getName());
         observeDto.setAuctionId(id);

@@ -108,7 +108,7 @@ public class GetAuctionServiceImpl implements GetAuctionService {
 
     @Override
     public List<AuctionResultDto> getAllObservedByUserId(Long id) {
-        List<Auction> auctions = auctionRepository.findAllByUsersObserving_Id(id);
+        List<Auction> auctions = auctionRepository.findAllByUsersObserving_IdAndHasEndedIsFalse(id);
         return createDtoListFromEntityList(auctions);
     }
 

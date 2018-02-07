@@ -3,7 +3,12 @@ package pro.lukasgorny.service.auction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import pro.lukasgorny.dto.ObserveResponseDto;
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.BuyoutSaveDto;
 import pro.lukasgorny.dto.auction.ObserveDto;
@@ -44,16 +49,27 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public Boolean observe(ObserveDto observeDto) {
-        if (!checkIsBiddingUserAuctionCreator(observeDto.getAuctionId(), observeDto.getUsername())) {
-            Auction auction = getAuctionService.getOneEntity(observeDto.getAuctionId());
-            User user = userService.getByEmail(observeDto.getUsername());
-            auction.getUsersObserving().add(user);
-            auctionRepository.save(auction);
-            return true;
+    public ResponseEntity<ObserveResponseDto> observe(ObserveDto observeDto) {
+        ObserveResponseDto observeResponseDto = new ObserveResponseDto();
+        Auction auction = getAuctionService.getOneEntity(observeDto.getAuctionId());
+
+        if (checkIsUserAuctionCreator(observeDto.getAuctionId(), observeDto.getUsername())) {
+            observeResponseDto.setSuccess(false);
+            observeResponseDto.setMessage(messages.getMessage("text.observe.owner", null, LocaleContextHolder.getLocale()));
+            return new ResponseEntity<>(observeResponseDto, HttpStatus.OK);
+        } else if(auction.getHasEnded()) {
+            observeResponseDto.setSuccess(false);
+            observeResponseDto.setMessage(messages.getMessage("text.observe.auction.ended", null, LocaleContextHolder.getLocale()));
+            return new ResponseEntity<>(observeResponseDto, HttpStatus.OK);
         }
 
-        return false;
+        User user = userService.getByEmail(observeDto.getUsername());
+        auction.getUsersObserving().add(user);
+        auctionRepository.save(auction);
+        observeResponseDto.setSuccess(true);
+        observeResponseDto.setMessage(messages.getMessage("text.observe.auction.success", null, LocaleContextHolder.getLocale()));
+
+        return new ResponseEntity<>(observeResponseDto, HttpStatus.OK);
     }
 
     @Override
@@ -73,21 +89,26 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public Boolean checkIsBiddingUserAuctionCreator(String auctionId, String username) {
+    public Boolean checkIsUserAuctionCreator(String auctionId, String username) {
         AuctionResultDto auction = getAuctionService.getOne(auctionId);
         return auction.getSellerDto().getEmail().equals(username);
     }
 
     @Override
+    @Transactional
     public void endAuction(Auction auction) {
         auction.setHasEnded(true);
 
-        if (isBidPriceHigherOrEqualToAuctionMinimalPrice(auction)) {
+        if(auction.getBid() && isBidPriceHigherOrEqualToAuctionMinimalPrice(auction)) {
             sendEmailNotificationToWinner(auction);
         } else {
             Transaction winningBid = getTransactionService.getWinningBidEntityForAuction(auction.getId());
-            winningBid.setOfferAccepted(false);
-            transactionRepository.save(winningBid);
+
+            if(winningBid != null) {
+                sendEmailNotificationToWinnerMinimalPriceNotMet(auction);
+                winningBid.setOfferAccepted(false);
+                transactionRepository.save(winningBid);
+            }
         }
 
         auctionRepository.save(auction);
@@ -95,7 +116,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     private boolean isBidPriceHigherOrEqualToAuctionMinimalPrice(Auction auction) {
         Transaction winningBid = getTransactionService.getWinningBidEntityForAuction(auction.getId());
-        return MathHelper.bigDecimalLessOrEqualToFirstValue(auction.getBidMinimalPrice(), winningBid.getOffer());
+        return MathHelper.bigDecimalHigherOrEqualToFirstValue(auction.getBidMinimalPrice(), winningBid.getOffer());
     }
 
     private void sendEmailNotificationToWinner(Auction auction) {
@@ -104,9 +125,20 @@ public class AuctionServiceImpl implements AuctionService {
         User seller = userService.getById(auction.getSeller().getId());
 
         String recipientAddress = winner.getEmail();
-        String subject = messages.getMessage("email.auction.win.title", null, LocaleContextHolder.getLocale()) + " " + auction.getTitle();
-        String message = messages.getMessage("email.auction.win.message", null, LocaleContextHolder.getLocale()) + " " + auction.getTitle() + " " +
-                messages.getMessage("email.auction.win.user.part", null, LocaleContextHolder.getLocale()) + " " + seller.getEmail();
+        String subject = String.format(messages.getMessage("email.auction.win.title", null, LocaleContextHolder.getLocale()), auction.getTitle());
+        String message = String.format(messages.getMessage("email.auction.not.minimal.price.message", null, LocaleContextHolder.getLocale()), auction.getTitle(), seller.getEmail());
+        emailSenderService.sendEmail(recipientAddress, subject, message);
+    }
+
+
+    private void sendEmailNotificationToWinnerMinimalPriceNotMet(Auction auction) {
+        Transaction winningBid = getTransactionService.getWinningBidEntityForAuction(auction.getId());
+        User winner = userService.getById(winningBid.getUser().getId());
+
+        String recipientAddress = winner.getEmail();
+        String subject = String.format(messages.getMessage("email.auction.not.minimal.price.title", null, LocaleContextHolder.getLocale()), auction.getTitle());
+        String message = String.format(messages.getMessage("email.auction.not.minimal.price.message", null, LocaleContextHolder.getLocale()), auction.getTitle());
+
         emailSenderService.sendEmail(recipientAddress, subject, message);
     }
 

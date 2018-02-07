@@ -28,7 +28,7 @@ public class BidDtoValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         BidSaveDto bidSaveDto = (BidSaveDto) o;
-        if(auctionService.checkIsBiddingUserAuctionCreator(bidSaveDto.getAuctionId(), bidSaveDto.getUsername())) {
+        if(auctionService.checkIsUserAuctionCreator(bidSaveDto.getAuctionId(), bidSaveDto.getUsername())) {
             errors.rejectValue("offeredPrice","error.bid.same.user");
         } else {
             if(bidSaveDto.getOfferedPrice() == null) {
