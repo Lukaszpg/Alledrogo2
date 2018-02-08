@@ -104,43 +104,9 @@
                 <div class="row">
                     <div class="col s12">
                         <ul class="tabs">
-                            <li class="tab col s4"><a href="#shipping" th:text="#{label.shipping.localization}"></a>
-                            </li>
                             <li class="tab col s4"><a href="#parameters" th:text="#{label.parameters}"></a></li>
                             <li class="tab col s4"><a href="#user" th:text="#{label.observed.seller}"></a></li>
                         </ul>
-                    </div>
-                    <div id="shipping" class="col s12">
-                        <div class="col s6">
-                            <div class="row">
-                                <label for="placeholderPlace" th:text="Lokalizacja"></label>
-                                <div id="placeholderPlace" th:text="Poznań"></div>
-                            </div>
-                            <div class="row">
-                                <label for="placeholderShippingTime" th:text="#{placeholder.shipping.time}"></label>
-                                <div id="placeholderShippingTime" th:text="#{placeholder.24h}"></div>
-                            </div>
-                        </div>
-                        <div class="col s6">
-                            <div class="row">
-                                <div class="input-field">
-                                    <i class="material-icons prefix shipping-icon">local_shipping</i>
-                                    <div class="shipping-text" th:utext="#{label.inpost('12.99')}"></div>
-                                </div>
-                                <div class="input-field">
-                                    <i class="material-icons prefix shipping-icon">local_shipping</i>
-                                    <div class="shipping-text" th:utext="#{label.dpd('18.99')}"></div>
-                                </div>
-                                <div class="input-field">
-                                    <i class="material-icons prefix shipping-icon">local_shipping</i>
-                                    <div class="shipping-text" th:utext="#{label.ups('16.99')}"></div>
-                                </div>
-                                <div class="input-field">
-                                    <i class="material-icons prefix shipping-icon">local_shipping</i>
-                                    <div class="shipping-text" th:utext="#{label.pocztex('14.99')}"></div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div id="parameters" class="col s12">
                         <div class="row">

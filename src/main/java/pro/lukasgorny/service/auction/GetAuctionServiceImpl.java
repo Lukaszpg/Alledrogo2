@@ -60,7 +60,12 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     @Override
     public Integer getAuctionsCountByCategory(Long id) {
         List<Long> ids = getCategoryService.getAllLeafIdsByTopCategoryId(id);
-        return auctionRepository.findAuctionCountByCategoryId(ids);
+
+        if(ids != null && !ids.isEmpty()) {
+            return auctionRepository.findAuctionCountByCategoryId(ids);
+        }
+
+        return 0;
     }
 
     @Override

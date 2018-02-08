@@ -12,22 +12,10 @@ import java.util.List;
  */
 public class UserSaveDto {
 
-    @NotNull
     private String email;
-
-    @NotNull
-    @Size(min = 8, max = 40)
     private String password;
-
-    @NotNull
-    @Size(min = 1, max = 2)
     private String birthdayDay;
-
-    @NotNull
     private String birthdayMonth;
-
-    @NotNull
-    @Size(min = 4, max = 4)
     private String birthdayYear;
 
     private List<RoleEnum> roles = new ArrayList<>();

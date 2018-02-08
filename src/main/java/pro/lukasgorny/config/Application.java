@@ -84,44 +84,49 @@ public class Application extends SpringBootServletInitializer {
     }
 
     @PostConstruct
-    private void createExampleCategories() {
+    private void createElectronicsCategories() {
         if(categoryRepository.countAll() == 0) {
             Category electronics = new Category();
             electronics.setName("Elektronika");
             electronics.setIsLeaf(false);
 
-            Category laptops = new Category();
-            laptops.setName("Laptopy");
-            laptops.setIsLeaf(false);
+            Category phonesGeneral = new Category();
+            phonesGeneral.setName("Telefony i akcesoria");
+            phonesGeneral.setIsLeaf(false);
+            electronics.getChildren().add(phonesGeneral);
 
-            electronics.getChildren().add(laptops);
-            electronics.setIsLeaf(false);
+            Category smartphones = new Category();
+            smartphones.setName("Smartfony i telefony komórkowe");
+            smartphones.setIsLeaf(false);
+            phonesGeneral.getChildren().add(smartphones);
 
-            Category lenovo = new Category();
-            lenovo.setName("Lenovo");
-            lenovo.setIsLeaf(true);
-            laptops.getChildren().add(lenovo);
+            Category etuis = new Category();
+            etuis.setName("Etui i pokrowce");
+            etuis.setIsLeaf(false);
+            phonesGeneral.getChildren().add(etuis);
 
-            Category dell = new Category();
-            dell.setName("Dell");
-            dell.setIsLeaf(true);
-            laptops.getChildren().add(dell);
+            Category powerbanks = new Category();
+            powerbanks.setName("Powerbanki");
+            powerbanks.setIsLeaf(false);
+            phonesGeneral.getChildren().add(powerbanks);
 
-            Category cars = new Category();
-            cars.setName("Samochody");
-            cars.setIsLeaf(false);
+            Category smartwatches = new Category();
+            smartwatches.setName("Smartwatche");
+            smartwatches.setIsLeaf(false);
+            phonesGeneral.getChildren().add(smartwatches);
 
-            Category audi = new Category();
-            audi.setName("Audi");
-            audi.setIsLeaf(true);
-            cars.getChildren().add(audi);
+            Category pcsAndTablets = new Category();
+            pcsAndTablets.setName("Komputery i tablety");
+            pcsAndTablets.setIsLeaf(false);
+            electronics.getChildren().add(pcsAndTablets);
 
-            categoryRepository.save(audi);
-            categoryRepository.save(dell);
-            categoryRepository.save(lenovo);
-            categoryRepository.save(laptops);
+            categoryRepository.save(smartwatches);
+            categoryRepository.save(etuis);
+            categoryRepository.save(smartphones);
+            categoryRepository.save(powerbanks);
+            categoryRepository.save(phonesGeneral);
+            categoryRepository.save(pcsAndTablets);
             categoryRepository.save(electronics);
-            categoryRepository.save(cars);
         }
     }
 
