@@ -68,7 +68,7 @@ public class GetCategoryServiceImpl implements GetCategoryService {
 
     @Override
     public List<CategoryDto> getAllTop() {
-        return categoryRepository.findByParentIsNull().stream().map(this::createDtoFromEntity).collect(Collectors.toList());
+        return categoryRepository.findByParentIsNullOrderByNameAsc().stream().map(this::createDtoFromEntity).collect(Collectors.toList());
     }
 
     @Override

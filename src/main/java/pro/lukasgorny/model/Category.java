@@ -27,7 +27,6 @@ public class Category extends Model {
     }
 
     @OneToMany(fetch = FetchType.LAZY)
-    @OrderColumn
     @JoinColumn(name = "parent_id")
     public List<Category> getChildren() {
         return children;

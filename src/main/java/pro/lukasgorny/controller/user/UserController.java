@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import pro.lukasgorny.controller.user.validator.UserExtendedDtoValidator;
 import pro.lukasgorny.dto.ChangeEmailDto;
 import pro.lukasgorny.dto.ChangePasswordDto;
 import pro.lukasgorny.dto.Rating.RatingResultDto;
@@ -38,15 +39,17 @@ public class UserController {
     private final GetTransactionService getTransactionService;
     private final CreateRatingService createRatingService;
     private final GetRatingService getRatingService;
+    private final UserExtendedDtoValidator userExtendedDtoValidator;
 
     @Autowired
     public UserController(UserService userService, GetAuctionService getAuctionService, GetTransactionService getTransactionService,
-            CreateRatingService createRatingService, GetRatingService getRatingService) {
+                          CreateRatingService createRatingService, GetRatingService getRatingService, UserExtendedDtoValidator userExtendedDtoValidator) {
         this.userService = userService;
         this.getAuctionService = getAuctionService;
         this.getTransactionService = getTransactionService;
         this.createRatingService = createRatingService;
         this.getRatingService = getRatingService;
+        this.userExtendedDtoValidator = userExtendedDtoValidator;
     }
 
     @GetMapping(Urls.User.OBSERVING)
@@ -115,7 +118,6 @@ public class UserController {
     public ModelAndView getUserRatings(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.MY_RATINGS);
         List<RatingResultDto> receivedRatings = getRatingService.getReceivedRatingsForUser(principal.getName());
-        List<RatingResultDto> issuedRatings = getRatingService.getIssuedRatingsForUser(principal.getName());
         modelAndView.addObject("receivedRatings", receivedRatings);
         modelAndView.addObject("receivedRatingsCountPositive", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.POSITIVE));
         modelAndView.addObject("receivedRatingsCountNegative", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.NEGATIVE));
@@ -138,10 +140,12 @@ public class UserController {
     }
 
     @PostMapping(Urls.User.ACCOUNT)
-    public ModelAndView saveUserData(@Valid @ModelAttribute("userExtendedDto") UserExtendedDto userExtendedDto, Principal principal, BindingResult bindingResult) {
+    public ModelAndView saveUserData(@ModelAttribute("userExtendedDto") UserExtendedDto userExtendedDto, Principal principal, BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("changePasswordTab", false);
         modelAndView.addObject("changeEmailTab", false);
+
+        userExtendedDtoValidator.validate(userExtendedDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.UserTemplates.ACCOUNT);

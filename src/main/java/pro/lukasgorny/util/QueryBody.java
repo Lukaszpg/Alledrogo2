@@ -12,6 +12,7 @@ public class QueryBody {
     public class CategoryQuery {
         public static final String FIND_CATEGORY_COUNT = "SELECT COUNT(*) FROM Category";
         public static final String FIND_ALL_IDS = "SELECT c.id FROM Category c";
+        public static final String FIND_BY_PARENT_ID = "SELECT c FROM Category c WHERE parent.id = :parentId order by c.name asc";
     }
 
     public class RoleQuery {
