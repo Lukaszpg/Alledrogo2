@@ -3,6 +3,7 @@ package pro.lukasgorny.service.auction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+
 import pro.lukasgorny.dto.auction.TransactionResultDto;
 import pro.lukasgorny.enums.TransactionType;
 import pro.lukasgorny.model.Auction;
@@ -27,15 +28,12 @@ public class GetTransactionServiceImpl implements GetTransactionService {
     private final TransactionRepository transactionRepository;
     private final HashService hashService;
     private final UserService userService;
-    private final GetAuctionService getAuctionService;
 
     @Autowired
-    public GetTransactionServiceImpl(TransactionRepository transactionRepository, HashService hashService,
-                                     UserService userService, @Lazy GetAuctionService getAuctionService) {
+    public GetTransactionServiceImpl(TransactionRepository transactionRepository, HashService hashService, UserService userService) {
         this.transactionRepository = transactionRepository;
         this.hashService = hashService;
         this.userService = userService;
-        this.getAuctionService = getAuctionService;
     }
 
     @Override
@@ -57,6 +55,13 @@ public class GetTransactionServiceImpl implements GetTransactionService {
     @Override
     public Transaction getWinningBidEntityForAuction(Long id) {
         return transactionRepository.findWinningBidForAuction(id);
+    }
+
+    @Override
+    public boolean isUserBuyer(String username, String transactionId) {
+        Transaction transaction = getOneEntity(transactionId);
+        User user = userService.getByEmail(username);
+        return transaction.getUser().getId().equals(user.getId());
     }
 
     @Override

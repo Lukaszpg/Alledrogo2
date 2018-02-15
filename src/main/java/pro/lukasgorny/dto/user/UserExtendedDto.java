@@ -1,4 +1,4 @@
-package pro.lukasgorny.dto;
+package pro.lukasgorny.dto.user;
 
 import pro.lukasgorny.enums.VoivodeshipEnum;
 

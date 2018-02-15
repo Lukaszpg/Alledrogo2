@@ -6,7 +6,7 @@ package pro.lukasgorny.util;
 public class QueryBody {
 
     public class UserQuery {
-
+        public static final String FIND_NEW_COUNT_MESSAGES_BY_RECEIVER_ID = "Select COUNT(*) FROM Message m WHERE m.receiver.id = :id AND m.isNew = true";
     }
 
     public class CategoryQuery {

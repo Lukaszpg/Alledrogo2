@@ -32,8 +32,8 @@
                         <h4 th:text="#{label.user.details.buyer}"></h4>
                         <div class="row">
                             <div class="col s6">
-                                <label for="name" th:text="#{label.user.name}"></label>
-                                <p id="name" th:text="${transaction?.buyerDetails?.name}"></p>
+                                <label for="name" th:text="#{label.user.firstName}"></label>
+                                <p id="name" th:text="${transaction?.buyerDetails?.firstName}"></p>
                                 <label for="surname" th:text="#{label.user.surname}"></label>
                                 <p id="surname" th:text="${transaction?.buyerDetails?.surname}"></p>
                                 <label for="company"

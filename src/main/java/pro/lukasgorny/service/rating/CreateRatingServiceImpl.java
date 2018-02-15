@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import pro.lukasgorny.dto.Rating.RatingSaveDto;
+import pro.lukasgorny.dto.rating.RatingSaveDto;
 import pro.lukasgorny.enums.RatingTypeEnum;
 import pro.lukasgorny.model.Rating;
 import pro.lukasgorny.model.Transaction;
@@ -63,6 +63,9 @@ public class CreateRatingServiceImpl implements CreateRatingService {
         rating.setRatingTypeEnum(RatingTypeEnum.valueOf(ratingSaveDto.getRatingType().toUpperCase()));
         rating.setIssuer(getIssuer(ratingSaveDto));
         rating.setReceiver(getReceiver(ratingSaveDto));
+        rating.setDescriptionAccordanceRating(ratingSaveDto.getDescriptionAccordanceRating());
+        rating.setShipmentCostRating(ratingSaveDto.getShipmentCostRating());
+        rating.setShippingTimeRating(ratingSaveDto.getShippingTimeRating());
         return rating;
     }
 

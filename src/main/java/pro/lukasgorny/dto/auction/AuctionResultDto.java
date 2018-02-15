@@ -1,7 +1,7 @@
 package pro.lukasgorny.dto.auction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import pro.lukasgorny.dto.UserResultDto;
+import pro.lukasgorny.dto.user.UserResultDto;
 import pro.lukasgorny.model.Category;
 
 import java.math.BigDecimal;
@@ -35,6 +35,9 @@ public class AuctionResultDto {
     private String mainImage;
     private Integer positiveCommentPercent;
     private Boolean untilOufOfItems;
+    private BigDecimal shippingTimeRatingAverage;
+    private BigDecimal shippingCostRatingAverage;
+    private BigDecimal descriptionAccordanceRatingAverage;
 
     public String getTitle() {
         return title;
@@ -202,5 +205,29 @@ public class AuctionResultDto {
 
     public void setBuyoutUsersAmount(Integer buyoutUsersAmount) {
         this.buyoutUsersAmount = buyoutUsersAmount;
+    }
+
+    public BigDecimal getShippingTimeRatingAverage() {
+        return shippingTimeRatingAverage;
+    }
+
+    public void setShippingTimeRatingAverage(BigDecimal shippingTimeRatingAverage) {
+        this.shippingTimeRatingAverage = shippingTimeRatingAverage;
+    }
+
+    public BigDecimal getShippingCostRatingAverage() {
+        return shippingCostRatingAverage;
+    }
+
+    public void setShippingCostRatingAverage(BigDecimal shippingCostRatingAverage) {
+        this.shippingCostRatingAverage = shippingCostRatingAverage;
+    }
+
+    public BigDecimal getDescriptionAccordanceRatingAverage() {
+        return descriptionAccordanceRatingAverage;
+    }
+
+    public void setDescriptionAccordanceRatingAverage(BigDecimal descriptionAccordanceRatingAverage) {
+        this.descriptionAccordanceRatingAverage = descriptionAccordanceRatingAverage;
     }
 }

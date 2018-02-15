@@ -2,7 +2,7 @@ package pro.lukasgorny.service.rating;
 
 import java.util.List;
 
-import pro.lukasgorny.dto.Rating.RatingResultDto;
+import pro.lukasgorny.dto.rating.RatingResultDto;
 import pro.lukasgorny.enums.RatingTypeEnum;
 
 /**

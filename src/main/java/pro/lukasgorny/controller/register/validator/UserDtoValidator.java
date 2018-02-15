@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import pro.lukasgorny.dto.UserSaveDto;
+import pro.lukasgorny.dto.user.UserSaveDto;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.service.registration.RegistrationService;
 import pro.lukasgorny.service.user.UserService;

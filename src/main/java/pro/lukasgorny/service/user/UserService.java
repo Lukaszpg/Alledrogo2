@@ -1,9 +1,9 @@
 package pro.lukasgorny.service.user;
 
-import pro.lukasgorny.dto.ChangeEmailDto;
-import pro.lukasgorny.dto.ChangePasswordDto;
-import pro.lukasgorny.dto.UserExtendedDto;
-import pro.lukasgorny.dto.UserResultDto;
+import pro.lukasgorny.dto.user.ChangeEmailDto;
+import pro.lukasgorny.dto.user.ChangePasswordDto;
+import pro.lukasgorny.dto.user.UserExtendedDto;
+import pro.lukasgorny.dto.user.UserResultDto;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.model.VerificationToken;
 
@@ -24,4 +24,5 @@ public interface UserService {
     boolean isNewPasswordSameAsOldPassword(ChangePasswordDto changePasswordDto);
     void changeUserEmail(ChangeEmailDto changeEmailDto);
     User getById(Long id);
+    User getById(String id);
 }

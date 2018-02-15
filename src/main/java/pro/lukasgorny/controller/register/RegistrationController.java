@@ -14,8 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import pro.lukasgorny.controller.register.validator.UserDtoValidator;
-import pro.lukasgorny.dto.ResetPasswordDto;
-import pro.lukasgorny.dto.UserSaveDto;
+import pro.lukasgorny.dto.user.ResetPasswordDto;
+import pro.lukasgorny.dto.user.UserSaveDto;
 import pro.lukasgorny.enums.RoleEnum;
 import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.event.OnRegistrationCompleteEvent;

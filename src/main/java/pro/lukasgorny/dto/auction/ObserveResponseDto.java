@@ -1,4 +1,4 @@
-package pro.lukasgorny.dto;
+package pro.lukasgorny.dto.auction;
 
 /**
  * Created by lukaszgo on 2018-02-07.

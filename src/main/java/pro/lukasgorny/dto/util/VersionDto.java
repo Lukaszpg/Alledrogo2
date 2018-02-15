@@ -1,4 +1,4 @@
-package pro.lukasgorny.dto;
+package pro.lukasgorny.dto.util;
 
 /**
  * Created by lukaszgo on 2017-10-26.

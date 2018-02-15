@@ -11,11 +11,15 @@
         <input type="hidden" th:value="${auctionDto.id}" id="auctionId">
         <input type="hidden" id="auctionEndDate" th:value="${auctionDto.endDate}">
         <div class="row">
-            <div class="col s8">
+            <div class="col s7">
                 <h3 th:text="${auctionDto.title}"></h3>
             </div>
             <div sec:authorize="isAuthenticated()" th:if="${!auctionDto.hasEnded}" class="col s4">
                 <auction-observe></auction-observe>
+            </div>
+            <div sec:authorize="isAuthenticated()" class="col s1">
+                <a class="mt-plus-33 btn-flat waves-effect waves-light tooltipped" data-delay="50" data-position="right"
+                   th:attr="data-tooltip=#{tooltip.message.seller}" th:href="@{'/user/messages/send/' + ${auctionDto.sellerDto.id}}"><i class="material-icons">mail_outline</i></a>
             </div>
         </div>
         <div class="row">
@@ -109,23 +113,75 @@
                         </ul>
                     </div>
                     <div id="parameters" class="col s12">
-                        <div class="row">
+                        <div class="row mt-plus-10">
                             <label for="itemState" th:text="#{label.state}"></label>
                             <div id="itemState" th:text="${auctionDto.isNew} ? #{label.new} : #{label.used}"></div>
                         </div>
                     </div>
                     <div id="user" class="col s12">
-                        <div class="row">
-                            <label for="nickname" th:text="#{label.user}"></label>
-                            <div id="nickname" th:text="${auctionDto.sellerDto.email}"></div>
+                        <div class="row mt-plus-10">
+                            <div class="col s6">
+                                <label for="nickname" th:text="#{label.user}"></label>
+                                <div id="nickname" th:text="${auctionDto.sellerDto.email}"></div>
+                            </div>
+                            <div th:if="${auctionDto.shippingTimeRatingAverage != null}" class="col s6 shipping-time-rating-wrapper">
+                                <label for="shippingTimeRatingDisplay" th:text="#{label.display.rating.ship.time}"></label>
+                                <select id="shippingTimeRatingDisplay">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <input type="hidden" th:value="${auctionDto.shippingTimeRatingAverage}" id="shippingTimeRatingHidden">
+                            </div>
                         </div>
                         <div class="row">
-                            <label for="registeredSince" th:text="#{label.registered.since}"></label>
-                            <div id="registeredSince" th:text="${auctionDto.sellerDto.registeredSince}"></div>
+                            <div class="col s6">
+                                <label for="registeredSince" th:text="#{label.registered.since}"></label>
+                                <div id="registeredSince" th:text="${auctionDto.sellerDto.registeredSince}"></div>
+                            </div>
+                            <div th:if="${auctionDto.shippingCostRatingAverage != null}" class="col s6 shipping-cost-rating-wrapper">
+                                <label for="shippingCostRatingDisplay" th:text="#{label.display.rating.ship.cost}"></label>
+                                <select id="shippingCostRatingDisplay">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <input type="hidden" th:value="${auctionDto.shippingCostRatingAverage}" id="shippingCostRatingHidden">
+                            </div>
                         </div>
-                        <div th:if="${auctionDto.positiveCommentPercent != null}" class="row">
-                            <label for="positivePercent" th:text="#{label.mark.seller}"></label>
-                            <div id="positivePercent" th:text="#{label.percent.comments(${auctionDto.positiveCommentPercent})}"></div>
+                        <div class="row">
+                            <div th:if="${auctionDto.positiveCommentPercent != null}" class="col s6">
+                                <label for="positivePercent" th:text="#{label.mark.seller}"></label>
+                                <div id="positivePercent" th:text="#{label.percent.comments(${auctionDto.positiveCommentPercent})}"></div>
+                            </div>
+                            <div th:if="${auctionDto.positiveCommentPercent != null && auctionDto.descriptionAccordanceRatingAverage != null}"
+                                 class="col s6 description-rating-wrapper">
+                                <label for="descriptionRatingDisplay" th:text="#{label.display.rating.description}"></label>
+                                <select id="descriptionRatingDisplay">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <input type="hidden" th:value="${auctionDto.descriptionAccordanceRatingAverage}" id="descriptionRatingHidden">
+                            </div>
+                            <div th:if="${auctionDto.positiveCommentPercent == null && auctionDto.descriptionAccordanceRatingAverage != null}"
+                                 class="col s6 offset-s6 description-rating-wrapper">
+                                <label for="descriptionRatingDisplay" th:text="#{label.display.rating.description}"></label>
+                                <select id="descriptionRatingDisplay">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <input type="hidden" th:value="${auctionDto.descriptionAccordanceRatingAverage}" id="descriptionRatingHidden">
+                            </div>
                         </div>
                     </div>
                 </div>

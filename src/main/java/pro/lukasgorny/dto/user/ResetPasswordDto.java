@@ -1,4 +1,4 @@
-package pro.lukasgorny.dto;
+package pro.lukasgorny.dto.user;
 
 import java.util.Locale;
 

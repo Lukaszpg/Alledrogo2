@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import pro.lukasgorny.dto.ObserveResponseDto;
+import pro.lukasgorny.dto.auction.ObserveResponseDto;
 import pro.lukasgorny.dto.auction.ObserveDto;
 import pro.lukasgorny.service.auction.AuctionService;
 import pro.lukasgorny.util.Urls;

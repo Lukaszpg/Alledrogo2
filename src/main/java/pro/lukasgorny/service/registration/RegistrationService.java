@@ -1,7 +1,7 @@
 package pro.lukasgorny.service.registration;
 
-import pro.lukasgorny.dto.ResetPasswordDto;
-import pro.lukasgorny.dto.UserSaveDto;
+import pro.lukasgorny.dto.user.ResetPasswordDto;
+import pro.lukasgorny.dto.user.UserSaveDto;
 import pro.lukasgorny.model.User;
 
 /**

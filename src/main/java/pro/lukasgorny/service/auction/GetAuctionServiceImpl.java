@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import pro.lukasgorny.dto.rating.RatingResultDto;
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.SearchDto;
 import pro.lukasgorny.dto.auction.TransactionResultDto;
@@ -13,13 +14,16 @@ import pro.lukasgorny.enums.TransactionType;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.Photo;
 import pro.lukasgorny.model.Transaction;
+import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.AuctionRepository;
 import pro.lukasgorny.service.category.GetCategoryService;
 import pro.lukasgorny.service.hash.HashService;
+import pro.lukasgorny.service.rating.GetRatingService;
 import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.CollectionHelper;
 import pro.lukasgorny.util.DateFormatter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -38,16 +42,18 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     private final GetCategoryService getCategoryService;
     private final UserService userService;
     private final PhotoService photoService;
+    private final GetRatingService getRatingService;
 
     @Autowired
     public GetAuctionServiceImpl(AuctionRepository auctionRepository, HashService hashService, GetTransactionService getTransactionService,
-            @Lazy GetCategoryService getCategoryService, UserService userService, PhotoService photoService) {
+            @Lazy GetCategoryService getCategoryService, UserService userService, PhotoService photoService, GetRatingService getRatingService) {
         this.hashService = hashService;
         this.auctionRepository = auctionRepository;
         this.getTransactionService = getTransactionService;
         this.getCategoryService = getCategoryService;
         this.userService = userService;
         this.photoService = photoService;
+        this.getRatingService = getRatingService;
     }
 
     @Override
@@ -166,8 +172,40 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setPositiveCommentPercent(calculatePositiveCommentPercent(auction));
         auctionResultDto.setUntilOufOfItems(auction.getUntilOutOfItems());
         auctionResultDto.setBuyoutUsersAmount(calculateBuyoutUserAmount(auction));
-
+        auctionResultDto.setShippingCostRatingAverage(calculateUserAverageShippingCostRating(auction.getSeller()));
+        auctionResultDto.setShippingTimeRatingAverage(calculateUserAverageShippingTimeRating(auction.getSeller()));
+        auctionResultDto.setDescriptionAccordanceRatingAverage(calculateUserDescriptionAccordanceRatingAverage(auction.getSeller()));
         return auctionResultDto;
+    }
+
+    private BigDecimal calculateUserAverageShippingCostRating(User user) {
+        List<RatingResultDto> receivedRatingsForUser = getRatingService.getReceivedRatingsForUser(user.getEmail());
+
+        if(receivedRatingsForUser == null || receivedRatingsForUser.isEmpty()) {
+            return null;
+        }
+
+        return BigDecimal.valueOf(receivedRatingsForUser.stream().mapToInt(RatingResultDto::getShipmentCostRating).average().getAsDouble());
+    }
+
+    private BigDecimal calculateUserAverageShippingTimeRating(User user) {
+        List<RatingResultDto> receivedRatingsForUser = getRatingService.getReceivedRatingsForUser(user.getEmail());
+
+        if(receivedRatingsForUser == null || receivedRatingsForUser.isEmpty()) {
+            return null;
+        }
+
+        return BigDecimal.valueOf(receivedRatingsForUser.stream().mapToInt(RatingResultDto::getShippingTimeRating).average().getAsDouble());
+    }
+
+    private BigDecimal calculateUserDescriptionAccordanceRatingAverage(User user) {
+        List<RatingResultDto> receivedRatingsForUser = getRatingService.getReceivedRatingsForUser(user.getEmail());
+
+        if(receivedRatingsForUser == null || receivedRatingsForUser.isEmpty()) {
+            return null;
+        }
+
+        return BigDecimal.valueOf(receivedRatingsForUser.stream().mapToInt(RatingResultDto::getDescriptionAccordanceRating).average().getAsDouble());
     }
 
     private String formatEndDateIfNotUntilOutOfItems(Auction auction) {
@@ -179,20 +217,16 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     }
 
     private Integer calculatePositiveCommentPercent(Auction auction) {
-        Integer commentsAmount = auction.getTransactions().size();
+        List<RatingResultDto> allRatings = getRatingService.getReceivedRatingsForUser(auction.getSeller().getEmail());
 
-        List<Transaction> transactionsWithBuyerRating = auction.getTransactions().stream().filter(transaction -> transaction.getBuyerRating() != null)
-                                                               .collect(Collectors.toList());
-        List<Transaction> positiveCommentsTransactions = transactionsWithBuyerRating.stream().filter(transaction -> RatingTypeEnum.POSITIVE
-                .equals(transaction.getBuyerRating().getRatingTypeEnum())).collect(Collectors.toList());
-
-        if (commentsAmount == 0 || positiveCommentsTransactions.isEmpty()) {
+        if(allRatings.isEmpty()) {
             return null;
         }
 
-        Integer positiveCommentsAmount = positiveCommentsTransactions.size();
+        List<RatingResultDto> positiveRatings = allRatings.stream().filter(rating -> RatingTypeEnum.POSITIVE.equals(RatingTypeEnum.valueOf(rating.getRatingType().toUpperCase()))).collect(
+                Collectors.toList());
 
-        return (positiveCommentsAmount * 100) / commentsAmount;
+        return (positiveRatings.size() * 100) / allRatings.size();
     }
 
     private String getMainImage(Auction auction) {

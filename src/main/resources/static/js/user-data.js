@@ -8,6 +8,7 @@ $(document).ready(function () {
     checkShouldChangeToPasswordChangeTab();
     checkShouldChangeToEmailChangeTab();
     initializeUserCopyToClipboardButton();
+    displaySuccessMessageIfApplicable();
 });
 
 var enableMaterializeSelect = function () {
@@ -36,18 +37,18 @@ var initializeSelectErrorHide = function () {
     });
 };
 
-var checkShouldChangeToEmailChangeTab = function() {
+var checkShouldChangeToEmailChangeTab = function () {
     var tabValue = $("#changeEmailTab").val();
 
-    if(tabValue == "true") {
+    if (tabValue == "true") {
         $('ul.tabs').tabs('select_tab', 'changeEmail');
     }
 };
 
-var checkShouldChangeToPasswordChangeTab = function() {
+var checkShouldChangeToPasswordChangeTab = function () {
     var tabValue = $("#changePasswordTab").val();
 
-    if(tabValue == "true") {
+    if (tabValue == "true") {
         $('ul.tabs').tabs('select_tab', 'changePassword');
     }
 };
@@ -78,11 +79,11 @@ var constructCopy = function () {
     var company = $("#company").html();
     var result = name + " " + surname + "\n" + address + "\n" + zipCode + ", " + city + ", " + voivodeship + "\n" + "nr tel.: " + firstPhoneNumber + "\n";
 
-    if(secondPhoneNumber != undefined) {
+    if (secondPhoneNumber != undefined) {
         result += "drugi nr tel.: " + secondPhoneNumber + "\n"
     }
 
-    if(company != undefined) {
+    if (company != undefined) {
         result += "Firma: " + company;
     }
 
@@ -91,4 +92,12 @@ var constructCopy = function () {
     tempCopyInput.select();
 
     return result;
+};
+
+var displaySuccessMessageIfApplicable = function () {
+    var successMessage = $("#successMessage").val();
+
+    if(successMessage != "") {
+        Materialize.toast(successMessage, 3000, 'toast-success')
+    }
 };

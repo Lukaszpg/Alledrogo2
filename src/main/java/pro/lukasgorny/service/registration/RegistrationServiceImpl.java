@@ -11,8 +11,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import pro.lukasgorny.dto.ResetPasswordDto;
-import pro.lukasgorny.dto.UserSaveDto;
+import pro.lukasgorny.dto.user.ResetPasswordDto;
+import pro.lukasgorny.dto.user.UserSaveDto;
 import pro.lukasgorny.event.OnResetPassword;
 import pro.lukasgorny.model.Role;
 import pro.lukasgorny.model.User;

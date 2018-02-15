@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-import pro.lukasgorny.dto.ResetPasswordDto;
+import pro.lukasgorny.dto.user.ResetPasswordDto;
 import pro.lukasgorny.event.OnResetPassword;
 import pro.lukasgorny.service.email.EmailSenderService;
 import pro.lukasgorny.service.registration.RegistrationService;

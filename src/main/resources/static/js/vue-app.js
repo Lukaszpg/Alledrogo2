@@ -119,9 +119,9 @@ window.onload = function () {
 
     Vue.component('auction-observe', {
         template:
-        '<a v-if="!isUserObserving" @click="observe" class="right observe-button waves-effect waves-teal btn-flat">' +
+        '<a v-if="!isUserObserving" @click="observe" class="right observe-button waves-effect waves-light btn-flat">' +
         '<i class="material-icons right">star_border</i>Obserwuj</a>' +
-        '<a v-else-if="isUserObserving" @click="unobserve" class="right observe-button waves-effect waves-teal btn-flat">' +
+        '<a v-else-if="isUserObserving" @click="unobserve" class="right observe-button waves-effect waves-light btn-flat">' +
         '<i class="material-icons right">star</i>Obserwujesz</a>',
 
         data() {

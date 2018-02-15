@@ -4,7 +4,7 @@ import com.mysql.jdbc.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import pro.lukasgorny.dto.UserExtendedDto;
+import pro.lukasgorny.dto.user.UserExtendedDto;
 
 /**
  * Created by Łukasz on 09.02.2018.

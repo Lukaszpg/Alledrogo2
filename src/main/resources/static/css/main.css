@@ -499,3 +499,31 @@ ul.dropdown-content.select-dropdown li span {
     width: 90%;
     margin-left: 5%;
 }
+
+.display-rating {
+    font-size: 1.1rem !important;;
+    margin-left: 3px;
+}
+
+.mt-plus-10 {
+    margin-top: 10px;
+}
+
+.mt-plus-33 {
+    margin-top: 33px;
+}
+
+.message-center-icon {
+    margin-top: -5px;
+}
+
+.message-center-button, .my-account-button {
+    margin-top: 27px;
+    width: 5%;
+}
+
+.message-badge {
+    margin-top: 43px;
+    margin-right: -24px;
+    background-color: red !important;
+}

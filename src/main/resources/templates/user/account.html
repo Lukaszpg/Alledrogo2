@@ -19,10 +19,11 @@
     </div>
     <div id="userData">
         <div class="row">
-            <form action="#" th:action="@{/user/my-account#userData}" th:object="${userExtendedDto}" method="post" class="col s8 offset-s4">
+            <form action="#" th:action="@{/user/my-account#userData}" th:object="${userExtendedDto}" method="post" class="col s8 offset-s2">
+                <input id="successMessage" type="hidden" th:value="${successMessage}">
                 <div class="row">
                     <h2 th:text="#{menu.label.user.data}"></h2>
-                    <div class="input-field col s5">
+                    <div class="input-field col s6">
                         <input th:field="*{firstName}" id="firstName" type="text"
                                th:placeholder="#{placeholder.user.name}"
                                class="validate" th:classappend="${#fields.hasErrors('firstName')}  ? 'invalid' : ''">
@@ -30,9 +31,7 @@
                         <div class="validation-error-input" th:if="${#fields.hasErrors('firstName')}"
                              th:errors="*{firstName}"></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s5">
+                    <div class="input-field col s6">
                         <input th:field="*{surname}" id="surname" type="text"
                                th:placeholder="#{placeholder.user.surname}"
                                class="validate" th:classappend="${#fields.hasErrors('surname')}  ? 'invalid' : ''">
@@ -42,7 +41,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s5">
+                    <div class="input-field col s6">
                         <input th:field="*{companyName}" id="company" type="text"
                                th:placeholder="#{placeholder.user.company}"
                                class="validate" th:classappend="${#fields.hasErrors('companyName')}  ? 'invalid' : ''">
@@ -50,9 +49,7 @@
                         <div class="validation-error-input" th:if="${#fields.hasErrors('companyName')}"
                              th:errors="*{companyName}"></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s5">
+                    <div class="input-field col s6">
                         <input th:field="*{address}" id="address" type="text"
                                th:placeholder="#{placeholder.user.address}"
                                class="validate" th:classappend="${#fields.hasErrors('address')}  ? 'invalid' : ''">
@@ -62,7 +59,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s5">
+                    <div class="input-field col s6">
                         <input th:field="*{zipCode}" id="zipcode" type="text"
                                th:placeholder="#{placeholder.user.zip.code}"
                                class="validate" th:classappend="${#fields.hasErrors('zipCode')}  ? 'invalid' : ''">
@@ -70,9 +67,7 @@
                         <div class="validation-error-input" th:if="${#fields.hasErrors('zipCode')}"
                              th:errors="*{zipCode}"></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s5">
+                    <div class="input-field col s6">
                         <input th:field="*{city}" id="city" type="text"
                                th:placeholder="#{placeholder.user.city}"
                                class="validate" th:classappend="${#fields.hasErrors('city')}  ? 'invalid' : ''">
@@ -82,7 +77,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s5">
+                    <div class="col s6">
                         <label for="voivodeshipSelect" th:text="#{label.user.voivodeship}"></label>
                         <select id="voivodeshipSelect" name="voivodeship" th:classappend="${#fields.hasErrors('voivodeship')}  ? 'invalid' : ''">
                             <option th:text="#{placeholder.user.voivodehip}" value="" th:disabled="disabled" th:selected="selected"></option>
@@ -95,7 +90,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s5">
+                    <div class="input-field col s6">
                         <input th:field="*{firstPhoneNumber}" id="phone" type="text"
                                th:placeholder="#{placeholder.user.phone}"
                                class="validate" th:classappend="${#fields.hasErrors('firstPhoneNumber')}  ? 'invalid' : ''">
@@ -103,9 +98,7 @@
                         <div class="validation-error-input" th:if="${#fields.hasErrors('firstPhoneNumber')}"
                              th:errors="*{firstPhoneNumber}"></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col s5">
+                    <div class="input-field col s6">
                         <input th:field="*{secondPhoneNumber}" id="secondPhone" type="text"
                                th:placeholder="#{placeholder.user.phone}"
                                class="validate" th:classappend="${#fields.hasErrors('secondPhoneNumber')}  ? 'invalid' : ''">
@@ -115,7 +108,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col s10">
+                    <div class="col s10 right">
                         <button class="btn waves-light waves-effect right" type="submit"
                                 th:text="#{button.save}"></button>
                     </div>
@@ -125,7 +118,7 @@
     </div>
     <div id="changePassword">
         <div class="row">
-            <form action="#" th:action="@{/user/change-password}" th:object="${changePasswordDto}" method="post" class="col s8 offset-s4">
+            <form action="#" th:action="@{/user/change-password}" th:object="${changePasswordDto}" method="post" class="col s8 offset-s3">
                 <div class="row">
                     <h2 th:text="#{menu.label.change.password}"></h2>
                     <div class="input-field col s5">
@@ -159,7 +152,7 @@
     </div>
     <div id="changeEmail">
         <div class="row">
-            <form action="#" th:action="@{/user/change-email}" th:object="${changeEmailDto}" method="post" class="col s8 offset-s4">
+            <form action="#" th:action="@{/user/change-email}" th:object="${changeEmailDto}" method="post" class="col s8 offset-s3">
                 <div class="row">
                     <h2 th:text="#{menu.label.change.email}"></h2>
                     <div class="input-field col s5">

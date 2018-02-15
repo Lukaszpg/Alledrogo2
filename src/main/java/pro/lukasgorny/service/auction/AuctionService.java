@@ -2,7 +2,7 @@ package pro.lukasgorny.service.auction;
 
 import org.springframework.http.ResponseEntity;
 
-import pro.lukasgorny.dto.ObserveResponseDto;
+import pro.lukasgorny.dto.auction.ObserveResponseDto;
 import pro.lukasgorny.dto.auction.BuyoutSaveDto;
 import pro.lukasgorny.dto.auction.ObserveDto;
 import pro.lukasgorny.model.Auction;

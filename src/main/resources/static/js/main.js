@@ -11,6 +11,7 @@ $(document).ready(function () {
     initializeMenuButtons();
     initializeSearchSelect();
     initializeModals();
+    initializeBarRatings();
 });
 
 var initializeTabs = function () {
@@ -59,4 +60,35 @@ var initializeSearchSelect = function () {
 var initializeModals = function () {
     $('.modal').modal();
 };
+
+var initializeBarRatings = function() {
+    var defaultValue = 5;
+    $("#shippingTimeRating").val(defaultValue);
+    $("#shipmentCostRating").val(defaultValue);
+    $("#descriptionAccordanceRating").val(defaultValue);
+
+    $('#shippingTimeRatingSelect').barrating({
+        theme: 'fontawesome-stars',
+
+        onSelect: function(value, text, event) {
+            $("#shippingTimeRating").val(value);
+        }
+    });
+
+    $('#shipmentCostRatingSelect').barrating({
+        theme: 'fontawesome-star',
+
+        onSelect: function(value, text, event) {
+            $("#shipmentCostRating").val(value);
+        }
+    });
+
+    $('#descriptionAccordanceRatingSelect').barrating({
+        theme: 'fontawesome-stars',
+
+        onSelect: function(value, text, event) {
+            $("#descriptionAccordanceRating").val(value);
+        }
+    });
+}
 

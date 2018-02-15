@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import pro.lukasgorny.config.Application;
-import pro.lukasgorny.dto.VersionDto;
+import pro.lukasgorny.dto.util.VersionDto;
 import pro.lukasgorny.util.Urls;
 
 /**

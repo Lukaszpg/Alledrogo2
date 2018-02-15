@@ -41,6 +41,8 @@ public class Templates {
         public static final String ACCOUNT = PREFIX + "account";
         public static final String CHANGE_PASSWORD_SUCCESS = PREFIX + "change-password-success";
         public static final String CHANGE_EMAIL_SUCCESS = PREFIX + "change-email-success";
+        public static final String SEND_MESSAGE = PREFIX + "send-message";
+        public static final String SEND_MESSAGE_SUCCESS = PREFIX + "send-message-success";
     }
 
     public class SearchTemplates {

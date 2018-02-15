@@ -1,7 +1,7 @@
 package pro.lukasgorny.dto.auction;
 
-import pro.lukasgorny.dto.UserExtendedDto;
-import pro.lukasgorny.dto.UserResultDto;
+import pro.lukasgorny.dto.user.UserExtendedDto;
+import pro.lukasgorny.dto.user.UserResultDto;
 import pro.lukasgorny.enums.TransactionType;
 
 import java.math.BigDecimal;

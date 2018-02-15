@@ -1,11 +1,9 @@
-package pro.lukasgorny.dto;
+package pro.lukasgorny.dto.user;
 
-import pro.lukasgorny.enums.RoleEnum;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
+
+import pro.lukasgorny.enums.RoleEnum;
 
 /**
  * Created by Łukasz on 24.10.2017.

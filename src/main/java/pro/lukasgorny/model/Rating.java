@@ -17,6 +17,9 @@ public class Rating extends Model {
     private User issuer;
     private User receiver;
     private Transaction transaction;
+    private Integer shippingTimeRating;
+    private Integer shipmentCostRating;
+    private Integer descriptionAccordanceRating;
 
     @Lob
     public String getContent() {
@@ -63,5 +66,29 @@ public class Rating extends Model {
 
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
+    }
+
+    public Integer getShippingTimeRating() {
+        return shippingTimeRating;
+    }
+
+    public void setShippingTimeRating(Integer shippingTimeRating) {
+        this.shippingTimeRating = shippingTimeRating;
+    }
+
+    public Integer getShipmentCostRating() {
+        return shipmentCostRating;
+    }
+
+    public void setShipmentCostRating(Integer shipmentCostRating) {
+        this.shipmentCostRating = shipmentCostRating;
+    }
+
+    public Integer getDescriptionAccordanceRating() {
+        return descriptionAccordanceRating;
+    }
+
+    public void setDescriptionAccordanceRating(Integer descriptionAccordanceRating) {
+        this.descriptionAccordanceRating = descriptionAccordanceRating;
     }
 }

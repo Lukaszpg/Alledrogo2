@@ -1,9 +1,10 @@
-package pro.lukasgorny.dto;
+package pro.lukasgorny.dto.user;
 
 /**
  * Created by Łukasz on 15.12.2017.
  */
 public class UserResultDto {
+    private String id;
     private String email;
     private String registeredSince;
     private String lastLogin;
@@ -39,5 +40,13 @@ public class UserResultDto {
 
     public void setUserExtendedDto(UserExtendedDto userExtendedDto) {
         this.userExtendedDto = userExtendedDto;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

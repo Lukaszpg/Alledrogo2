@@ -6,14 +6,15 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import pro.lukasgorny.dto.ChangeEmailDto;
-import pro.lukasgorny.dto.ChangePasswordDto;
-import pro.lukasgorny.dto.UserExtendedDto;
-import pro.lukasgorny.dto.UserResultDto;
+import pro.lukasgorny.dto.user.ChangeEmailDto;
+import pro.lukasgorny.dto.user.ChangePasswordDto;
+import pro.lukasgorny.dto.user.UserExtendedDto;
+import pro.lukasgorny.dto.user.UserResultDto;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.model.VerificationToken;
 import pro.lukasgorny.repository.VerificationTokenRepository;
 import pro.lukasgorny.repository.UserRepository;
+import pro.lukasgorny.service.hash.HashService;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -29,14 +30,16 @@ public class UserServiceImpl implements UserService {
     private final VerificationTokenRepository verificationTokenRepository;
     private final MessageSource messageSource;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final HashService hashService;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, MessageSource messageSource,
-            BCryptPasswordEncoder bCryptPasswordEncoder) {
+            BCryptPasswordEncoder bCryptPasswordEncoder, HashService hashService) {
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.messageSource = messageSource;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.hashService = hashService;
     }
 
     @Override
@@ -63,6 +66,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResultDto createDtoFromEntity(User user) {
         UserResultDto userResultDto = new UserResultDto();
+        userResultDto.setId(hashService.encode(user.getId()));
         userResultDto.setEmail(user.getEmail());
         userResultDto.setRegisteredSince(calculateAndFormatDateDifference(user));
         userResultDto.setUserExtendedDto(createExtendedDtoFromEntity(user));
@@ -112,6 +116,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(Long id) {
         return userRepository.findOne(id);
+    }
+
+    @Override
+    public User getById(String id) {
+        return userRepository.findOne(hashService.decode(id));
     }
 
     @Override

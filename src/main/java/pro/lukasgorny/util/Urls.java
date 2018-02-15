@@ -66,6 +66,7 @@ public class Urls {
         public static final String MAIN = "/user";
         public static final String OBSERVING = "/observing";
         public static final String RATING = "/rating";
+        public static final String MESSAGES = "/messages";
         public static final String MY_RATINGS = "/my-ratings";
         public static final String CREATE_RATING = RATING + "/create/{id}";
         public static final String CREATE_RATING_SUCCESS_REDIRECT = "redirect:" + MAIN + RATING + "/create-success";
@@ -79,6 +80,9 @@ public class Urls {
         public static final String CHANGE_EMAIL = "/change-email";
         public static final String CHANGE_EMAIL_SUCCESS = "/change-email-success";
         public static final String CHANGE_EMAIL_SUCCESS_REDIRECT = "redirect:" + MAIN + "/change-email-success";
+        public static final String SEND_MESSAGE = MESSAGES + "/send/{id}";
+        public static final String SEND_MESSAGE_SUCCESS = MESSAGES + "/send-message-success";
+        public static final String SEND_MESSAGE_SUCCESS_REDIRECT = "redirect:" + MAIN + MESSAGES + "/send-message-success";
     }
 
     public class Search {

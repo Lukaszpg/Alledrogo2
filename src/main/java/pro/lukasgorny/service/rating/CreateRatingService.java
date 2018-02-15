@@ -1,6 +1,6 @@
 package pro.lukasgorny.service.rating;
 
-import pro.lukasgorny.dto.Rating.RatingSaveDto;
+import pro.lukasgorny.dto.rating.RatingSaveDto;
 
 /**
  * Created by lukaszgo on 2018-01-17.

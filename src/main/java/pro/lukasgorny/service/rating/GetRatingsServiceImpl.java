@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pro.lukasgorny.dto.Rating.RatingResultDto;
+import pro.lukasgorny.dto.rating.RatingResultDto;
 import pro.lukasgorny.enums.RatingTypeEnum;
 import pro.lukasgorny.model.Rating;
 import pro.lukasgorny.model.User;
@@ -59,6 +59,9 @@ public class GetRatingsServiceImpl implements GetRatingService {
         ratingResultDto.setRatingType(rating.getRatingTypeEnum().toString().toLowerCase());
         ratingResultDto.setDate(DateFormatter.formatDateToHourMinuteFormat(rating.getCreateDate()));
         ratingResultDto.setAuctionName(rating.getTransaction().getAuction().getTitle());
+        ratingResultDto.setShippingTimeRating(rating.getShippingTimeRating());
+        ratingResultDto.setShipmentCostRating(rating.getShipmentCostRating());
+        ratingResultDto.setDescriptionAccordanceRating(rating.getDescriptionAccordanceRating());
         return ratingResultDto;
     }
 }
