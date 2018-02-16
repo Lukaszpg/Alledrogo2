@@ -49,7 +49,7 @@ public class StorageServiceImpl implements StorageService {
 
             Path storeLocation;
 
-            if (isProduction()) {
+            if (!isProduction()) {
                 storeLocation = Paths.get(rootLocation + "\\" + auction.getId());
 
                 if (!Files.exists(storeLocation)) {

@@ -540,3 +540,7 @@ ul.dropdown-content.select-dropdown li span {
 .message-content {
     word-break: break-word;
 }
+
+.auction-title {
+    word-break: break-word;
+}
