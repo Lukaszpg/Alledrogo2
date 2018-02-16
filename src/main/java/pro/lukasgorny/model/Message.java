@@ -1,9 +1,6 @@
 package pro.lukasgorny.model;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by lukaszgo on 2018-02-15.
@@ -25,6 +22,7 @@ public class Message extends Model {
         this.title = title;
     }
 
+    @Lob
     public String getContent() {
         return content;
     }

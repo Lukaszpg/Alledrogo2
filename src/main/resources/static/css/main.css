@@ -522,8 +522,21 @@ ul.dropdown-content.select-dropdown li span {
     width: 5%;
 }
 
+.menu-home-icon {
+    width: 5%;
+    margin-top: 22px;
+}
+
 .message-badge {
     margin-top: 43px;
     margin-right: -24px;
     background-color: red !important;
+}
+
+.message-new-row {
+    background-color: #6DC066;
+}
+
+.message-content {
+    word-break: break-word;
 }

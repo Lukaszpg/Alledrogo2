@@ -39,12 +39,30 @@ window.onload = function () {
                 },
                 photos: [],
                 currentPhoto: "",
-                currentActiveOrder: 0
+                currentActiveOrder: 0,
+                isLoading: false
             }
         },
         template:
         '<div>' +
             '<div class="row">' +
+                '<div class="col offset-s4">' +
+                '<div v-bind:class="{ \'preloader-wrapper\': true, big: true, active: true, hide: !isLoading, \'category-picker-preloader\': true}">' +
+                '<div class="spinner-layer spinner-yellow">' +
+                '<div class="circle-clipper left">' +
+                '<div class="circle"></div>' +
+                '</div>' +
+                '<div class="gap-patch">' +
+                '<div class="circle"></div>' +
+                '</div>' +
+                '<div class="circle-clipper right">' +
+                '<div class="circle"></div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+            '</div>' +
+            '<div v-bind:class="{row:true, hide: isLoading}">' +
                 '<div class="col s8 offset-s1">' +
                     '<div class="gallery-border row">' +
                         '<div class="col s8 offset-s2">' +
@@ -53,7 +71,7 @@ window.onload = function () {
                     '</div>' +
                 '</div>' +
             '</div>' +
-            '<div class="row">' +
+            '<div v-bind:class="{row:true, hide: isLoading}">' +
                 '<div v-for="photo in photos" v-bind:class="{col:true, s3: true, ' +
                     '\'gallery-thumbnail-fixed-height\':true, \'gallery-thumbnail-active\':(photo.order === currentActiveOrder), ' +
                     '\'gallery-thumbnail-not-active\':(photo.order !== currentActiveOrder)}">' +
@@ -105,11 +123,13 @@ window.onload = function () {
         mounted() {
             var vm = this;
             var id = $("#auctionId").val();
+            vm.isLoading = true;
             axios.get('/photo/get-all/' + id)
                 .then(function (response) {
                     vm.photos = response.data;
                     vm.prepareSrcAttributes();
                     vm.currentPhoto = vm.photos[0];
+                    vm.isLoading = false;
                 })
                 .catch(function () {
                     this.errors.push(e)
@@ -326,7 +346,7 @@ window.onload = function () {
         template:
             '<div>' +
                 '<div class="row">' +
-                    '<div class="col s2">' +
+                    '<div class="col s2 m3 l2">' +
                         '<div class="row"></div>' +
                         '<div class="row"></div>' +
                         '<div class="row"></div>' +
@@ -356,7 +376,7 @@ window.onload = function () {
                                 '</a>' +
                             '</ul>' +
                     '</div>' +
-                    '<div v-if="auctions.length > 0" class="col s10">' +
+                    '<div v-if="auctions.length > 0" class="col s10 m9 l10">' +
                         '<div class="row">' +
                             '<div class="col s12">' +
                                 '<h2>Szukasz "{{ searchString }}"</h2>' +
@@ -383,10 +403,10 @@ window.onload = function () {
                         '</div>' +
                         '<div v-bind:class="{ hide: isLoadingSearchResults }" v-for="auction in auctions" class="single-auction-result">' +
                             '<div class="row">' +
-                                '<div class="col s4">' +
+                                '<div class="col s4 m6">' +
                                     '<img class="responsive-img search-main-image" :src="auction.mainImageSrcPath">' +
                                 '</div>' +
-                                '<div class="col s8">' +
+                                '<div class="col s8 m6">' +
                                     '<div class="row">' +
                                         '<a :href="\'/auction/get/\' + auction.id"><h5>{{ auction.title }}</h5></a>' +
                                     '</div>' +

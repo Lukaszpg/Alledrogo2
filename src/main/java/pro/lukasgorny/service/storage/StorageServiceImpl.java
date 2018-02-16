@@ -1,6 +1,7 @@
 package pro.lukasgorny.service.storage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,12 @@ import java.util.stream.Stream;
 public class StorageServiceImpl implements StorageService {
 
     private final Path rootLocation;
+    private final Environment environment;
 
     @Autowired
-    public StorageServiceImpl(StorageProperties storageProperties) {
+    public StorageServiceImpl(StorageProperties storageProperties, Environment environment) {
         this.rootLocation = Paths.get(storageProperties.getLocation());
+        this.environment = environment;
     }
 
     @Override
@@ -41,20 +44,33 @@ public class StorageServiceImpl implements StorageService {
                 throw new StorageException("Failed to store empty file " + filename);
             }
             if (filename.contains("..")) {
-                throw new StorageException(
-                        "Cannot store file with relative path outside current directory "
-                                + filename);
+                throw new StorageException("Cannot store file with relative path outside current directory " + filename);
             }
 
-            Path storeLocation = Paths.get(rootLocation + "\\" + auction.getId());
+            Path storeLocation;
 
-            if(!Files.exists(storeLocation)) {
-                Files.createDirectories(storeLocation);
+            if (isProduction()) {
+                storeLocation = Paths.get(rootLocation + "\\" + auction.getId());
+
+                if (!Files.exists(storeLocation)) {
+                    Files.createDirectories(storeLocation);
+                }
+
+                storeLocation = Paths.get(rootLocation + "\\" + auction.getId() + "\\" + filename);
+
+                Files.copy(file.getInputStream(), storeLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            } else {
+                storeLocation = Paths.get(rootLocation + "/" + auction.getId());
+
+                if (!Files.exists(storeLocation)) {
+                    Files.createDirectories(storeLocation);
+                }
+
+                storeLocation = Paths.get(rootLocation + "/" + auction.getId() + "/" + filename);
+
+                Files.copy(file.getInputStream(), storeLocation, StandardCopyOption.REPLACE_EXISTING);
             }
-
-            storeLocation = Paths.get(rootLocation + "\\" + auction.getId() + "\\" + filename);
-
-            Files.copy(file.getInputStream(), storeLocation, StandardCopyOption.REPLACE_EXISTING);
 
             return storeLocation.toString();
         } catch (IOException e) {
@@ -62,12 +78,20 @@ public class StorageServiceImpl implements StorageService {
         }
     }
 
+    private boolean isProduction() {
+        for (String s : environment.getActiveProfiles()) {
+            if (s.equals("production")) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public Stream<Path> loadAll() {
         try {
-            return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
-                    .map(this.rootLocation::relativize);
+            return Files.walk(this.rootLocation, 1).filter(path -> !path.equals(this.rootLocation)).map(this.rootLocation::relativize);
         } catch (IOException e) {
             throw new StorageException("Failed to read stored files", e);
         }
@@ -87,8 +111,7 @@ public class StorageServiceImpl implements StorageService {
             if (resource.exists() || resource.isReadable()) {
                 return resource;
             } else {
-                throw new StorageFileNotFoundException(
-                        "Could not read file: " + filename);
+                throw new StorageFileNotFoundException("Could not read file: " + filename);
 
             }
         } catch (MalformedURLException e) {

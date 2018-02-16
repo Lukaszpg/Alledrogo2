@@ -85,6 +85,12 @@ public class Urls {
         public static final String SEND_MESSAGE_SUCCESS_REDIRECT = "redirect:" + MAIN + MESSAGES + "/send-message-success";
     }
 
+    public class UserRest {
+        public static final String MAIN = "/user-rest";
+        public static final String MESSAGES = "/messages";
+        public static final String CHANGE_STATUS = MESSAGES + "/change-status/{id}";
+    }
+
     public class Search {
         public static final String SEARCH = "/search";
         public static final String SEARCH_REST = "/search-rest";

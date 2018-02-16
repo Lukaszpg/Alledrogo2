@@ -43,6 +43,7 @@ public class Templates {
         public static final String CHANGE_EMAIL_SUCCESS = PREFIX + "change-email-success";
         public static final String SEND_MESSAGE = PREFIX + "send-message";
         public static final String SEND_MESSAGE_SUCCESS = PREFIX + "send-message-success";
+        public static final String MESSAGES = PREFIX + "messages";
     }
 
     public class SearchTemplates {

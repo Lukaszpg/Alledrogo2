@@ -16,11 +16,11 @@ import pro.lukasgorny.dto.rating.RatingSaveDto;
 import pro.lukasgorny.dto.user.MessageSaveDto;
 import pro.lukasgorny.dto.user.UserExtendedDto;
 import pro.lukasgorny.enums.RatingTypeEnum;
-import pro.lukasgorny.model.Model;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.service.auction.GetAuctionService;
 import pro.lukasgorny.service.auction.GetTransactionService;
 import pro.lukasgorny.service.message.CreateMessageService;
+import pro.lukasgorny.service.message.GetMessageService;
 import pro.lukasgorny.service.rating.CreateRatingService;
 import pro.lukasgorny.service.rating.GetRatingService;
 import pro.lukasgorny.service.user.UserService;
@@ -48,11 +48,12 @@ public class UserController {
     private final MessageSource messageSource;
     private final UserExtendedDtoValidator userExtendedDtoValidator;
     private final CreateMessageService createMessageService;
+    private final GetMessageService getMessageService;
 
     @Autowired
     public UserController(UserService userService, GetAuctionService getAuctionService, GetTransactionService getTransactionService,
             CreateRatingService createRatingService, GetRatingService getRatingService, UserExtendedDtoValidator userExtendedDtoValidator,
-            MessageSource messageSource, CreateMessageService createMessageService) {
+            MessageSource messageSource, CreateMessageService createMessageService, GetMessageService getMessageService) {
         this.userService = userService;
         this.getAuctionService = getAuctionService;
         this.getTransactionService = getTransactionService;
@@ -61,6 +62,7 @@ public class UserController {
         this.messageSource = messageSource;
         this.userExtendedDtoValidator = userExtendedDtoValidator;
         this.createMessageService = createMessageService;
+        this.getMessageService = getMessageService;
     }
 
     @GetMapping(Urls.User.OBSERVING)
@@ -279,6 +281,14 @@ public class UserController {
     public ModelAndView sendMessageSuccess(@RequestParam("receiverName") String receiverName) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.SEND_MESSAGE_SUCCESS);
         modelAndView.addObject("receiverName", receiverName);
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.MESSAGES)
+    public ModelAndView getMessages(Principal principal) {
+        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.MESSAGES);
+        modelAndView.addObject("sentMessages", getMessageService.getSentMessages(principal.getName()));
+        modelAndView.addObject("receivedMessages", getMessageService.getReceivedMessages(principal.getName()));
         return modelAndView;
     }
 }

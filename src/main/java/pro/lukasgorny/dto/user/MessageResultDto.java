@@ -5,10 +5,13 @@ package pro.lukasgorny.dto.user;
  */
 public class MessageResultDto {
 
+    private String id;
     private String title;
     private String content;
     private String senderEmail;
+    private String receiverEmail;
     private boolean isNew;
+    private String created;
 
     public String getContent() {
         return content;
@@ -34,11 +37,35 @@ public class MessageResultDto {
         this.senderEmail = senderEmail;
     }
 
-    public boolean isNew() {
+    public boolean getIsNew() {
         return isNew;
     }
 
-    public void setNew(boolean aNew) {
+    public void setIsNew(boolean aNew) {
         isNew = aNew;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
+    public String getReceiverEmail() {
+        return receiverEmail;
+    }
+
+    public void setReceiverEmail(String receiverEmail) {
+        this.receiverEmail = receiverEmail;
     }
 }

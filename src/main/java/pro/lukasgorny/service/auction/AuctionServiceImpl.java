@@ -18,6 +18,7 @@ import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.AuctionRepository;
 import pro.lukasgorny.repository.TransactionRepository;
 import pro.lukasgorny.service.email.EmailSenderService;
+import pro.lukasgorny.service.hash.HashService;
 import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.MathHelper;
 
@@ -34,11 +35,12 @@ public class AuctionServiceImpl implements AuctionService {
     private final EmailSenderService emailSenderService;
     private final MessageSource messages;
     private final GetTransactionService getTransactionService;
+    private final HashService hashService;
 
     @Autowired
-    public AuctionServiceImpl(TransactionRepository transactionRepository, AuctionRepository auctionRepository,
-                              GetAuctionService getAuctionService, UserService userService,
-                              EmailSenderService emailSenderService, MessageSource messages, GetTransactionService getTransactionService) {
+    public AuctionServiceImpl(TransactionRepository transactionRepository, AuctionRepository auctionRepository, GetAuctionService getAuctionService,
+            UserService userService, EmailSenderService emailSenderService, MessageSource messages, GetTransactionService getTransactionService,
+            HashService hashService) {
         this.transactionRepository = transactionRepository;
         this.auctionRepository = auctionRepository;
         this.getAuctionService = getAuctionService;
@@ -46,6 +48,7 @@ public class AuctionServiceImpl implements AuctionService {
         this.emailSenderService = emailSenderService;
         this.messages = messages;
         this.getTransactionService = getTransactionService;
+        this.hashService = hashService;
     }
 
     @Override
@@ -84,7 +87,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Boolean isObserving(ObserveDto observeDto) {
         User user = userService.getByEmail(observeDto.getUsername());
-        Auction auction = auctionRepository.findByUsersObserving_Id(user.getId());
+        Auction auction = auctionRepository.findByUsersObserving_IdAndId(user.getId(), hashService.decode(observeDto.getAuctionId()));
         return auction != null;
     }
 

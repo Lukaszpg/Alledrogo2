@@ -7,6 +7,8 @@ public class QueryBody {
 
     public class UserQuery {
         public static final String FIND_NEW_COUNT_MESSAGES_BY_RECEIVER_ID = "Select COUNT(*) FROM Message m WHERE m.receiver.id = :id AND m.isNew = true";
+        public static final String FIND_RECEIVED_MESSAGES = "Select m FROM Message m WHERE m.receiver.id = :id";
+        public static final String FIND_SENT_MESSAGES = "Select m FROM Message m WHERE m.sender.id = :id";
     }
 
     public class CategoryQuery {
@@ -23,6 +25,7 @@ public class QueryBody {
         public static final String FIND_CURRENT_ITEMS_AMOUNT = "Select a.currentAmount FROM Auction a WHERE a.id = :id";
         public static final String FIND_BY_CATEGORY_ID_AND_TITLE = "SELECT a FROM Auction a WHERE a.category.id IN (:ids) AND lower(a.title) LIKE lower(CONCAT('%', :title, '%')) AND a.hasEnded = false";
         public static final String FIND_AUCTION_AMOUNT_BY_CATEGORY = "SELECT COUNT(*) FROM Auction a WHERE a.category.id IN (:ids) AND a.hasEnded = false";
+        public static final String FIND_OBSERVING_BY_AUCTION_ID_AND_USER_ID = "SELECT a FROM Auction INNER JOIN a.usersObserving";
     }
 
     public class RatingQuery {

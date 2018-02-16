@@ -11,7 +11,13 @@ $(document).ready(function () {
     checkBidCheckbox();
     checkBuyoutCheckbox();
     checkUntilOutOfItemsCheckbox();
+    initializeSellInputMasks();
 });
+
+var initializeSellInputMasks = function () {
+    $('.money').mask('###0.00', {reverse: true});
+    $('.amount').mask('#####0');
+};
 
 var checkBidCheckbox = function () {
     var bidCheckbox = $("#isBidCheckbox");

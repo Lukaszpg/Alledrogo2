@@ -12,6 +12,8 @@ $(document).ready(function () {
     initializeSearchSelect();
     initializeModals();
     initializeBarRatings();
+    bindMessagesViewClick();
+    bindMessagesSentViewClick();
 });
 
 var initializeTabs = function () {
@@ -90,5 +92,36 @@ var initializeBarRatings = function() {
             $("#descriptionAccordanceRating").val(value);
         }
     });
-}
+};
+
+var bindMessagesViewClick = function() {
+    $(".messages-view").click(function() {
+        var elem = $(this);
+        var id = elem.parent().find("#messageId").val();
+
+        setMessageContentAndTitle(elem);
+
+        axios.get("/user-rest/messages/change-status/" + id)
+            .then(function () {
+                elem.parent().find("#messageNewBadge").remove();
+            })
+            .catch(function () {
+                console.log(e);
+            })
+    });
+};
+
+var bindMessagesSentViewClick = function() {
+    $(".messages-view-sent").click(function () {
+        setMessageContentAndTitle($(this));
+    });
+};
+
+var setMessageContentAndTitle = function(elem) {
+    var content = elem.parent().find("#messageContent").val();
+    var title = elem.parent().find("#messageTitle").val();
+
+    $("#modalMessageTitle").html(title);
+    $("#modalMessageContent").html(content);
+};
 
