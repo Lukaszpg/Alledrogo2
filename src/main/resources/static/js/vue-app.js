@@ -48,7 +48,7 @@ window.onload = function () {
             '<div class="row">' +
                 '<div class="col offset-s4">' +
                 '<div v-bind:class="{ \'preloader-wrapper\': true, big: true, active: true, hide: !isLoading, \'category-picker-preloader\': true}">' +
-                '<div class="spinner-layer spinner-yellow">' +
+                '<div class="spinner-layer spinner-blue">' +
                 '<div class="circle-clipper left">' +
                 '<div class="circle"></div>' +
                 '</div>' +
