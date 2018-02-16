@@ -34,11 +34,18 @@
                     <td th:text="${message?.created}"></td>
                     <td th:text="${message?.title}"></td>
                     <td><a href="#viewMessage" class="modal-trigger messages-view" th:text="#{label.message.view}"></a>
-                        <input type="hidden" id="messageContent" th:value="${message?.content}">
-                        <input type="hidden" id="messageTitle" th:value="${message?.title}">
                         <input type="hidden" id="messageId" th:value="${message?.id}">
                         <span th:if="${message.isNew}" id="messageNewBadge" class="new badge red" th:attr="data-badge-caption=#{caption.new.message}"></span>
                     </td>
+                    <div id="viewMessage" class="modal modal-fixed-footer">
+                        <div class="modal-content">
+                            <h4 id="modalMessageTitle" th:text="${message?.title}"></h4>
+                            <p class="message-content" id="modalMessageContent" th:text="${message?.content}"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" th:text="#{button.close}"></a>
+                        </div>
+                    </div>
                 </tr>
                 <tr th:if="${#lists.isEmpty(receivedMessages)}">
                     <td th:text="#{label.no.messages}"></td>
@@ -66,26 +73,24 @@
                     <td th:text="${message?.senderEmail}"></td>
                     <td th:text="${message?.created}"></td>
                     <td th:text="${message?.title}"></td>
-                    <td><a href="#viewMessage" class="modal-trigger messages-view-sent" th:text="#{label.message.view}"></a>
-                        <input type="hidden" id="messageContent" th:value="${message?.content}">
-                        <input type="hidden" id="messageTitle" th:value="${message?.title}">
+                    <td><a href="#viewSentMessage" class="modal-trigger" th:text="#{label.message.view}"></a>
                         <input type="hidden" id="messageId" th:value="${message?.id}">
                     </td>
+                    <div id="viewSentMessage" class="modal modal-fixed-footer">
+                        <div class="modal-content">
+                            <h4 id="modalMessageTitle" th:text="${message?.title}"></h4>
+                            <p class="message-content" id="modalMessageContent" th:text="${message?.content}"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" th:text="#{button.close}"></a>
+                        </div>
+                    </div>
                 </tr>
                 <tr th:if="${#lists.isEmpty(sentMessages)}">
                     <td th:text="#{label.no.messages}"></td>
                 </tr>
                 </tbody>
             </table>
-        </div>
-    </div>
-    <div id="viewMessage" class="modal modal-fixed-footer">
-        <div class="modal-content">
-            <h4 id="modalMessageTitle"></h4>
-            <p class="message-content" id="modalMessageContent"></p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" th:text="#{button.close}"></a>
         </div>
     </div>
 </div>
