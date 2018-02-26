@@ -31,8 +31,6 @@ public class RegistrationServiceImpl implements RegistrationService {
     private final ModelMapper modelmapper;
     private final ApplicationEventPublisher eventPublisher;
 
-    private UserSaveDto userSaveDto;
-
     @Autowired
     public RegistrationServiceImpl(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository,
             ModelMapper modelmapper, ApplicationEventPublisher eventPublisher) {
@@ -44,8 +42,8 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public User register() {
-        User user = createEntityFromDto();
+    public User register(UserSaveDto userSaveDto) {
+        User user = createEntityFromDto(userSaveDto);
         userService.save(user);
         return user;
     }
@@ -57,14 +55,14 @@ public class RegistrationServiceImpl implements RegistrationService {
         return ptr.matcher(email).matches();
     }
 
-    private User createEntityFromDto() {
+    private User createEntityFromDto(UserSaveDto userSaveDto) {
         User user = modelmapper.map(userSaveDto, User.class);
         user.setBlocked(false);
         user.setSellingBlocked(false);
         user.setPassword(bCryptPasswordEncoder.encode(userSaveDto.getPassword()));
         user.setEnabled(false);
         user.setDeleted(false);
-        user.setRoles(prepareRoles());
+        user.setRoles(prepareRoles(userSaveDto));
 
         return user;
 
@@ -94,13 +92,9 @@ public class RegistrationServiceImpl implements RegistrationService {
         return resetPasswordDto;
     }
 
-    private List<Role> prepareRoles() {
+    private List<Role> prepareRoles(UserSaveDto userSaveDto) {
         List<Role> results = new ArrayList<>();
         userSaveDto.getRoles().forEach(role -> results.add(roleRepository.findByName(role.name())));
         return results;
-    }
-
-    public void setUserSaveDto(UserSaveDto userSaveDto) {
-        this.userSaveDto = userSaveDto;
     }
 }

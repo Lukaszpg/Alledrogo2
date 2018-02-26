@@ -9,6 +9,7 @@ public class UserResultDto {
     private String registeredSince;
     private String lastLogin;
     private UserExtendedDto userExtendedDto;
+    private Boolean using2fa;
 
     public String getEmail() {
         return email;
@@ -48,5 +49,13 @@ public class UserResultDto {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Boolean getUsing2fa() {
+        return using2fa;
+    }
+
+    public void setUsing2fa(Boolean using2fa) {
+        this.using2fa = using2fa;
     }
 }

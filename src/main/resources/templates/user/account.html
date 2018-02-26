@@ -6,14 +6,13 @@
 </head>
 <body th:replace="layout/template :: bodyFragment">
 <div th:fragment="content">
-    <input type="hidden" id="changePasswordTab" th:value="${changePasswordTab}">
-    <input type="hidden" id="changeEmailTab" th:value="${changeEmailTab}">
     <div class="row">
         <div class="col s12">
             <ul class="tabs">
-                <li class="tab col s4 l4"><a href="#userData" th:text="#{menu.label.user.data}"></a></li>
-                <li class="tab col s4 l4"><a href="#changePassword" th:text="#{menu.label.change.password}"></a></li>
-                <li class="tab col s4 l4"><a href="#changeEmail" th:text="#{menu.label.change.email}"></a></li>
+                <li class="tab col s4 l3"><a href="#userData" th:text="#{menu.label.user.data}"></a></li>
+                <li class="tab col s4 l3"><a href="#changePassword" th:text="#{menu.label.change.password}"></a></li>
+                <li class="tab col s4 l3"><a href="#changeEmail" th:text="#{menu.label.change.email}"></a></li>
+                <li class="tab col s4 l3"><a href="#security" th:text="#{menu.label.security}"></a></li>
             </ul>
         </div>
     </div>
@@ -82,9 +81,11 @@
                         <select id="voivodeshipSelect" name="voivodeship" th:classappend="${#fields.hasErrors('voivodeship')}  ? 'invalid' : ''">
                             <option th:text="#{placeholder.user.voivodehip}" value="" th:disabled="disabled" th:selected="selected"></option>
                             <option th:each="voivodeship : ${T(pro.lukasgorny.enums.VoivodeshipEnum).values()}"
-                                    th:if="${userExtendedDto.voivodeship == voivodeship}" th:value="${voivodeship}" selected th:text="${voivodeship.name}"></option>
+                                    th:if="${userExtendedDto.voivodeship == voivodeship}" th:value="${voivodeship}" selected
+                                    th:text="${voivodeship.name}"></option>
                             <option th:each="voivodeship : ${T(pro.lukasgorny.enums.VoivodeshipEnum).values()}"
-                                    th:if="${userExtendedDto.voivodeship != voivodeship}" th:value="${voivodeship}" th:text="${voivodeship.name}"></option>
+                                    th:if="${userExtendedDto.voivodeship != voivodeship}" th:value="${voivodeship}"
+                                    th:text="${voivodeship.name}"></option>
                         </select>
                         <div class="validation-error" th:if="${#fields.hasErrors('voivodeship')}" th:errors="*{voivodeship}"></div>
                     </div>
@@ -118,7 +119,8 @@
     </div>
     <div id="changePassword">
         <div class="row">
-            <form action="#" th:action="@{/user/change-password}" th:object="${changePasswordDto}" method="post" class="col s8 offset-s3">
+            <form action="#" th:action="@{/user/change-password#changePassword}" th:object="${changePasswordDto}" method="post"
+                  class="col s8 offset-s3">
                 <div class="row">
                     <h2 th:text="#{menu.label.change.password}"></h2>
                     <div class="input-field col s5">
@@ -152,7 +154,7 @@
     </div>
     <div id="changeEmail">
         <div class="row">
-            <form action="#" th:action="@{/user/change-email}" th:object="${changeEmailDto}" method="post" class="col s8 offset-s3">
+            <form action="#" th:action="@{/user/change-email#changeEmail}" th:object="${changeEmailDto}" method="post" class="col s8 offset-s3">
                 <div class="row">
                     <h2 th:text="#{menu.label.change.email}"></h2>
                     <div class="input-field col s5">
@@ -172,6 +174,42 @@
                         <label for="newEmail" th:text="#{label.user.new.email}"></label>
                         <div class="validation-error-input" th:if="${#fields.hasErrors('newEmail')}"
                              th:errors="*{newEmail}"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s10">
+                        <button class="btn waves-light waves-effect right" type="submit"
+                                th:text="#{button.save}"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="security">
+        <div class="row">
+            <form action="#" th:action="@{/user/security#security}" th:object="${securityDto}" method="post" class="col s8 offset-s3">
+                <div class="row">
+                    <h2 th:text="#{page.title.fa}"></h2>
+                    <div class="input-field col s5">
+                        <input th:field="*{actualPassword}" id="actualPassword" type="password"
+                               th:placeholder="#{placeholder.user.actual.password}"
+                               class="validate" th:classappend="${#fields.hasErrors('actualPassword')}  ? 'invalid' : ''">
+                        <label for="firstName" th:text="#{label.user.actual.password}"></label>
+                        <div class="validation-error-input" th:if="${#fields.hasErrors('actualPassword')}"
+                             th:errors="*{actualPassword}"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s4">
+                        <label for="using2fa" th:text="#{label.using2fa}"></label>
+                        <div class="switch">
+                            <label>
+                                nie
+                                <input id="using2fa" name="using2fa" type="checkbox" th:checked="${securityDto.using2fa}">
+                                <span class="lever"></span>
+                                tak
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <div class="row">

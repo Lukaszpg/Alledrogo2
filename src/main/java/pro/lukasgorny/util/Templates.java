@@ -10,13 +10,16 @@ public class Templates {
     public static final String EMAIL_ERROR = "email_error";
     public static final String TOKEN_ACTIVATE = "activate";
     public static final String REGISTRATION_SUCCESS = "registration-success";
+    public static final String REGISTRATION_SUCCESS_QR_CODE = "registration-success-qr-code";
     public static final String TOKEN_ERROR = "token-error";
     public static final String ACTIVATION_SUCCESS = "activation-success";
     public static final String LOGIN = "login";
+    public static final String CODE = "code";
     public static final String INDEX = "index";
     public static final String ERROR_404 = "error/404";
     public static final String ERROR_405 = "error/405";
     public static final String ERROR_500 = "error/500";
+    public static final String ERROR_403 = "error/403";
 
     public class AuctionTemplates {
         public static final String PREFIX = "auction/";
@@ -44,6 +47,8 @@ public class Templates {
         public static final String SEND_MESSAGE = PREFIX + "send-message";
         public static final String SEND_MESSAGE_SUCCESS = PREFIX + "send-message-success";
         public static final String MESSAGES = PREFIX + "messages";
+        public static final String SECURITY_QR_CODE = PREFIX + "security-change-success-qr-code";
+        public static final String SECURITY_CHANGE_SUCCESS = PREFIX + "security-change-success";
     }
 
     public class SearchTemplates {

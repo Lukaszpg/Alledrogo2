@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/template :: headFragment(#{title.fa})">
+    <title>Index</title>
+    <meta charset="utf-8"/>
+</head>
+<body th:replace="layout/template :: bodyFragment">
+<div th:fragment="content">
+    <div id="registrationForm" class="row">
+        <form action="#" th:action="@{/code}" th:object="${totpDto}" method="post"
+              class="col s10 offset-s3">
+            <div class="row">
+                <h2 th:text="#{page.title.fa}"></h2>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <p th:text="#{text.enter.code.fa}"></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s4">
+                    <input th:field="*{code}" th:placeholder="#{placeholder.fa.code}" id="code" type="text"
+                           class="validate" th:classappend="${#fields.hasErrors('code')}  ? 'invalid' : ''">
+                    <label for="code" th:text="#{label.fa.code}"></label>
+                    <div class="validation-error-input" th:if="${#fields.hasErrors('code')}" th:errors="*{code}"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s8">
+                    <button class="btn waves-light waves-effect right" type="submit"
+                            th:text="#{button.send}"></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

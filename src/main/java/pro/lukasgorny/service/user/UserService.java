@@ -1,9 +1,6 @@
 package pro.lukasgorny.service.user;
 
-import pro.lukasgorny.dto.user.ChangeEmailDto;
-import pro.lukasgorny.dto.user.ChangePasswordDto;
-import pro.lukasgorny.dto.user.UserExtendedDto;
-import pro.lukasgorny.dto.user.UserResultDto;
+import pro.lukasgorny.dto.user.*;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.model.VerificationToken;
 
@@ -25,4 +22,7 @@ public interface UserService {
     void changeUserEmail(ChangeEmailDto changeEmailDto);
     User getById(Long id);
     User getById(String id);
+    String generateQRUrl(User user);
+    void grantAuthorities(String email);
+    void changeSecurity(SecurityDto securityDto);
 }

@@ -1,5 +1,6 @@
 package pro.lukasgorny.controller.register;
 
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
@@ -12,22 +13,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.mysql.jdbc.StringUtils;
 
 import pro.lukasgorny.controller.register.validator.UserDtoValidator;
 import pro.lukasgorny.dto.user.ResetPasswordDto;
 import pro.lukasgorny.dto.user.UserSaveDto;
 import pro.lukasgorny.enums.RoleEnum;
-import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.event.OnRegistrationCompleteEvent;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.model.VerificationToken;
 import pro.lukasgorny.service.helper.HelperServiceImpl;
 import pro.lukasgorny.service.registration.RegistrationService;
 import pro.lukasgorny.service.user.UserService;
+import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.util.Urls;
-
-import javax.validation.Valid;
-import com.mysql.jdbc.StringUtils;
 
 /**
  * Created by Łukasz on 24.10.2017.
@@ -83,7 +82,13 @@ public class RegistrationController {
 
             ModelMap modelMap = new ModelMap();
             modelMap.addAttribute("email", userSaveDto.getEmail());
-            return new ModelAndView(Urls.Registration.REGISTER_SUCCESS_REDIRECT, modelMap);
+
+            if(!userSaveDto.getUsing2fa()) {
+                return new ModelAndView(Urls.Registration.REGISTER_SUCCESS_REDIRECT, modelMap);
+            } else {
+                modelMap.addAttribute("qr", userService.generateQRUrl(user));
+                return new ModelAndView(Urls.Registration.REGISTER_SUCCESS_QR_CODE_REDIRECT, modelMap);
+            }
         }
 
         return modelAndView;
@@ -91,8 +96,7 @@ public class RegistrationController {
 
     private User registerUser(UserSaveDto userSaveDto) {
         userSaveDto.getRoles().add(RoleEnum.USER);
-        registrationService.setUserSaveDto(userSaveDto);
-        return registrationService.register();
+        return registrationService.register(userSaveDto);
     }
 
     private void sendActivationEmail(User user, WebRequest request) throws Exception {
@@ -138,6 +142,15 @@ public class RegistrationController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Templates.REGISTRATION_SUCCESS);
         modelAndView.addObject("email", email);
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.Registration.REGISTER_SUCCESS_QR_CODE)
+    public ModelAndView registerSuccess(@ModelAttribute("email") String email, @ModelAttribute("qr") String qr) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(Templates.REGISTRATION_SUCCESS_QR_CODE);
+        modelAndView.addObject("email", email);
+        modelAndView.addObject("qr", qr);
         return modelAndView;
     }
 

@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import pro.lukasgorny.service.auction.GetAuctionService;
 import pro.lukasgorny.util.Templates;
+import pro.lukasgorny.util.Urls;
 
 /**
  * Created by Łukasz on 25.10.2017.
@@ -22,7 +23,7 @@ public class IndexController {
         this.getAuctionService = getAuctionService;
     }
 
-    @GetMapping("/")
+    @GetMapping(Urls.Index.HOME)
     public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView(Templates.INDEX);
         modelAndView.addObject("auctions", getAuctionService.getTopAuctions());

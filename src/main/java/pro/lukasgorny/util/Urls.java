@@ -7,6 +7,7 @@ public class Urls {
     public static final String ERROR_404 = "/error/404";
     public static final String ERROR_405 = "/error/405";
     public static final String ERROR_500 = "/error/500";
+    public static final String ERROR_403 = "/error/403";
 
     public class Auction {
         public static final String PREFIX = "auction";
@@ -36,6 +37,7 @@ public class Urls {
 
     public class Login {
         public static final String LOGIN = "/login";
+        public static final String CODE = "/code";
         public static final String LOGIN_REDIRECT = "redirect:/login";
     }
 
@@ -43,10 +45,12 @@ public class Urls {
         public static final String REGISTER = "/register";
         public static final String EMAIL_ERROR_REDIRECT = "redirect:/email-error";
         public static final String REGISTER_SUCCESS_REDIRECT = "redirect:/register-success";
+        public static final String REGISTER_SUCCESS_QR_CODE_REDIRECT = "redirect:/register-success-qr-code";
         public static final String TOKEN_ERROR_REDIRECT = "redirect:/token-error";
         public static final String TOKEN_ERROR = "/token-error";
         public static final String ACTIVATE = "/activate";
         public static final String REGISTER_SUCCESS = "/register-success";
+        public static final String REGISTER_SUCCESS_QR_CODE = "/register-success-qr-code";
         public static final String RESET_PASSWORD = "/reset-password";
         public static final String RESET_PASSWORD_SUCCESS = "/reset-password-success";
         public static final String RESET_PASSWORD_SUCCESS_REDIRECT = "redirect:/reset-password-success";
@@ -83,6 +87,12 @@ public class Urls {
         public static final String SEND_MESSAGE = MESSAGES + "/send/{id}";
         public static final String SEND_MESSAGE_SUCCESS = MESSAGES + "/send-message-success";
         public static final String SEND_MESSAGE_SUCCESS_REDIRECT = "redirect:" + MAIN + MESSAGES + "/send-message-success";
+        public static final String SECURITY = "/security";
+        public static final String SECURITY_CHANGE_SUCCESS_QR_CODE_REDIRECT = "redirect:" + MAIN + "/security-qr-code";
+        public static final String SECURITY_CHANGE_SUCCESS_REDIRECT = "redirect:" + MAIN + "/security-change-success";
+        public static final String SECURITY_CHANGE_SUCCESS_QR_CODE = "/security-qr-code";
+        public static final String SECURITY_CHANGE_SUCCESS = "/security-change-success";
+
     }
 
     public class UserRest {
@@ -98,5 +108,10 @@ public class Urls {
 
     public class Photo {
         public static final String GET_ALL = "/photo/get-all/{id}";
+    }
+
+    public class Index {
+        public static final String HOME_REDIRECT = "redirect:/";
+        public static final String HOME = "/";
     }
 }

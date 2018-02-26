@@ -1,24 +1,31 @@
 package pro.lukasgorny.service.user;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import pro.lukasgorny.dto.user.ChangeEmailDto;
-import pro.lukasgorny.dto.user.ChangePasswordDto;
-import pro.lukasgorny.dto.user.UserExtendedDto;
-import pro.lukasgorny.dto.user.UserResultDto;
+import pro.lukasgorny.dto.user.*;
+import pro.lukasgorny.model.Role;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.model.VerificationToken;
-import pro.lukasgorny.repository.VerificationTokenRepository;
 import pro.lukasgorny.repository.UserRepository;
+import pro.lukasgorny.repository.VerificationTokenRepository;
 import pro.lukasgorny.service.hash.HashService;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.StringJoiner;
 
 /**
  * Created by lukaszgo on 2017-05-25.
@@ -31,6 +38,10 @@ public class UserServiceImpl implements UserService {
     private final MessageSource messageSource;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final HashService hashService;
+
+    private static String QR_PREFIX = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
+
+    private static String APP_NAME = "Auctionify";
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, MessageSource messageSource,
@@ -70,6 +81,7 @@ public class UserServiceImpl implements UserService {
         userResultDto.setEmail(user.getEmail());
         userResultDto.setRegisteredSince(calculateAndFormatDateDifference(user));
         userResultDto.setUserExtendedDto(createExtendedDtoFromEntity(user));
+        userResultDto.setUsing2fa(user.getUsing2FA());
         return userResultDto;
     }
 
@@ -124,10 +136,44 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String generateQRUrl(User user) {
+        try {
+            return QR_PREFIX + URLEncoder
+                    .encode(String.format("otpauth://totp/%s:%s?secret=%s&issuer=%s", APP_NAME, user.getEmail(), user.getSecret(), APP_NAME),
+                            "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    @Override
     public void changeUserPassword(ChangePasswordDto changePasswordDto) {
         User user = getByEmail(changePasswordDto.getEmail());
         user.setPassword(bCryptPasswordEncoder.encode(changePasswordDto.getNewPassword()));
         save(user);
+    }
+
+    @Override
+    public void grantAuthorities(String email) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        List<GrantedAuthority> authorities = addAllUserAuthorities(email);
+        Authentication newAuth = new UsernamePasswordAuthenticationToken(auth.getPrincipal(), auth.getCredentials(), authorities);
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+    }
+
+    @Override
+    public void changeSecurity(SecurityDto securityDto) {
+        User user = getByEmail(securityDto.getEmail());
+        user.setUsing2FA(securityDto.getUsing2fa());
+        save(user);
+    }
+
+    private List<GrantedAuthority> addAllUserAuthorities(String email) {
+        User user = getByEmail(email);
+        List<String> roleNames = user.getRoles().stream().map(Role::getName).collect(Collectors.toList());
+        return AuthorityUtils.commaSeparatedStringToAuthorityList(String.join(",", roleNames));
     }
 
     private UserExtendedDto createExtendedDtoFromEntity(User user) {

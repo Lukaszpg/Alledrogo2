@@ -9,9 +9,8 @@ import pro.lukasgorny.model.User;
  */
 public interface RegistrationService {
 
-    User register();
+    User register(UserSaveDto userSaveDto);
     boolean validateEmail(String email);
-    void setUserSaveDto(UserSaveDto userSaveDto);
     boolean resetUserPassword(ResetPasswordDto resetPasswordDto);
     ResetPasswordDto generateAndSaveUserNewPassword(ResetPasswordDto resetPasswordDto);
 }

@@ -4,17 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import pro.lukasgorny.controller.user.validator.UserExtendedDtoValidator;
-import pro.lukasgorny.dto.user.ChangeEmailDto;
-import pro.lukasgorny.dto.user.ChangePasswordDto;
+import pro.lukasgorny.dto.user.*;
 import pro.lukasgorny.dto.rating.RatingResultDto;
 import pro.lukasgorny.dto.rating.RatingSaveDto;
-import pro.lukasgorny.dto.user.MessageSaveDto;
-import pro.lukasgorny.dto.user.UserExtendedDto;
 import pro.lukasgorny.enums.RatingTypeEnum;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.service.auction.GetAuctionService;
@@ -145,11 +143,13 @@ public class UserController {
     @GetMapping(Urls.User.ACCOUNT)
     public ModelAndView getMyAccount(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.ACCOUNT);
+        User user = userService.getByEmail(principal.getName());
+        SecurityDto securityDto = new SecurityDto();
+        securityDto.setUsing2fa(user.getUsing2FA());
         modelAndView.addObject("userExtendedDto", userService.getUserData(principal.getName()));
         modelAndView.addObject("changePasswordDto", new ChangePasswordDto());
         modelAndView.addObject("changeEmailDto", new ChangeEmailDto());
-        modelAndView.addObject("changePasswordTab", false);
-        modelAndView.addObject("changeEmailTab", false);
+        modelAndView.addObject("securityDto", securityDto);
         return modelAndView;
     }
 
@@ -158,10 +158,12 @@ public class UserController {
             BindingResult bindingResult) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(Templates.UserTemplates.ACCOUNT);
+        User user = userService.getByEmail(principal.getName());
+        SecurityDto securityDto = new SecurityDto();
+        securityDto.setUsing2fa(user.getUsing2FA());
         modelAndView.addObject("changePasswordDto", new ChangePasswordDto());
         modelAndView.addObject("changeEmailDto", new ChangeEmailDto());
-        modelAndView.addObject("changePasswordTab", false);
-        modelAndView.addObject("changeEmailTab", false);
+        modelAndView.addObject("securityDto", securityDto);
 
         userExtendedDtoValidator.validate(userExtendedDto, bindingResult);
 
@@ -180,8 +182,12 @@ public class UserController {
     public ModelAndView changeUserPassword(@Valid ChangePasswordDto changePasswordDto, BindingResult bindingResult, Principal principal,
             HttpSession httpSession) {
         ModelAndView modelAndView = new ModelAndView();
+        User user = userService.getByEmail(principal.getName());
+        SecurityDto securityDto = new SecurityDto();
+        securityDto.setUsing2fa(user.getUsing2FA());
         modelAndView.addObject("userExtendedDto", userService.getUserData(principal.getName()));
         modelAndView.addObject("changeEmailDto", new ChangeEmailDto());
+        modelAndView.addObject("securityDto", securityDto);
 
         changePasswordDto.setEmail(principal.getName());
 
@@ -195,8 +201,6 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.UserTemplates.ACCOUNT);
-            modelAndView.addObject("changePasswordTab", true);
-            modelAndView.addObject("changeEmailTab", false);
             return modelAndView;
         }
 
@@ -216,8 +220,12 @@ public class UserController {
     public ModelAndView changeUserEmail(@Valid ChangeEmailDto changeEmailDto, BindingResult bindingResult, Principal principal,
             HttpSession httpSession) {
         ModelAndView modelAndView = new ModelAndView();
+        User user = userService.getByEmail(principal.getName());
+        SecurityDto securityDto = new SecurityDto();
+        securityDto.setUsing2fa(user.getUsing2FA());
         modelAndView.addObject("userExtendedDto", userService.getUserData(principal.getName()));
         modelAndView.addObject("changePasswordDto", new ChangePasswordDto());
+        modelAndView.addObject("securityDto", securityDto);
         changeEmailDto.setEmail(principal.getName());
 
         if (!userService.isUserPasswordMatchWithInput(changeEmailDto.getActualPassword(), principal.getName())) {
@@ -230,8 +238,6 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.UserTemplates.ACCOUNT);
-            modelAndView.addObject("changePasswordTab", false);
-            modelAndView.addObject("changeEmailTab", true);
             return modelAndView;
         }
 
@@ -247,6 +253,53 @@ public class UserController {
         return new ModelAndView(Templates.UserTemplates.CHANGE_EMAIL_SUCCESS);
     }
 
+    @PostMapping(Urls.User.SECURITY)
+    public ModelAndView changeSecurity(@Valid SecurityDto securityDto, BindingResult bindingResult, Principal principal, HttpSession httpSession) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("userExtendedDto", userService.getUserData(principal.getName()));
+        modelAndView.addObject("changePasswordDto", new ChangePasswordDto());
+        modelAndView.addObject("changeEmailDto", new ChangeEmailDto());
+        securityDto.setEmail(principal.getName());
+
+        if (!userService.isUserPasswordMatchWithInput(securityDto.getActualPassword(), principal.getName())) {
+            bindingResult.rejectValue("actualPassword", "error.password.actual.no.match");
+        }
+
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName(Templates.UserTemplates.ACCOUNT);
+            return modelAndView;
+        }
+
+        userService.changeSecurity(securityDto);
+
+        if(securityDto.getUsing2fa()) {
+            User user = userService.getByEmail(principal.getName());
+            ModelMap modelMap = new ModelMap();
+            modelMap.addAttribute("qr", userService.generateQRUrl(user));
+            return new ModelAndView(Urls.User.SECURITY_CHANGE_SUCCESS_QR_CODE_REDIRECT, modelMap);
+        }
+
+        modelAndView.setViewName(Urls.User.SECURITY_CHANGE_SUCCESS_REDIRECT);
+        httpSession.invalidate();
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.SECURITY_CHANGE_SUCCESS_QR_CODE)
+    public ModelAndView securitySuccessQrCode(@ModelAttribute("qr") String qr, HttpSession httpSession) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(Templates.UserTemplates.SECURITY_QR_CODE);
+        modelAndView.addObject("qr", qr);
+        httpSession.invalidate();
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.SECURITY_CHANGE_SUCCESS)
+    public ModelAndView securitySuccess() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(Templates.UserTemplates.SECURITY_CHANGE_SUCCESS);
+        return modelAndView;
+    }
+
     @GetMapping(Urls.User.SEND_MESSAGE)
     public ModelAndView getSendMessageForm(@PathVariable("id") String receiverId) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.SEND_MESSAGE);
@@ -258,13 +311,14 @@ public class UserController {
     }
 
     @PostMapping(Urls.User.SEND_MESSAGE)
-    public ModelAndView sendMessage(@PathVariable("id") String receiverId, @Valid MessageSaveDto messageSaveDto, BindingResult bindingResult, Principal principal) {
+    public ModelAndView sendMessage(@PathVariable("id") String receiverId, @Valid MessageSaveDto messageSaveDto, BindingResult bindingResult,
+            Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
         String receiverName = userService.getById(receiverId).getEmail();
         messageSaveDto.setReceiverId(receiverId);
         messageSaveDto.setReceiverName(receiverName);
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.UserTemplates.SEND_MESSAGE);
             return modelAndView;
         }

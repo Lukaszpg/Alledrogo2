@@ -5,5 +5,6 @@ package pro.lukasgorny.enums;
  */
 public enum RoleEnum {
     USER,
-    ADMIN
+    ADMIN,
+    PRE_AUTH_USER
 }

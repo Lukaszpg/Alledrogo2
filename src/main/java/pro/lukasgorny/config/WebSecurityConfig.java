@@ -1,9 +1,6 @@
 package pro.lukasgorny.config;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import pro.lukasgorny.handler.CustomAccessDeniedHandler;
 import pro.lukasgorny.handler.CustomAuthenticationFailureHandler;
+import pro.lukasgorny.handler.CustomAuthenticationSuccessHandler;
 
 /**
  * Created by lukaszgo on 2017-05-25.
@@ -28,17 +28,22 @@ import pro.lukasgorny.handler.CustomAuthenticationFailureHandler;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final DataSource dataSource;
     private final UserDetailsService userDetailsService;
     private final CustomAuthenticationFailureHandler authenticationFailureHandler;
+    private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+    private final CustomAccessDeniedHandler accessDeniedHandler;
+    private CustomWebAuthenticationDetailsSource customWebAuthenticationDetailsSource;
 
     @Autowired
-    public WebSecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, DataSource dataSource,
-                             UserDetailsService userDetailsService, CustomAuthenticationFailureHandler authenticationFailureHandler) {
+    public WebSecurityConfig(BCryptPasswordEncoder bCryptPasswordEncoder, UserDetailsService userDetailsService,
+            CustomAuthenticationFailureHandler authenticationFailureHandler, CustomAuthenticationSuccessHandler authenticationSuccessHandler,
+            CustomAccessDeniedHandler accessDeniedHandler, CustomWebAuthenticationDetailsSource customWebAuthenticationDetailsSource) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.dataSource = dataSource;
         this.userDetailsService = userDetailsService;
         this.authenticationFailureHandler = authenticationFailureHandler;
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
+        this.accessDeniedHandler = accessDeniedHandler;
+        this.customWebAuthenticationDetailsSource = customWebAuthenticationDetailsSource;
     }
 
     @Override
@@ -64,6 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/activate/**").permitAll()
                 .antMatchers("/token-error").permitAll()
                 .antMatchers("/register-success").permitAll()
+                .antMatchers("/register-success-qr-code").permitAll()
                 .antMatchers("/reset-password-success").permitAll()
                 .antMatchers("/version").permitAll()
                 .antMatchers("/search").permitAll()
@@ -71,16 +77,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/reset-password").permitAll()
                 .antMatchers("/user/change-password-success").permitAll()
                 .antMatchers("/user/change-email-success").permitAll()
+                .antMatchers("/user/security-change-success").permitAll()
+                .antMatchers("/user/security-qr-code").permitAll()
                 .antMatchers("/photo/get-all/**").permitAll()
                 .antMatchers("/category-rest/**").permitAll()
                 .antMatchers("/auction/get/**").permitAll()
+                .antMatchers("/code").hasRole("PRE_AUTH_USER")
                 .antMatchers("/auction/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/user/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .anyRequest().authenticated().and().csrf().disable().formLogin().loginPage("/login")
-                .defaultSuccessUrl("/").usernameParameter("email").failureHandler(authenticationFailureHandler).passwordParameter("password").and().logout()
+                .anyRequest().authenticated().and().csrf().disable().formLogin().authenticationDetailsSource(customWebAuthenticationDetailsSource).loginPage("/login")
+                .usernameParameter("email").successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler).passwordParameter("password").and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").and().exceptionHandling()
-                .accessDeniedPage("/access-denied");
+                .accessDeniedHandler(accessDeniedHandler);
     }
 
     @Override

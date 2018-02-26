@@ -5,6 +5,7 @@ import pro.lukasgorny.enums.VoivodeshipEnum;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import org.jboss.aerogear.security.otp.api.Base32;
 
 /**
  * Created by lukaszgo on 2017-05-25.
@@ -30,6 +31,13 @@ public class User extends Model {
     private VoivodeshipEnum voivodeship;
     private String firstPhoneNumber;
     private String secondPhoneNumber;
+    private Boolean isUsing2FA;
+    private String secret;
+
+    public User() {
+        super();
+        this.secret = Base32.random();
+    }
 
     public String getEmail() {
         return email;
@@ -176,5 +184,21 @@ public class User extends Model {
 
     public void setSecondPhoneNumber(String secondPhoneNumber) {
         this.secondPhoneNumber = secondPhoneNumber;
+    }
+
+    public Boolean getUsing2FA() {
+        return isUsing2FA;
+    }
+
+    public void setUsing2FA(Boolean using2FA) {
+        isUsing2FA = using2FA;
+    }
+
+    public String getSecret() {
+        return secret;
+    }
+
+    public void setSecret(String secret) {
+        this.secret = secret;
     }
 }

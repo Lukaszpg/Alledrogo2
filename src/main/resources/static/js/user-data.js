@@ -5,8 +5,6 @@ $(document).ready(function () {
     initializeInputMasks();
     initializeInputErrorHide();
     initializeSelectErrorHide();
-    checkShouldChangeToPasswordChangeTab();
-    checkShouldChangeToEmailChangeTab();
     initializeUserCopyToClipboardButton();
     displaySuccessMessageIfApplicable();
 });
@@ -35,22 +33,6 @@ var initializeSelectErrorHide = function () {
             $(this).parent().parent().find(".validation-error-input").addClass("hide");
         });
     });
-};
-
-var checkShouldChangeToEmailChangeTab = function () {
-    var tabValue = $("#changeEmailTab").val();
-
-    if (tabValue == "true") {
-        $('ul.tabs').tabs('select_tab', 'changeEmail');
-    }
-};
-
-var checkShouldChangeToPasswordChangeTab = function () {
-    var tabValue = $("#changePasswordTab").val();
-
-    if (tabValue == "true") {
-        $('ul.tabs').tabs('select_tab', 'changePassword');
-    }
 };
 
 var initializeUserCopyToClipboardButton = function () {

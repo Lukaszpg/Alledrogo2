@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/template :: headFragment(#{title.registration})">
+    <title>Index</title>
+    <meta charset="utf-8"/>
+</head>
+<body th:replace="layout/template :: bodyFragment">
+<div th:fragment="content">
+    <div class="row">
+       <div class="col s9 offset-s2">
+           <h2 th:text="#{page.title.registration.success}"></h2>
+           <p th:text="#{registration.success.qr.code(${email})}"></p>
+       </div>
+    </div>
+    <div class="row">
+        <div class="col s6 offset-s5">
+            <img th:src="${qr}"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s9 offset-s2">
+            <a class="right btn waves-light waves-effect" th:text="#{button.login.goto}" th:href="@{/login}"></a>
+        </div>
+   </div>
+    </div>
+</div>
+</body>
+</html>

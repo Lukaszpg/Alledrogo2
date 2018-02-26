@@ -28,4 +28,7 @@ public class ExceptionController {
         return Templates.ERROR_500;
     }
 
+    @RequestMapping(Urls.ERROR_403)
+    public String accessDenied() { return Templates.ERROR_403; }
+
 }

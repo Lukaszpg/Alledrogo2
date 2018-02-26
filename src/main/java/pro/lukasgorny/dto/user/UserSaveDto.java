@@ -15,6 +15,7 @@ public class UserSaveDto {
     private String birthdayDay;
     private String birthdayMonth;
     private String birthdayYear;
+    private boolean using2fa;
 
     private List<RoleEnum> roles = new ArrayList<>();
 
@@ -64,5 +65,13 @@ public class UserSaveDto {
 
     public void setRoles(List<RoleEnum> roles) {
         this.roles = roles;
+    }
+
+    public boolean getUsing2fa() {
+        return using2fa;
+    }
+
+    public void setUsing2fa(boolean using2fa) {
+        this.using2fa = using2fa;
     }
 }
