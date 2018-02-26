@@ -99,8 +99,6 @@ var bindMessagesViewClick = function() {
         var elem = $(this);
         var id = elem.parent().find("#messageId").val();
 
-        setMessageContentAndTitle(elem);
-
         axios.get("/user-rest/messages/change-status/" + id)
             .then(function () {
                 elem.parent().find("#messageNewBadge").remove();
@@ -109,19 +107,5 @@ var bindMessagesViewClick = function() {
                 console.log(e);
             })
     });
-};
-
-var bindMessagesSentViewClick = function() {
-    $(".messages-view-sent").click(function () {
-        setMessageContentAndTitle($(this));
-    });
-};
-
-var setMessageContentAndTitle = function(elem) {
-    var content = elem.parent().find("#messageContent").val();
-    var title = elem.parent().find("#messageTitle").val();
-
-    $("#modalMessageTitle").html(title);
-    $("#modalMessageContent").html(content);
 };
 
