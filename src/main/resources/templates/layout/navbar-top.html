@@ -37,7 +37,6 @@
                 <ul th:replace="fragments/menu-navbar-top :: menu-navbar-top"></ul>
 
                 <div class="col s8 m6 l4 right">
-                    <a class="btn-flat show-on-med-and-down right menu-home-icon" th:href="@{/}"><i class="material-icons">home</i></a>
                     <a class="my-account-button btn-flat tooltipped right"
                        th:attr="data-tooltip=#{tooltip.message.center}" th:href="@{/user/messages}"><i class="message-center-icon material-icons">mail_outline</i></a>
                     <span th:attr="data-tooltip=#{tooltip.message.new}" data-position="bottom" th:if="${newMessagesCount != 0 && newMessagesCount != null}" class="tooltipped message-badge new badge" th:text="${newMessagesCount}" data-badge-caption=""></span>

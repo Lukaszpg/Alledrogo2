@@ -68,6 +68,7 @@ public class GetMessageServiceImpl implements GetMessageService {
         messageResultDto.setReceiverEmail(message.getReceiver().getEmail());
         messageResultDto.setIsNew(message.getIsNew());
         messageResultDto.setCreated(DateFormatter.formatDateToHourMinuteFormat(message.getCreateDate()));
+        messageResultDto.setSenderId(hashService.encode(message.getSender().getId()));
         return messageResultDto;
     }
 }

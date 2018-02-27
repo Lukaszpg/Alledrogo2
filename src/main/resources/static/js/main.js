@@ -63,7 +63,7 @@ var initializeModals = function () {
     $('.modal').modal();
 };
 
-var initializeBarRatings = function() {
+var initializeBarRatings = function () {
     var defaultValue = 5;
     $("#shippingTimeRating").val(defaultValue);
     $("#shipmentCostRating").val(defaultValue);
@@ -72,7 +72,7 @@ var initializeBarRatings = function() {
     $('#shippingTimeRatingSelect').barrating({
         theme: 'fontawesome-stars',
 
-        onSelect: function(value, text, event) {
+        onSelect: function (value, text, event) {
             $("#shippingTimeRating").val(value);
         }
     });
@@ -80,7 +80,7 @@ var initializeBarRatings = function() {
     $('#shipmentCostRatingSelect').barrating({
         theme: 'fontawesome-star',
 
-        onSelect: function(value, text, event) {
+        onSelect: function (value, text, event) {
             $("#shipmentCostRating").val(value);
         }
     });
@@ -88,14 +88,14 @@ var initializeBarRatings = function() {
     $('#descriptionAccordanceRatingSelect').barrating({
         theme: 'fontawesome-stars',
 
-        onSelect: function(value, text, event) {
+        onSelect: function (value, text, event) {
             $("#descriptionAccordanceRating").val(value);
         }
     });
 };
 
-var bindMessagesViewClick = function() {
-    $(".messages-view").click(function() {
+var bindMessagesViewClick = function () {
+    $(".messages-view").click(function () {
         var elem = $(this);
         var id = elem.parent().find("#messageId").val();
 
@@ -106,6 +106,29 @@ var bindMessagesViewClick = function() {
             .catch(function () {
                 console.log(e);
             })
+
+        appendMessageTitleAndContent(elem, "#modalMessageTitle", "#modalMessageContent");
+        var messageAnswerAction = $("#messageAnswerAction");
+        var senderId = elem.parent().find("#senderId").val();
+        var originalHref = messageAnswerAction.attr("href");
+        var truncatedHref = originalHref.substr(0, originalHref.lastIndexOf("/"));
+        var hrefToAppend =  truncatedHref + "/" + senderId;
+        messageAnswerAction.attr("href", hrefToAppend);
     });
 };
+
+var bindMessagesSentViewClick = function () {
+    $(".messages-view-sent").click(function () {
+        var elem = $(this);
+        appendMessageTitleAndContent(elem, "#modalMessageTitleSent", "#modalMessageContentSent");
+    });
+};
+
+var appendMessageTitleAndContent = function (elem, titleBox, contentBox) {
+    var title = elem.parent().find("#messageTitle").val();
+    var content = elem.parent().find("#messageContent").val();
+
+    $(titleBox).html(title);
+    $(contentBox).html(content);
+}
 

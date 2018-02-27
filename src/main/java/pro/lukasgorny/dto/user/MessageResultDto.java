@@ -12,6 +12,7 @@ public class MessageResultDto {
     private String receiverEmail;
     private boolean isNew;
     private String created;
+    private String senderId;
 
     public String getContent() {
         return content;
@@ -67,5 +68,13 @@ public class MessageResultDto {
 
     public void setReceiverEmail(String receiverEmail) {
         this.receiverEmail = receiverEmail;
+    }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 }

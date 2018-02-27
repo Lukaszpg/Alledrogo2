@@ -694,6 +694,7 @@ public class Application extends SpringBootServletInitializer {
             userSaveDto.setBirthdayDay("20");
             userSaveDto.setBirthdayMonth("4");
             userSaveDto.setBirthdayYear("1992");
+            userSaveDto.setUsing2fa(false);
             registrationService.register(userSaveDto);
 
             User user = userService.getByEmail("admin@auctionify.pl");
@@ -715,6 +716,7 @@ public class Application extends SpringBootServletInitializer {
             userSaveDto.setBirthdayDay("20");
             userSaveDto.setBirthdayMonth("4");
             userSaveDto.setBirthdayYear("1992");
+            userSaveDto.setUsing2fa(false);
             registrationService.register(userSaveDto);
 
             User user = userService.getByEmail("user@auctionify.pl");
