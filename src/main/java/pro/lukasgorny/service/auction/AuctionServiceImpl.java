@@ -38,8 +38,8 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Autowired
     public AuctionServiceImpl(TransactionRepository transactionRepository, AuctionRepository auctionRepository, GetAuctionService getAuctionService,
-            UserService userService, EmailSenderService emailSenderService, MessageSource messages, GetTransactionService getTransactionService,
-            HashService hashService) {
+                              UserService userService, EmailSenderService emailSenderService, MessageSource messages, GetTransactionService getTransactionService,
+                              HashService hashService) {
         this.transactionRepository = transactionRepository;
         this.auctionRepository = auctionRepository;
         this.getAuctionService = getAuctionService;
@@ -59,7 +59,7 @@ public class AuctionServiceImpl implements AuctionService {
             observeResponseDto.setSuccess(false);
             observeResponseDto.setMessage(messages.getMessage("text.observe.owner", null, LocaleContextHolder.getLocale()));
             return new ResponseEntity<>(observeResponseDto, HttpStatus.OK);
-        } else if(auction.getHasEnded()) {
+        } else if (auction.getHasEnded()) {
             observeResponseDto.setSuccess(false);
             observeResponseDto.setMessage(messages.getMessage("text.observe.auction.ended", null, LocaleContextHolder.getLocale()));
             return new ResponseEntity<>(observeResponseDto, HttpStatus.OK);
@@ -101,12 +101,12 @@ public class AuctionServiceImpl implements AuctionService {
     public void endAuction(Auction auction) {
         auction.setHasEnded(true);
 
-        if(auction.getBid() && isBidPriceHigherOrEqualToAuctionMinimalPrice(auction)) {
+        if (auction.getBid() && isBidPriceHigherOrEqualToAuctionMinimalPrice(auction)) {
             sendEmailNotificationToWinner(auction);
         } else {
             Transaction winningBid = getTransactionService.getWinningBidEntityForAuction(auction.getId());
 
-            if(winningBid != null) {
+            if (winningBid != null) {
                 sendEmailNotificationToWinnerMinimalPriceNotMet(auction);
                 winningBid.setOfferAccepted(false);
                 transactionRepository.save(winningBid);
@@ -120,9 +120,13 @@ public class AuctionServiceImpl implements AuctionService {
     @Transactional
     public void endAuctionByBuyout(Auction auction) {
         auction.setHasEnded(true);
-        Transaction transaction = getTransactionService.getWinningBidEntityForAuction(auction.getId());
-        transaction.setOfferAccepted(false);
-        transactionRepository.save(transaction);
+        Transaction winningBid = getTransactionService.getWinningBidEntityForAuction(auction.getId());
+
+        if (winningBid != null) {
+            winningBid.setOfferAccepted(false);
+            transactionRepository.save(winningBid);
+        }
+
         auctionRepository.save(auction);
     }
 
