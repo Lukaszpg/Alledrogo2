@@ -6,5 +6,6 @@ package pro.lukasgorny.enums;
 public enum PaycheckType {
     IN_PROGRESS,
     COMPLETED,
-    FAILED
+    FAILED,
+    CANCELED
 }

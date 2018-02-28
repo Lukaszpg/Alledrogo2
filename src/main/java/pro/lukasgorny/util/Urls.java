@@ -23,7 +23,7 @@ public class Urls {
         public static final String AUCTION_ENDED = "/auction-ended";
         public static final String CONFIRM_BUYOUT = "/confirm-buyout/{id}";
         public static final String BUYOUT = "/buyout/{id}";
-        public static final String BUYOUT_SUCCESS = "/buyout-success/{id}";
+        public static final String BUYOUT_SUCCESS = "/buyout-success/{transactionId}";
         public static final String BUYOUT_SUCCESS_REDIRECT = "redirect:/" + PREFIX + "/buyout-success/%s";
     }
 
@@ -77,6 +77,8 @@ public class Urls {
         public static final String CREATE_RATING_SUCCESS = RATING + "/create-success";
         public static final String ITEMS_SOLD = "/item/sold";
         public static final String ITEMS_BOUGHT = "/item/bought";
+        public static final String ITEMS_BIDDING = "/item/bidding";
+        public static final String ITEMS_SELLING = "/item/selling";
         public static final String ACCOUNT = "/my-account";
         public static final String CHANGE_PASSWORD = "/change-password";
         public static final String CHANGE_PASSWORD_SUCCESS = "/change-password-success";
@@ -92,6 +94,7 @@ public class Urls {
         public static final String SECURITY_CHANGE_SUCCESS_REDIRECT = "redirect:" + MAIN + "/security-change-success";
         public static final String SECURITY_CHANGE_SUCCESS_QR_CODE = "/security-qr-code";
         public static final String SECURITY_CHANGE_SUCCESS = "/security-change-success";
+        public static final String PAYMENTS = "/payments";
 
     }
 
@@ -118,11 +121,14 @@ public class Urls {
     public class PaymentRest {
         public static final String MAIN = "/payment-rest";
         public static final String CREATE = "/create/{transactionId}";
-        public static final String COMPLETE = "/complete";
+        public static final String CONFIRM = "/confirm";
     }
 
     public class Payment {
         public static final String MAIN = "/payment";
+        public static final String CONFIRM = "/confirm";
         public static final String COMPLETE = "/complete";
+        public static final String ERROR = "/error";
+        public static final String CANCEL = "/cancel";
     }
 }

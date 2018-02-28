@@ -7,6 +7,8 @@ import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import pro.lukasgorny.dto.paycheck.PaymentCompleteDto;
 import pro.lukasgorny.dto.paycheck.PaycheckSaveDto;
 import pro.lukasgorny.enums.PaycheckType;
 import pro.lukasgorny.enums.TransactionType;
@@ -16,7 +18,6 @@ import pro.lukasgorny.service.auction.GetTransactionService;
 import pro.lukasgorny.service.paycheck.CreatePaycheckService;
 import pro.lukasgorny.service.paycheck.GetPaycheckService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,18 +48,20 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${paypal.error.url}")
     private String errorUrl;
 
+    @Value("${paypal.complete.success.url}")
+    private String completeSuccessUrl;
+
     @Value("${paypal.payment.method}")
     private String method;
 
     private final GetTransactionService getTransactionService;
-    private final CreateTransactionService createTransactionService;
     private final CreatePaycheckService createPaycheckService;
     private final GetPaycheckService getPaycheckService;
 
     @Autowired
-    public PaymentServiceImpl(GetTransactionService getTransactionService, CreateTransactionService createTransactionService, CreatePaycheckService createPaycheckService, GetPaycheckService getPaycheckService) {
+    public PaymentServiceImpl(GetTransactionService getTransactionService, CreatePaycheckService createPaycheckService,
+            GetPaycheckService getPaycheckService) {
         this.getTransactionService = getTransactionService;
-        this.createTransactionService = createTransactionService;
         this.createPaycheckService = createPaycheckService;
         this.getPaycheckService = getPaycheckService;
     }
@@ -83,6 +86,7 @@ public class PaymentServiceImpl implements PaymentService {
                 for (Links link : links) {
                     if (link.getRel().equals("approval_url")) {
                         redirectUrl = link.getHref();
+                        paycheckSaveDto.setToken(getTokenFromRedirectUrl(redirectUrl));
                         break;
                     }
                 }
@@ -90,50 +94,61 @@ public class PaymentServiceImpl implements PaymentService {
                 response.put("redirect_url", redirectUrl);
 
                 paycheckSaveDto.setPaycheckType(PaycheckType.IN_PROGRESS);
-
                 paycheckSaveDto.setPaypalPaymentId(createdPayment.getId());
-                createTransactionService.save(auctionTransaction);
+                createPaycheckService.create(paycheckSaveDto);
+            } else {
+                response.put("status", "error");
+                response.put("redirect_url", errorUrl);
+                paycheckSaveDto.setPaycheckType(PaycheckType.FAILED);
+                createPaycheckService.create(paycheckSaveDto);
             }
         } catch (PayPalRESTException e) {
             response.put("status", "error");
             response.put("redirect_url", errorUrl);
             paycheckSaveDto.setPaycheckType(PaycheckType.FAILED);
+            createPaycheckService.create(paycheckSaveDto);
         }
-
-        createPaycheckService.create(paycheckSaveDto);
 
         return response;
     }
 
+    private String getTokenFromRedirectUrl(String url) {
+        String substring = url.substring(url.lastIndexOf("token="));
+        return substring.replaceAll("token=", "");
+    }
+
     @Override
-    public Map<String, Object> completePayment(HttpServletRequest req) {
+    public Map<String, Object> completePayment(PaymentCompleteDto paymentCompleteDto) {
         Map<String, Object> response = new HashMap();
-        String payPalPaymentId = req.getParameter("paymentId");
+        String payPalPaymentId = paymentCompleteDto.getPaymentId();
         Payment payment = new Payment();
         payment.setId(payPalPaymentId);
 
         Paycheck paycheck = getPaycheckService.getByPayPalPaymentId(payPalPaymentId);
 
         PaymentExecution paymentExecution = new PaymentExecution();
-        paymentExecution.setPayerId(req.getParameter("PayerID"));
+        paymentExecution.setPayerId(paymentCompleteDto.getPayerId());
 
         try {
             APIContext context = new APIContext(clientId, clientSecret, "sandbox");
             Payment createdPayment = payment.execute(context, paymentExecution);
             if (createdPayment != null) {
                 response.put("status", "success");
-                response.put("payment", createdPayment);
-
+                response.put("redirect_url", completeSuccessUrl);
                 paycheck.setType(PaycheckType.COMPLETED);
+                createPaycheckService.update(paycheck);
+            } else {
+                response.put("status", "error");
+                response.put("redirect_url", errorUrl);
+                paycheck.setType(PaycheckType.FAILED);
+                createPaycheckService.update(paycheck);
             }
         } catch (PayPalRESTException e) {
             response.put("status", "error");
-            response.put("message", e.getDetails());
-
+            response.put("redirect_url", errorUrl);
             paycheck.setType(PaycheckType.FAILED);
+            createPaycheckService.update(paycheck);
         }
-
-        createPaycheckService.update(paycheck);
 
         return response;
     }
@@ -154,9 +169,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private PaycheckSaveDto setDataFromTransaction(PaycheckSaveDto paycheckSaveDto, pro.lukasgorny.model.Transaction auctionTransaction) {
-        paycheckSaveDto.setAuction(auctionTransaction.getAuction());
+        paycheckSaveDto.setTransaction(auctionTransaction);
         paycheckSaveDto.setPayer(auctionTransaction.getUser());
-
+        paycheckSaveDto.setReceiver(auctionTransaction.getAuction().getSeller());
         return paycheckSaveDto;
     }
 

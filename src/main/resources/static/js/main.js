@@ -78,7 +78,7 @@ var initializeBarRatings = function () {
     });
 
     $('#shipmentCostRatingSelect').barrating({
-        theme: 'fontawesome-star',
+        theme: 'fontawesome-stars',
 
         onSelect: function (value, text, event) {
             $("#shipmentCostRating").val(value);

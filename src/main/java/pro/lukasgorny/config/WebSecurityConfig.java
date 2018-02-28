@@ -83,6 +83,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/category-rest/**").permitAll()
                 .antMatchers("/auction/get/**").permitAll()
                 .antMatchers("/code").hasRole("PRE_AUTH_USER")
+                .antMatchers("/payment/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers("/payment-rest/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/auction/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/user/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/admin/**").hasAuthority("ADMIN")

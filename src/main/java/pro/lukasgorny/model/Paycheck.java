@@ -12,10 +12,12 @@ import java.math.BigDecimal;
 @Table(name = "paychecks")
 public class Paycheck extends Model {
     private User payer;
-    private Auction auction;
+    private User receiver;
+    private Transaction transaction;
     private BigDecimal cash;
     private PaycheckType type;
     private String paypalTransactionId;
+    private String token;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "payer_id")
@@ -25,16 +27,6 @@ public class Paycheck extends Model {
 
     public void setPayer(User payer) {
         this.payer = payer;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_id")
-    public Auction getAuction() {
-        return auction;
-    }
-
-    public void setAuction(Auction auction) {
-        this.auction = auction;
     }
 
     public BigDecimal getCash() {
@@ -60,5 +52,33 @@ public class Paycheck extends Model {
 
     public void setPaypalTransactionId(String paypalTransactionId) {
         this.paypalTransactionId = paypalTransactionId;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "transaction_id")
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_id")
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

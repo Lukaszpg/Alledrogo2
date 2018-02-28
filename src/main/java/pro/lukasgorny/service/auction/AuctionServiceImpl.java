@@ -1,5 +1,6 @@
 package pro.lukasgorny.service.auction;
 
+import javax.persistence.Transient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -117,6 +118,13 @@ public class AuctionServiceImpl implements AuctionService {
         auctionRepository.save(auction);
     }
 
+    @Override
+    @Transactional
+    public void endAuctionByBuyout(Auction auction) {
+        auction.setHasEnded(true);
+        auctionRepository.save(auction);
+    }
+
     private boolean isBidPriceHigherOrEqualToAuctionMinimalPrice(Auction auction) {
         Transaction winningBid = getTransactionService.getWinningBidEntityForAuction(auction.getId());
         return MathHelper.bigDecimalHigherOrEqualToFirstValue(auction.getBidMinimalPrice(), winningBid.getOffer());
@@ -154,7 +162,7 @@ public class AuctionServiceImpl implements AuctionService {
     public void updateCurrentItemsAmountOrEndAuction(BuyoutSaveDto buyoutSaveDto) {
         Auction auction = getAuctionService.getOneEntity(buyoutSaveDto.getAuctionId());
         if ((auction.getCurrentAmount() - buyoutSaveDto.getAmountToBuy()) == 0) {
-            endAuction(auction);
+            endAuctionByBuyout(auction);
         } else {
             auction.setCurrentAmount(auction.getCurrentAmount() - buyoutSaveDto.getAmountToBuy());
             auctionRepository.save(auction);

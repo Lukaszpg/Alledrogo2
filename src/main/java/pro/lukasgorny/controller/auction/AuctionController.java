@@ -195,15 +195,15 @@ public class AuctionController {
         ModelAndView modelAndView = new ModelAndView();
         buyoutSaveDto.setAuctionId(id);
         buyoutSaveDto.setUsername(principal.getName());
-        createTransactionService.createTransaction(buyoutSaveDto);
-        modelAndView.setViewName(String.format(Urls.Auction.BUYOUT_SUCCESS_REDIRECT, id));
+        String transactionId = createTransactionService.createTransaction(buyoutSaveDto);
+        modelAndView.setViewName(String.format(Urls.Auction.BUYOUT_SUCCESS_REDIRECT, transactionId));
         return modelAndView;
     }
 
     @GetMapping(Urls.Auction.BUYOUT_SUCCESS)
-    public ModelAndView buyoutSuccess(@PathVariable("id") String id) {
+    public ModelAndView buyoutSuccess(@PathVariable("transactionId") String id) {
         ModelAndView modelAndView = new ModelAndView(Templates.AuctionTemplates.BUYOUT_SUCCESS);
-        modelAndView.addObject("auctionId", id);
+        modelAndView.addObject("transactionId", id);
         return modelAndView;
     }
 }

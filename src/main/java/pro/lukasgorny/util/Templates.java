@@ -40,6 +40,8 @@ public class Templates {
         public static final String CREATE_RATING = PREFIX + "create-rating";
         public static final String ITEMS_BOUGHT = PREFIX + "items-bought";
         public static final String ITEMS_SOLD = PREFIX + "items-sold";
+        public static final String ITEMS_SELLING = PREFIX + "items-selling";
+        public static final String ITEMS_BIDDING = PREFIX + "items-bidding";
         public static final String CREATE_RATING_SUCCESS = PREFIX + "create-rating-success";
         public static final String ACCOUNT = PREFIX + "account";
         public static final String CHANGE_PASSWORD_SUCCESS = PREFIX + "change-password-success";
@@ -49,10 +51,20 @@ public class Templates {
         public static final String MESSAGES = PREFIX + "messages";
         public static final String SECURITY_QR_CODE = PREFIX + "security-change-success-qr-code";
         public static final String SECURITY_CHANGE_SUCCESS = PREFIX + "security-change-success";
+        public static final String PAYMENTS = PREFIX + "payments";
     }
 
     public class SearchTemplates {
         public static final String PREFIX = "search/";
         public static final String SEARCH_RESULTS = PREFIX + "search-results";
+    }
+
+    public class PaymentTemplates {
+        public static final String PREFIX = "payment/";
+        public static final String CONFIRM = PREFIX + "/confirm";
+        public static final String COMPLETE = PREFIX + "/complete";
+        public static final String ERROR = PREFIX + "/error";
+        public static final String CANCEL = PREFIX + "/cancel";
+
     }
 }

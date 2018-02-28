@@ -19,6 +19,7 @@ import pro.lukasgorny.service.auction.GetAuctionService;
 import pro.lukasgorny.service.auction.GetTransactionService;
 import pro.lukasgorny.service.message.CreateMessageService;
 import pro.lukasgorny.service.message.GetMessageService;
+import pro.lukasgorny.service.paycheck.GetPaycheckService;
 import pro.lukasgorny.service.rating.CreateRatingService;
 import pro.lukasgorny.service.rating.GetRatingService;
 import pro.lukasgorny.service.user.UserService;
@@ -47,11 +48,13 @@ public class UserController {
     private final UserExtendedDtoValidator userExtendedDtoValidator;
     private final CreateMessageService createMessageService;
     private final GetMessageService getMessageService;
+    private final GetPaycheckService getPaycheckService;
 
     @Autowired
     public UserController(UserService userService, GetAuctionService getAuctionService, GetTransactionService getTransactionService,
             CreateRatingService createRatingService, GetRatingService getRatingService, UserExtendedDtoValidator userExtendedDtoValidator,
-            MessageSource messageSource, CreateMessageService createMessageService, GetMessageService getMessageService) {
+            MessageSource messageSource, CreateMessageService createMessageService, GetMessageService getMessageService,
+            GetPaycheckService getPaycheckService) {
         this.userService = userService;
         this.getAuctionService = getAuctionService;
         this.getTransactionService = getTransactionService;
@@ -61,6 +64,7 @@ public class UserController {
         this.userExtendedDtoValidator = userExtendedDtoValidator;
         this.createMessageService = createMessageService;
         this.getMessageService = getMessageService;
+        this.getPaycheckService = getPaycheckService;
     }
 
     @GetMapping(Urls.User.OBSERVING)
@@ -98,6 +102,7 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName(Templates.UserTemplates.CREATE_RATING);
+            modelAndView.addObject("showStarRatings", getTransactionService.isUserBuyer(principal.getName(), id));
             return modelAndView;
         }
 
@@ -126,17 +131,26 @@ public class UserController {
         return modelAndView;
     }
 
+    @GetMapping(Urls.User.ITEMS_SELLING)
+    public ModelAndView getUserSellingItems(Principal principal) {
+        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.ITEMS_SELLING);
+        modelAndView.addObject("transactions", getTransactionService.getAllBoughtItemsByUserEmail(principal.getName()));
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.ITEMS_BIDDING)
+    public ModelAndView getUserBiddingItems(Principal principal) {
+        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.ITEMS_BIDDING);
+        modelAndView.addObject("transactions", getTransactionService.getAllBiddingItemsByUserEmail(principal.getName()));
+        return modelAndView;
+    }
+
+
     @GetMapping(Urls.User.MY_RATINGS)
     public ModelAndView getUserRatings(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.MY_RATINGS);
-        List<RatingResultDto> receivedRatings = getRatingService.getReceivedRatingsForUser(principal.getName());
-        modelAndView.addObject("receivedRatings", receivedRatings);
-        modelAndView.addObject("receivedRatingsCountPositive", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.POSITIVE));
-        modelAndView.addObject("receivedRatingsCountNegative", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.NEGATIVE));
-        modelAndView.addObject("receivedRatingsCountNeutral", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.NEUTRAL));
-        modelAndView.addObject("issuedRatingsCountPositive", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.POSITIVE));
-        modelAndView.addObject("issuedRatingsCountNegative", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.NEGATIVE));
-        modelAndView.addObject("issuedRatingsCountNeutral", getRatingService.getCommentCountByType(receivedRatings, RatingTypeEnum.NEUTRAL));
+        modelAndView.addObject("receivedRatings", getRatingService.getReceivedRatingsForUser(principal.getName()));
+        modelAndView.addObject("issuedRatings", getRatingService.getIssuedRatingsForUser(principal.getName()));
         return modelAndView;
     }
 
@@ -343,6 +357,14 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.MESSAGES);
         modelAndView.addObject("sentMessages", getMessageService.getSentMessages(principal.getName()));
         modelAndView.addObject("receivedMessages", getMessageService.getReceivedMessages(principal.getName()));
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.PAYMENTS)
+    public ModelAndView payments(Principal principal){
+        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.PAYMENTS);
+        modelAndView.addObject("receivedPayments", getPaycheckService.getFinishedByReceiverEmail(principal.getName()));
+        modelAndView.addObject("myPayments", getPaycheckService.getByPayerEmail(principal.getName()));
         return modelAndView;
     }
 }

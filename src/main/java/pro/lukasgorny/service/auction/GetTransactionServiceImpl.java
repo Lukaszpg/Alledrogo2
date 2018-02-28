@@ -1,16 +1,18 @@
 package pro.lukasgorny.service.auction;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import pro.lukasgorny.dto.auction.TransactionResultDto;
+import pro.lukasgorny.enums.PaycheckType;
 import pro.lukasgorny.enums.TransactionType;
 import pro.lukasgorny.model.Auction;
+import pro.lukasgorny.model.Paycheck;
 import pro.lukasgorny.model.Transaction;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.repository.TransactionRepository;
 import pro.lukasgorny.service.hash.HashService;
+import pro.lukasgorny.service.paycheck.GetPaycheckService;
 import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.DateFormatter;
 
@@ -25,12 +27,15 @@ import java.util.stream.Collectors;
 @Service
 public class GetTransactionServiceImpl implements GetTransactionService {
 
+    private final GetPaycheckService getPaycheckService;
     private final TransactionRepository transactionRepository;
     private final HashService hashService;
     private final UserService userService;
 
     @Autowired
-    public GetTransactionServiceImpl(TransactionRepository transactionRepository, HashService hashService, UserService userService) {
+    public GetTransactionServiceImpl(GetPaycheckService getPaycheckService, TransactionRepository transactionRepository, HashService hashService,
+            UserService userService) {
+        this.getPaycheckService = getPaycheckService;
         this.transactionRepository = transactionRepository;
         this.hashService = hashService;
         this.userService = userService;
@@ -83,6 +88,12 @@ public class GetTransactionServiceImpl implements GetTransactionService {
     }
 
     @Override
+    public List<TransactionResultDto> getAllBiddingItemsByUserEmail(String email) {
+        User user = userService.getByEmail(email);
+        return createDtoListFromEntityList(transactionRepository.findAllBiddingItemsForBuyer(user.getId()));
+    }
+
+    @Override
     public List<TransactionResultDto> getAllBoughtItemsWithoutRatingForBuyerByUserEmail(String email) {
         User user = userService.getByEmail(email);
         return createDtoListFromEntityList(transactionRepository.findAllBoughtItemsWithoutRatingForBuyer(user.getId()));
@@ -112,7 +123,14 @@ public class GetTransactionServiceImpl implements GetTransactionService {
         transactionResultDto.setAuctionTitle(auction.getTitle());
         transactionResultDto.setSellerDto(userService.createDtoFromEntity(auction.getSeller()));
         transactionResultDto.setAuctionId(hashService.encode(auction.getId()));
+        transactionResultDto.setPaymentCompleted(isAnyPaymentCompletedOrInProgress(transaction));
         return transactionResultDto;
+    }
+
+    private boolean isAnyPaymentCompletedOrInProgress(Transaction transaction) {
+        List<Paycheck> paychecks = getPaycheckService.getByTransactionId(transaction.getId());
+        return paychecks != null
+                && paychecks.stream().filter(paycheck -> PaycheckType.COMPLETED.equals(paycheck.getType()) || PaycheckType.IN_PROGRESS.equals(paycheck.getType())).collect(Collectors.toList()).size() > 0;
     }
 
     private BigDecimal calculatePrice(Transaction transaction) {

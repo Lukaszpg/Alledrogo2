@@ -8,11 +8,14 @@
     <ul id="dropdown-menu" class="dropdown-content">
         <li><a th:href="@{/auction/sell}" class="menu-dropdown-top-black" th:text="#{menu.label.auction.sell}"></a></li>
         <li class="divider"></li>
+        <li><a th:href="@{/user/my-account}" class="menu-dropdown-top-black" th:text="#{menu.label.user.account}"></a></li>
         <li><a th:href="@{/user/observing}" class="menu-dropdown-top-black" th:text="#{menu.label.user.observing}"></a></li>
         <li><a th:href="@{/user/rating}" class="menu-dropdown-top-black" th:text="#{menu.label.post.rating}"></a></li>
         <li><a th:href="@{/user/my-ratings}" class="menu-dropdown-top-black" th:text="#{menu.label.my.ratings}"></a></li>
         <li><a th:href="@{/user/item/sold}" class="menu-dropdown-top-black" th:text="#{menu.label.items.sold}"></a></li>
         <li><a th:href="@{/user/item/bought}" class="menu-dropdown-top-black" th:text="#{menu.label.items.bought}"></a></li>
+        <li><a th:href="@{/user/item/bidding}" class="menu-dropdown-top-black" th:text="#{menu.label.items.bidding}"></a></li>
+        <li><a th:href="@{/user/item/selling}" class="menu-dropdown-top-black" th:text="#{menu.label.items.selling}"></a></li>
         <li class="divider"></li>
         <!-- <li sec:authorize="hasAuthority('ADMIN')"><a class="menu-top-item" th:href="@{/admin/panel}" th:text="#{menu.label.admin.panel}"></a></li> -->
         <li sec:authorize="!isAuthenticated()"><a th:href="@{/register}" class="menu-top-item" th:text="#{page.title.create.account}"></a></li>

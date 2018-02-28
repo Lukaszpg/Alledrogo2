@@ -33,4 +33,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Query(QueryBody.TransactionQuery.FIND_ALL_SOLD_ITEMS_WITHOUT_RATING_FOR_SELLER)
     List<Transaction> findAllSoldItemsWithoutRatingForSeller(@Param("userId") Long id);
+
+    @Query(QueryBody.TransactionQuery.FIND_ALL_BIDDING_ITEMS_FOR_BUYER)
+    List<Transaction> findAllBiddingItemsForBuyer(@Param("userId") Long id);
 }

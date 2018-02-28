@@ -2,10 +2,11 @@ package pro.lukasgorny.controller.payment;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import pro.lukasgorny.dto.paycheck.PaymentCompleteDto;
 import pro.lukasgorny.service.payment.PaymentService;
 import pro.lukasgorny.util.Urls;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -23,12 +24,15 @@ public class PaymentRestController {
     }
 
     @PostMapping(Urls.PaymentRest.CREATE)
-    public Map<String, Object> makePayment(@PathVariable("transactionId") String transactionId){
+    public Map<String, Object> makePayment(@PathVariable("transactionId") String transactionId) {
         return paymentService.createPayment(transactionId);
     }
 
-    @PostMapping(Urls.PaymentRest.COMPLETE)
-    public Map<String, Object> completePayment(HttpServletRequest request){
-        return paymentService.completePayment(request);
+    @PostMapping(Urls.PaymentRest.CONFIRM)
+    public Map<String, Object> confirmRest(@RequestParam("payerId") String payerId, @RequestParam("paymentId") String paymentId) {
+        PaymentCompleteDto paymentCompleteDto = new PaymentCompleteDto();
+        paymentCompleteDto.setPayerId(payerId);
+        paymentCompleteDto.setPaymentId(paymentId);
+        return paymentService.completePayment(paymentCompleteDto);
     }
 }

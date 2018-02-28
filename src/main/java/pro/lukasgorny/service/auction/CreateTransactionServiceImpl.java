@@ -55,10 +55,11 @@ public class CreateTransactionServiceImpl implements CreateTransactionService {
     }
 
     @Override
-    public void createTransaction(BuyoutSaveDto buyoutSaveDto) {
+    public String createTransaction(BuyoutSaveDto buyoutSaveDto) {
         Transaction buyout = createEntityFromDto(buyoutSaveDto);
         transactionRepository.save(buyout);
         updateAuctionCurrentItemsAmountOrEndAuction(buyoutSaveDto);
+        return hashService.encode(buyout.getId());
     }
 
     @Override

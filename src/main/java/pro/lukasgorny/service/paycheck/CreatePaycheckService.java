@@ -10,4 +10,5 @@ public interface CreatePaycheckService {
     void save(Paycheck paycheck);
     void create(PaycheckSaveDto paycheckSaveDto);
     void update(Paycheck paycheck);
+    void cancel(String token);
 }

@@ -38,28 +38,82 @@ window.onload = function () {
         },
         data() {
             return {
+                isLoading: false
             }
         },
         template: '<div>' +
-                    '<img @click="makePayment" class="responsive-img paypal-logo" src="/img/paypal_logo.png">' +
-                '</div>',
+                    '<img @click="makePayment" v-bind:class="{ hide: isLoading }" class="responsive-img paypal-logo" src="/img/paypal_logo.png">' +
+        '<div v-bind:class="{ hide: !isLoading }" class="preloader-wrapper big active">' +
+            '<div class="spinner-layer spinner-blue-only">' +
+                '<div class="circle-clipper left">' +
+            '<div class="circle"></div>' +
+            '</div>' +
+            '<div class="gap-patch">' +
+                '<div class="circle"></div>' +
+            '</div>' +
+            '<div class="circle-clipper right">' +
+            '<div class="circle"></div>' +
+            '</div>'+
+            '</div>' +
+        '</div>' +
+        '</div>',
 
         methods: {
             makePayment: function() {
                 var vm = this;
+                vm.isLoading = true;
                 axios.post('/payment-rest/create/' + vm.transactionId)
                     .then(function (response) {
-                        if(response.data.status == "success") {
-                            window.location.href = response.data.redirect_url;
-                        }
+                        window.location.href = response.data.redirect_url;
                     })
                     .catch(function () {
-                        this.errors.push(e)
+                        window.location.href = "/payment/error";
                     })
             }
         },
 
         mounted() {
+        }
+    });
+
+    Vue.component('payment-complete', {
+        props: {
+            payerId: {
+                type: String,
+                required: true
+            },
+            paymentId: {
+                type: String,
+                required: true
+            }
+        },
+        data() {
+            return {
+            }
+        },
+        template:
+        '<div>' +
+            '<div class="progress">' +
+                '<div class="indeterminate"></div>' +
+            '</div>' +
+        '</div>',
+
+        methods: {
+            completePayment: function() {
+                var vm = this;
+                axios.post('/payment-rest/confirm?' + "payerId=" + vm.payerId + "&paymentId=" + vm.paymentId)
+                    .then(function (response) {
+                        window.location.href = response.data.redirect_url;
+                    })
+                    .catch(function () {
+                        window.location.href = "/payment/error";
+                    })
+            }
+        },
+
+        mounted() {
+            var vm = this;
+            vm.completePayment();
         }
     });
 

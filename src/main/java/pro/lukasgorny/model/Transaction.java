@@ -21,7 +21,6 @@ public class Transaction extends Model {
     private Rating buyerRating;
     private Rating sellerRating;
     private Boolean offerAccepted;
-    private Paycheck paycheck;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="auction_id")
@@ -102,15 +101,5 @@ public class Transaction extends Model {
 
     public void setOfferAccepted(Boolean offerAccepted) {
         this.offerAccepted = offerAccepted;
-    }
-
-    @OneToOne
-    @JoinColumn(name = "paycheck_id")
-    public Paycheck getPaycheck() {
-        return paycheck;
-    }
-
-    public void setPaycheck(Paycheck paycheck) {
-        this.paycheck = paycheck;
     }
 }

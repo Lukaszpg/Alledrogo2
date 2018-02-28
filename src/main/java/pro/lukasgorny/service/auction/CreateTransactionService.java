@@ -11,6 +11,6 @@ public interface CreateTransactionService {
     Boolean checkOfferLowerThanCurrentPrice(BidSaveDto bidSaveDto);
     Transaction getOneByAuctionIdAndWinningIsTrue(String id);
     void createTransaction(BidSaveDto bidSaveDto);
-    void createTransaction(BuyoutSaveDto buyoutSaveDto);
+    String createTransaction(BuyoutSaveDto buyoutSaveDto);
     void save(Transaction transaction);
 }

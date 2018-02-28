@@ -549,3 +549,7 @@ ul.dropdown-content.select-dropdown li span {
     width: 30%;
     cursor: pointer;
 }
+
+.buyout-auction-ended {
+    font-weight: bold;
+}

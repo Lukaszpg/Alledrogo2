@@ -21,6 +21,7 @@ public class TransactionResultDto {
     private UserResultDto sellerDto;
     private UserExtendedDto buyerDetails;
     private String auctionId;
+    private boolean paymentCompleted;
 
     public TransactionResultDto() {
     }
@@ -103,5 +104,13 @@ public class TransactionResultDto {
 
     public void setAuctionId(String auctionId) {
         this.auctionId = auctionId;
+    }
+
+    public boolean isPaymentCompleted() {
+        return paymentCompleted;
+    }
+
+    public void setPaymentCompleted(boolean paymentCompleted) {
+        this.paymentCompleted = paymentCompleted;
     }
 }

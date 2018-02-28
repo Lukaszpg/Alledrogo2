@@ -15,6 +15,7 @@ public interface AuctionService {
     Boolean unobserve(ObserveDto observeDto);
     Boolean isObserving(ObserveDto observeDto);
     void endAuction(Auction auction);
+    void endAuctionByBuyout(Auction auction);
     Boolean checkIsUserAuctionCreator(String auctionId, String username);
     Boolean checkHasAuctionEnded(String id);
     void updateCurrentItemsAmountOrEndAuction(BuyoutSaveDto buyoutSaveDto);
