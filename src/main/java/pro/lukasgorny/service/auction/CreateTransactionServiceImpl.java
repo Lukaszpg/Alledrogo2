@@ -61,6 +61,11 @@ public class CreateTransactionServiceImpl implements CreateTransactionService {
         updateAuctionCurrentItemsAmountOrEndAuction(buyoutSaveDto);
     }
 
+    @Override
+    public void save(Transaction transaction) {
+        transactionRepository.save(transaction);
+    }
+
     private Transaction createEntityFromDto(BidSaveDto bidSaveDto) {
         Transaction bid = new Transaction();
         bid.setOffer(bidSaveDto.getOfferedPrice());

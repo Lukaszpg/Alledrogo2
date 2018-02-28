@@ -17,7 +17,11 @@
             <div sec:authorize="isAuthenticated()" th:if="${!auctionDto.hasEnded}" class="col s4">
                 <auction-observe></auction-observe>
             </div>
-            <div sec:authorize="isAuthenticated()" class="col s1">
+            <div sec:authorize="isAuthenticated()" th:if="${!auctionDto.hasEnded}" class="col s1">
+                <a class="mt-plus-33 btn-flat waves-effect waves-light tooltipped" data-delay="50" data-position="right"
+                   th:attr="data-tooltip=#{tooltip.message.seller}" th:href="@{'/user/messages/send/' + ${auctionDto.sellerDto.id}}"><i class="material-icons">mail_outline</i></a>
+            </div>
+            <div sec:authorize="isAuthenticated()" th:if="${auctionDto.hasEnded}" class="col s1 offset-s3">
                 <a class="mt-plus-33 btn-flat waves-effect waves-light tooltipped" data-delay="50" data-position="right"
                    th:attr="data-tooltip=#{tooltip.message.seller}" th:href="@{'/user/messages/send/' + ${auctionDto.sellerDto.id}}"><i class="material-icons">mail_outline</i></a>
             </div>

@@ -20,6 +20,7 @@ public class TransactionResultDto {
     private String auctionTitle;
     private UserResultDto sellerDto;
     private UserExtendedDto buyerDetails;
+    private String auctionId;
 
     public TransactionResultDto() {
     }
@@ -94,5 +95,13 @@ public class TransactionResultDto {
 
     public void setBuyerDetails(UserExtendedDto buyerDetails) {
         this.buyerDetails = buyerDetails;
+    }
+
+    public String getAuctionId() {
+        return auctionId;
+    }
+
+    public void setAuctionId(String auctionId) {
+        this.auctionId = auctionId;
     }
 }

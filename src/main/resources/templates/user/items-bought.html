@@ -18,6 +18,8 @@
                 <th th:text="#{label.observed.auction.title}"></th>
                 <th th:text="#{label.auction.bought.amount}"></th>
                 <th th:text="#{label.price.simple}"></th>
+                <th></th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -27,6 +29,32 @@
                 <td th:text="${transaction?.auctionTitle}"></td>
                 <td th:text="${transaction?.amountBought}"></td>
                 <td th:text="${transaction?.price}"></td>
+                <td><a th:href="@{'/auction/get/' + ${transaction?.auctionId}}" th:text="#{button.auction.goto}"></a>
+                </td>
+                <td><a href="#paymentModal" class="modal-trigger" th:text="#{label.pay}"></a></td>
+                <div id="paymentModal" class="modal">
+                    <div class="modal-content">
+                        <div class="row">
+                            <div class="col s12 m1 l2"></div>
+                            <div class="col s12 m10 l8">
+                                <h5 th:text="#{label.pay.with.paypal}"></h5>
+                                <p th:text="#{label.pay.redirected}"></p>
+                            </div>
+                            <div class="col s12 m1 l2"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m5 l5"></div>
+                            <div class="col s12 m4 l6">
+                                <payment th:attr="transaction-id=${transaction?.id}"></payment>
+                            </div>
+                            <div class="col s12 m3 l1"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat"
+                           th:text="#{button.close}"></a>
+                    </div>
+                </div>
                 <div id="detailsModal" class="modal">
                     <div class="modal-content">
                         <h4 th:text="#{label.user.details.seller}"></h4>
@@ -66,7 +94,9 @@
                     </div>
                     <div class="modal-footer">
                         <input type="hidden" id="tempCopyInput">
-                        <a href="#!" class="user-details-copy-to-clipboard modal-action waves-effect waves-green btn-flat" th:text="#{label.copy.to.clipboard}"></a>
+                        <a href="#!"
+                           class="user-details-copy-to-clipboard modal-action waves-effect waves-green btn-flat"
+                           th:text="#{label.copy.to.clipboard}"></a>
                     </div>
                 </div>
             </tr>

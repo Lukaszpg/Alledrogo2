@@ -29,6 +29,40 @@ window.onload = function () {
         }
     });
 
+    Vue.component('payment', {
+        props: {
+            transactionId: {
+                type: String,
+                required: true
+            }
+        },
+        data() {
+            return {
+            }
+        },
+        template: '<div>' +
+                    '<img @click="makePayment" class="responsive-img paypal-logo" src="/img/paypal_logo.png">' +
+                '</div>',
+
+        methods: {
+            makePayment: function() {
+                var vm = this;
+                axios.post('/payment-rest/create/' + vm.transactionId)
+                    .then(function (response) {
+                        if(response.data.status == "success") {
+                            window.location.href = response.data.redirect_url;
+                        }
+                    })
+                    .catch(function () {
+                        this.errors.push(e)
+                    })
+            }
+        },
+
+        mounted() {
+        }
+    });
+
     Vue.component('gallery', {
         data() {
             return {

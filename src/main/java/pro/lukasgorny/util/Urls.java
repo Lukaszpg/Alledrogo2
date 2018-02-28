@@ -114,4 +114,15 @@ public class Urls {
         public static final String HOME_REDIRECT = "redirect:/";
         public static final String HOME = "/";
     }
+
+    public class PaymentRest {
+        public static final String MAIN = "/payment-rest";
+        public static final String CREATE = "/create/{transactionId}";
+        public static final String COMPLETE = "/complete";
+    }
+
+    public class Payment {
+        public static final String MAIN = "/payment";
+        public static final String COMPLETE = "/complete";
+    }
 }

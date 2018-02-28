@@ -12,4 +12,5 @@ public interface CreateTransactionService {
     Transaction getOneByAuctionIdAndWinningIsTrue(String id);
     void createTransaction(BidSaveDto bidSaveDto);
     void createTransaction(BuyoutSaveDto buyoutSaveDto);
+    void save(Transaction transaction);
 }

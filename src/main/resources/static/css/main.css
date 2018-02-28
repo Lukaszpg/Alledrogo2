@@ -544,3 +544,8 @@ ul.dropdown-content.select-dropdown li span {
 .auction-title {
     word-break: break-word;
 }
+
+.paypal-logo {
+    width: 30%;
+    cursor: pointer;
+}

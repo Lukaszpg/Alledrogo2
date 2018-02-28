@@ -111,6 +111,7 @@ public class GetTransactionServiceImpl implements GetTransactionService {
         transactionResultDto.setPrice(calculatePrice(transaction));
         transactionResultDto.setAuctionTitle(auction.getTitle());
         transactionResultDto.setSellerDto(userService.createDtoFromEntity(auction.getSeller()));
+        transactionResultDto.setAuctionId(hashService.encode(auction.getId()));
         return transactionResultDto;
     }
 
