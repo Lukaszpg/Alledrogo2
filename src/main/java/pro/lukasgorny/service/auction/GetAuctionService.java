@@ -21,4 +21,5 @@ public interface GetAuctionService {
     Integer getAuctionCurrentItemAmount(String id);
     Integer getAuctionsCountByCategory(Long id);
     Auction getOneEntity(Long id);
+    List<AuctionResultDto> getNotEndedAuctionsForUser(String email);
 }

@@ -27,7 +27,9 @@ public class AuctionResultDto {
     @JsonIgnore
     private Category category;
 
+    private String createDate;
     private String endDate;
+    private String endDateDotFormat;
     private UserResultDto sellerDto;
     private TransactionResultDto winningBid;
     private Integer biddingUsersAmount;
@@ -229,5 +231,21 @@ public class AuctionResultDto {
 
     public void setDescriptionAccordanceRatingAverage(BigDecimal descriptionAccordanceRatingAverage) {
         this.descriptionAccordanceRatingAverage = descriptionAccordanceRatingAverage;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getEndDateDotFormat() {
+        return endDateDotFormat;
+    }
+
+    public void setEndDateDotFormat(String endDateDotFormat) {
+        this.endDateDotFormat = endDateDotFormat;
     }
 }

@@ -1,107 +1,40 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/template :: headFragment(#{title.items.bought})">
+<head th:replace="layout/template :: headFragment(#{title.items.selling})">
     <title>Index</title>
     <meta charset="utf-8"/>
 </head>
 <body th:replace="layout/template :: bodyFragment">
 <div th:fragment="content">
     <div class="row">
-        <h2 th:text="#{menu.label.post.rating.bought}"></h2>
+        <h2 th:text="#{page.title.item.selling}"></h2>
     </div>
     <div class="row">
         <table>
             <thead>
             <tr>
-                <th th:text="#{label.observed.seller}"></th>
-                <th th:text="#{label.items.buy.date}"></th>
+                <th th:text="#{label.auction.create.date}"></th>
+                <th th:text="#{label.auction.end.date}"></th>
                 <th th:text="#{label.observed.auction.title}"></th>
-                <th th:text="#{label.auction.bought.amount}"></th>
-                <th th:text="#{label.price.simple}"></th>
-                <th></th>
+                <th th:text="#{label.price.buyout}"></th>
+                <th th:text="#{label.bid.minimal.price}"></th>
+                <th th:text="#{label.actual.price}"></th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:if="${!#lists.isEmpty(transactions)}" th:each="transaction : ${transactions}">
-                <td><a href="#detailsModal" class="modal-trigger" th:text="${transaction?.sellerDto?.email}"></a></td>
-                <td th:text="${transaction?.created}"></td>
-                <td th:text="${transaction?.auctionTitle}"></td>
-                <td th:text="${transaction?.amountBought}"></td>
-                <td th:text="${transaction?.price}"></td>
-                <td><a th:href="@{'/auction/get/' + ${transaction?.auctionId}}" th:text="#{button.auction.goto}"></a>
+            <tr th:if="${!#lists.isEmpty(auctions)}" th:each="auction : ${auctions}">
+                <td th:text="${auction?.createDate}"></td>
+                <td th:text="${auction?.endDateDotFormat}"></td>
+                <td th:text="${auction?.title}"></td>
+                <td th:text="${auction?.price != null ? auction?.price : '-'}"></td>
+                <td th:text="${auction?.bidMinimalPrice != null ? auction?.bidMinimalPrice : '-'}"></td>
+                <td th:text="${auction?.winningBid != null ? auction?.winningBid.price : auction?.bidStartingPrice}"></td>
+                <td><a th:href="@{'/auction/get/' + ${auction?.id}}" th:text="#{button.auction.goto}"></a>
                 </td>
-                <td><a th:if="${!transaction?.paymentCompleted}" href="#paymentModal" class="modal-trigger" th:text="#{label.pay}"></a></td>
-                <div id="paymentModal" class="modal">
-                    <div class="modal-content">
-                        <div class="row">
-                            <div class="col s12 m1 l2"></div>
-                            <div class="col s12 m10 l8">
-                                <h5 th:text="#{label.pay.with.paypal}"></h5>
-                                <p th:text="#{label.pay.redirected}"></p>
-                            </div>
-                            <div class="col s12 m1 l2"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col s12 m5 l5"></div>
-                            <div class="col s12 m4 l6">
-                                <payment th:attr="transaction-id=${transaction?.id}"></payment>
-                            </div>
-                            <div class="col s12 m3 l1"></div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat"
-                           th:text="#{button.close}"></a>
-                    </div>
-                </div>
-                <div id="detailsModal" class="modal">
-                    <div class="modal-content">
-                        <h4 th:text="#{label.user.details.seller}"></h4>
-                        <div class="row">
-                            <div class="col s6">
-                                <label for="firstName" th:text="#{label.user.firstName}"></label>
-                                <p id="firstName" th:text="${transaction?.sellerDto?.userExtendedDto?.firstName}"></p>
-                                <label for="surname" th:text="#{label.user.surname}"></label>
-                                <p id="surname" th:text="${transaction?.sellerDto?.userExtendedDto?.surname}"></p>
-                                <label for="company"
-                                       th:if="${transaction?.sellerDto?.userExtendedDto?.companyName != null}"
-                                       th:text="#{label.user.company}"></label>
-                                <p id="company" th:if="${transaction?.sellerDto?.userExtendedDto?.companyName != null}"
-                                   th:text="${transaction?.sellerDto?.userExtendedDto?.companyName}"></p>
-                                <label for="address" th:text="#{label.user.address}"></label>
-                                <p id="address" th:text="${transaction?.sellerDto?.userExtendedDto?.address}"></p>
-                                <label for="zipCode" th:text="#{label.user.zip.code}"></label>
-                                <p id="zipCode" th:text="${transaction?.sellerDto?.userExtendedDto?.zipCode}"></p>
-                            </div>
-                            <div class="col s6">
-                                <label for="city" th:text="#{label.user.city}"></label>
-                                <p id="city" th:text="${transaction?.sellerDto?.userExtendedDto?.city}"></p>
-                                <label for="voivodeship" th:text="#{label.user.voivodeship}"></label>
-                                <p id="voivodeship"
-                                   th:text="${transaction?.sellerDto?.userExtendedDto?.voivodeship?.name}"></p>
-                                <label for="firstPhoneNumber" th:text="#{label.user.phone}"></label>
-                                <p id="firstPhoneNumber"
-                                   th:text="${transaction?.sellerDto?.userExtendedDto?.firstPhoneNumber}"></p>
-                                <label for="secondPhoneNumber"
-                                       th:if="${transaction?.sellerDto?.userExtendedDto?.secondPhoneNumber != null}"
-                                       th:text="#{label.user.second.phone}"></label>
-                                <p id="secondPhoneNumber"
-                                   th:if="${transaction?.sellerDto?.userExtendedDto?.secondPhoneNumber != null}"
-                                   th:text="${transaction?.sellerDto?.userExtendedDto?.secondPhoneNumber}"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="hidden" id="tempCopyInput">
-                        <a href="#!"
-                           class="user-details-copy-to-clipboard modal-action waves-effect waves-green btn-flat"
-                           th:text="#{label.copy.to.clipboard}"></a>
-                    </div>
-                </div>
             </tr>
-            <tr th:if="${#lists.isEmpty(transactions)}">
-                <td th:text="#{label.no.won.auctions}"></td>
+            <tr th:if="${#lists.isEmpty(auctions)}">
+                <td th:text="#{label.no.auctions}"></td>
             </tr>
             </tbody>
         </table>

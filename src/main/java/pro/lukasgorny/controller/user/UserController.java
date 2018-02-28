@@ -8,12 +8,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import pro.lukasgorny.controller.user.validator.UserExtendedDtoValidator;
-import pro.lukasgorny.dto.user.*;
-import pro.lukasgorny.dto.rating.RatingResultDto;
 import pro.lukasgorny.dto.rating.RatingSaveDto;
-import pro.lukasgorny.enums.RatingTypeEnum;
+import pro.lukasgorny.dto.user.*;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.service.auction.GetAuctionService;
 import pro.lukasgorny.service.auction.GetTransactionService;
@@ -29,7 +26,6 @@ import pro.lukasgorny.util.Urls;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 
 /**
  * Created by Łukasz on 25.10.2017.
@@ -134,7 +130,7 @@ public class UserController {
     @GetMapping(Urls.User.ITEMS_SELLING)
     public ModelAndView getUserSellingItems(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.ITEMS_SELLING);
-        modelAndView.addObject("transactions", getTransactionService.getAllBoughtItemsByUserEmail(principal.getName()));
+        modelAndView.addObject("auctions", getAuctionService.getNotEndedAuctionsForUser(principal.getName()));
         return modelAndView;
     }
 

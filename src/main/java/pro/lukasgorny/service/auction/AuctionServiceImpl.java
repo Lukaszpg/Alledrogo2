@@ -1,6 +1,5 @@
 package pro.lukasgorny.service.auction;
 
-import javax.persistence.Transient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -8,11 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import pro.lukasgorny.dto.auction.ObserveResponseDto;
 import pro.lukasgorny.dto.auction.AuctionResultDto;
 import pro.lukasgorny.dto.auction.BuyoutSaveDto;
 import pro.lukasgorny.dto.auction.ObserveDto;
+import pro.lukasgorny.dto.auction.ObserveResponseDto;
 import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.Transaction;
 import pro.lukasgorny.model.User;
@@ -122,6 +120,9 @@ public class AuctionServiceImpl implements AuctionService {
     @Transactional
     public void endAuctionByBuyout(Auction auction) {
         auction.setHasEnded(true);
+        Transaction transaction = getTransactionService.getWinningBidEntityForAuction(auction.getId());
+        transaction.setOfferAccepted(false);
+        transactionRepository.save(transaction);
         auctionRepository.save(auction);
     }
 

@@ -55,7 +55,6 @@
                     <th th:text="#{label.observed.auction.title}"></th>
                     <th th:text="#{label.payments.payer.name}"></th>
                     <th th:text="#{label.payments.amount}"></th>
-                    <th th:text="#{label.payments.status}"></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -64,8 +63,7 @@
                     <td th:text="${payment?.auctionTitle}"></td>
                     <td th:text="${payment?.payerName}"></td>
                     <td th:text="${payment?.amount}"></td>
-                    <td th:text="${payment?.paycheckType}"></td>
-                    <td><a th:href="@{'/auction/get/' + ${payment?.auctionId}}" th:text="#{button.auction.goto}"></a></td>
+                    <td><a class="right" th:href="@{'/auction/get/' + ${payment?.auctionId}}" th:text="#{button.auction.goto}"></a></td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(receivedPayments)}">
                     <td th:text="#{label.no.payments}"></td>

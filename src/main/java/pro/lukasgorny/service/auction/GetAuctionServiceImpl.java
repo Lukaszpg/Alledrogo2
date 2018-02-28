@@ -113,6 +113,12 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     }
 
     @Override
+    public List<AuctionResultDto> getNotEndedAuctionsForUser(String email) {
+        User user = userService.getByEmail(email);
+        return createDtoListFromEntityList(auctionRepository.findAllNotEndedForUser(user.getId()));
+    }
+
+    @Override
     public Boolean auctionExists(String id) {
         return getOne(id) != null;
     }
@@ -162,7 +168,9 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setCategory(auction.getCategory());
         auctionResultDto.setBidStartingPrice(auction.getBidStartingPrice());
         auctionResultDto.setBidMinimalPrice(auction.getBidMinimalPrice());
+        auctionResultDto.setCreateDate(DateFormatter.formatDateToHourMinuteFormat(auction.getCreateDate()));
         auctionResultDto.setEndDate(formatEndDateIfNotUntilOutOfItems(auction));
+        auctionResultDto.setEndDateDotFormat(DateFormatter.formatDateToHourMinuteFormat(auction.getEndDate()));
         auctionResultDto.setSellerDto(userService.createDtoFromEntity(auction.getSeller()));
         auctionResultDto.setWinningBid(getWinningBid(auctionResultDto.getId()));
         auctionResultDto.setHasEnded(auction.getHasEnded());
