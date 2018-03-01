@@ -73,6 +73,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/reset-password-success").permitAll()
                 .antMatchers("/version").permitAll()
                 .antMatchers("/search").permitAll()
+                .antMatchers("/regulations").permitAll()
+                .antMatchers("/privacy").permitAll()
                 .antMatchers("/search-rest").permitAll()
                 .antMatchers("/reset-password").permitAll()
                 .antMatchers("/user/change-password-success").permitAll()

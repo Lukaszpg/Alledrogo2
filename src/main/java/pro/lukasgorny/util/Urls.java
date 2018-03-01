@@ -116,6 +116,8 @@ public class Urls {
     public class Index {
         public static final String HOME_REDIRECT = "redirect:/";
         public static final String HOME = "/";
+        public static final String REGULATIONS = "/regulations";
+        public static final String PRIVACY = "/privacy";
     }
 
     public class PaymentRest {

@@ -16,6 +16,8 @@ public class Templates {
     public static final String LOGIN = "login";
     public static final String CODE = "code";
     public static final String INDEX = "index";
+    public static final String REGULATIONS = "regulations";
+    public static final String PRIVACY = "privacy";
     public static final String ERROR_404 = "error/404";
     public static final String ERROR_405 = "error/405";
     public static final String ERROR_500 = "error/500";

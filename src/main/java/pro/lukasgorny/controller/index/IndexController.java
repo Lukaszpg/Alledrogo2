@@ -29,4 +29,14 @@ public class IndexController {
         modelAndView.addObject("auctions", getAuctionService.getTopAuctions());
         return modelAndView;
     }
+
+    @GetMapping(Urls.Index.REGULATIONS)
+    public ModelAndView regulations() {
+        return new ModelAndView(Templates.REGULATIONS);
+    }
+
+    @GetMapping(Urls.Index.PRIVACY)
+    public ModelAndView privacy() {
+        return new ModelAndView(Templates.PRIVACY);
+    }
 }

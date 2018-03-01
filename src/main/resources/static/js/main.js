@@ -14,6 +14,7 @@ $(document).ready(function () {
     initializeBarRatings();
     bindMessagesViewClick();
     bindMessagesSentViewClick();
+    initializeScrollSpy();
 });
 
 var initializeTabs = function () {
@@ -130,5 +131,11 @@ var appendMessageTitleAndContent = function (elem, titleBox, contentBox) {
 
     $(titleBox).html(title);
     $(contentBox).html(content);
-}
+};
+
+var initializeScrollSpy = function() {
+    $(document).ready(function(){
+        $('.scrollspy').scrollSpy();
+    });
+};
 

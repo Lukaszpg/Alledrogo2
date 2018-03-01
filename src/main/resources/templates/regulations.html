@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/template :: headFragment(#{title.regulations})">
+    <title>Index</title>
+    <meta charset="utf-8"/>
+</head>
+<body th:replace="layout/template :: bodyFragment">
+<div th:fragment="content">
+    <div class="row">
+        <div class="col s12 l4 m4">
+            <div class="floating-toc">
+                <h3 th:text="#{label.table.of.contents}"></h3>
+                <ul class="section table-of-contents">
+                    <li><a href="#definitions" th:text="#{label.regulations.toc.definitions}"></a></li>
+                    <li><a href="#conditions" th:text="#{label.regulations.toc.conditions}"></a></li>
+                    <li><a href="#offers" th:text="#{label.regulations.toc.transaction.offers}"></a></li>
+                    <li><a href="#banned" th:text="#{label.regulations.toc.transaction.banned}"></a></li>
+                    <li><a href="#start" th:text="#{label.regulations.toc.transaction.start}"></a></li>
+                    <li><a href="#flow" th:text="#{label.regulations.toc.transaction.flow}"></a></li>
+                    <li><a href="#ratings" th:text="#{label.regulations.toc.transaction.ratings}"></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col s12 l8 m8">
+            <h3 th:text="#{page.title.regulations}"></h3>
+            <div id="definitions" class="section scrollspy">
+                <h4 th:text="#{label.regulations.toc.definitions}"></h4>
+                <p th:utext="#{text.regulations.definitions}"></p>
+            </div>
+
+            <div id="conditions" class="section scrollspy">
+                <h4 th:text="#{label.regulations.toc.conditions}"></h4>
+                <p th:utext="#{text.regulations.conditions}"></p>
+            </div>
+
+            <div id="offers" class="section scrollspy">
+                <h4 th:text="#{label.regulations.toc.transaction.offers}"></h4>
+                <p th:utext="#{text.regulations.offers}"></p>
+            </div>
+
+            <div id="banned" class="section scrollspy">
+                <h4 th:text="#{label.regulations.toc.transaction.banned}"></h4>
+                <p th:utext="#{text.regulations.banned}"></p>
+            </div>
+
+            <div id="start" class="section scrollspy">
+                <h4 th:text="#{label.regulations.toc.transaction.start}"></h4>
+                <p th:utext="#{text.regulations.transaction.start}"></p>
+            </div>
+
+            <div id="flow" class="section scrollspy">
+                <h4 th:text="#{label.regulations.toc.transaction.flow}"></h4>
+                <p th:utext="#{text.regulations.transaction.flow}"></p>
+            </div>
+
+            <div id="ratings" class="section scrollspy">
+                <h4 th:text="#{label.regulations.toc.transaction.ratings}"></h4>
+                <p th:utext="#{text.regulations.transaction.ratings}"></p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

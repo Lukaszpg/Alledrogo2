@@ -553,3 +553,7 @@ ul.dropdown-content.select-dropdown li span {
 .buyout-auction-ended {
     font-weight: bold;
 }
+
+.floating-toc {
+    position: fixed;
+}

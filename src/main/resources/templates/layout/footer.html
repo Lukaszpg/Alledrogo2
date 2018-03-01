@@ -2,6 +2,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <body>
 <footer th:fragment="footerFragment" class="footer-custom page-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text" th:text="#{label.auctionify.about}"></h5>
+                <p class="grey-text text-lighten-4" th:text="#{label.auctionify.about.text}"></p>
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <h5 class="white-text" th:text="#{label.links}"></h5>
+                <ul>
+                    <li><a class="grey-text text-lighten-3" th:href="@{/regulations}" th:text="#{label.regulations}"></a></li>
+                    <li><a class="grey-text text-lighten-3" th:href="@{/privacy}" th:text="#{label.privacy}"></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="footer-copyright">
         <div class="container">
             <div class="left" th:text="#{footer}"></div>
