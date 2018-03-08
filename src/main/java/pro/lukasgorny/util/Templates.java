@@ -63,10 +63,10 @@ public class Templates {
 
     public class PaymentTemplates {
         public static final String PREFIX = "payment/";
-        public static final String CONFIRM = PREFIX + "/confirm";
-        public static final String COMPLETE = PREFIX + "/complete";
-        public static final String ERROR = PREFIX + "/error";
-        public static final String CANCEL = PREFIX + "/cancel";
+        public static final String CONFIRM = PREFIX + "confirm";
+        public static final String COMPLETE = PREFIX + "complete";
+        public static final String ERROR = PREFIX + "error";
+        public static final String CANCEL = PREFIX + "cancel";
 
     }
 }
