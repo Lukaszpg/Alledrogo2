@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import pro.lukasgorny.dto.rating.RatingResultDto;
 import pro.lukasgorny.dto.user.*;
 import pro.lukasgorny.enums.RatingTypeEnum;
-import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.Role;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.model.VerificationToken;
@@ -31,7 +30,6 @@ import pro.lukasgorny.repository.UserRepository;
 import pro.lukasgorny.repository.VerificationTokenRepository;
 import pro.lukasgorny.service.hash.HashService;
 import pro.lukasgorny.service.rating.GetRatingService;
-import pro.lukasgorny.util.Urls;
 
 /**
  * Created by lukaszgo on 2017-05-25.

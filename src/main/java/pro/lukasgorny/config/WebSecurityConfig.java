@@ -91,7 +91,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auction/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/user/**").hasAnyAuthority("USER", "ADMIN")
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .anyRequest().authenticated().and().csrf().disable().formLogin().authenticationDetailsSource(customWebAuthenticationDetailsSource).loginPage("/login")
+                .anyRequest().authenticated().and().formLogin().authenticationDetailsSource(customWebAuthenticationDetailsSource).loginPage("/login")
                 .usernameParameter("email").successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler).passwordParameter("password").and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/").and().exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler);
