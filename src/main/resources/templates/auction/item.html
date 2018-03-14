@@ -19,11 +19,13 @@
             </div>
             <div sec:authorize="isAuthenticated()" th:if="${!auctionDto.hasEnded}" class="col s1">
                 <a class="mt-plus-33 btn-flat waves-effect waves-light tooltipped" data-delay="50" data-position="right"
-                   th:attr="data-tooltip=#{tooltip.message.seller}" th:href="@{'/user/messages/send/' + ${auctionDto.sellerDto.id}}"><i class="material-icons">mail_outline</i></a>
+                   th:attr="data-tooltip=#{tooltip.message.seller}" th:href="@{'/user/messages/send/' + ${auctionDto.sellerDto.id}}"><i
+                        class="material-icons">mail_outline</i></a>
             </div>
             <div sec:authorize="isAuthenticated()" th:if="${auctionDto.hasEnded}" class="col s1 offset-s4">
                 <a class="mt-plus-33 btn-flat waves-effect waves-light tooltipped" data-delay="50" data-position="right"
-                   th:attr="data-tooltip=#{tooltip.message.seller}" th:href="@{'/user/messages/send/' + ${auctionDto.sellerDto.id}}"><i class="material-icons">mail_outline</i></a>
+                   th:attr="data-tooltip=#{tooltip.message.seller}" th:href="@{'/user/messages/send/' + ${auctionDto.sellerDto.id}}"><i
+                        class="material-icons">mail_outline</i></a>
             </div>
         </div>
         <div class="row">
@@ -54,11 +56,14 @@
                                      th:errors="*{offeredPrice}"></div>
                             </div>
                             <div th:if="${auctionDto.hasEnded}" class="col s8 offset-s1">
-                                <p class="auction-ended right" th:if="${auctionDto.winningBid == null && (auctionDto.isBuyout != null && !auctionDto.isBuyout)}"
+                                <p class="auction-ended right"
+                                   th:if="${auctionDto.winningBid == null && (auctionDto.isBuyout != null && !auctionDto.isBuyout)}"
                                    th:text="#{auction.ended.no.bids}"></p>
-                                <p class="auction-ended right" th:if="${auctionDto.winningBid != null && (auctionDto.isBuyout != null && !auctionDto.isBuyout)}"
+                                <p class="auction-ended right"
+                                   th:if="${auctionDto.winningBid != null && (auctionDto.isBuyout != null && !auctionDto.isBuyout)}"
                                    th:text="#{auction.ended.winner(${auctionDto.winningBid.buyerName})}"></p>
-                                <p class="auction-ended right" th:if="${auctionDto.winningBid == null && (auctionDto.isBuyout != null && auctionDto.isBuyout)}"
+                                <p class="auction-ended right"
+                                   th:if="${auctionDto.winningBid == null && (auctionDto.isBuyout != null && auctionDto.isBuyout)}"
                                    th:text="#{auction.ended.buyout}"></p>
                             </div>
                             <div th:if="${!auctionDto.hasEnded && !auctionDto.untilOufOfItems}" class="col s3 offset-s3">
@@ -132,9 +137,11 @@
                         <div class="row mt-plus-10">
                             <div class="col s6">
                                 <label for="nickname" th:text="#{label.user}"></label>
-                                <div id="nickname" th:text="${auctionDto.sellerDto.email}"></div>
+                                <div id="nickname">
+                                    <a th:text="${auctionDto.sellerDto.email}" th:href="@{'/user/profile/' + ${auctionDto.sellerDto.id}}"></a>
+                                </div>
                             </div>
-                            <div th:if="${auctionDto.shippingTimeRatingAverage != null}" class="col s6 shipping-time-rating-wrapper">
+                            <div th:if="${auctionDto.sellerDto.shippingTimeRatingAverage != null}" class="col s6 shipping-time-rating-wrapper">
                                 <label for="shippingTimeRatingDisplay" th:text="#{label.display.rating.ship.time}"></label>
                                 <select id="shippingTimeRatingDisplay">
                                     <option value="1">1</option>
@@ -143,7 +150,7 @@
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                 </select>
-                                <input type="hidden" th:value="${auctionDto.shippingTimeRatingAverage}" id="shippingTimeRatingHidden">
+                                <input type="hidden" th:value="${auctionDto.sellerDto.shippingTimeRatingAverage}" id="shippingTimeRatingHidden">
                             </div>
                         </div>
                         <div class="row">
@@ -151,7 +158,7 @@
                                 <label for="registeredSince" th:text="#{label.registered.since}"></label>
                                 <div id="registeredSince" th:text="${auctionDto.sellerDto.registeredSince}"></div>
                             </div>
-                            <div th:if="${auctionDto.shippingCostRatingAverage != null}" class="col s6 shipping-cost-rating-wrapper">
+                            <div th:if="${auctionDto.sellerDto.shippingCostRatingAverage != null}" class="col s6 shipping-cost-rating-wrapper">
                                 <label for="shippingCostRatingDisplay" th:text="#{label.display.rating.ship.cost}"></label>
                                 <select id="shippingCostRatingDisplay">
                                     <option value="1">1</option>
@@ -160,15 +167,15 @@
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                 </select>
-                                <input type="hidden" th:value="${auctionDto.shippingCostRatingAverage}" id="shippingCostRatingHidden">
+                                <input type="hidden" th:value="${auctionDto.sellerDto.shippingCostRatingAverage}" id="shippingCostRatingHidden">
                             </div>
                         </div>
                         <div class="row">
-                            <div th:if="${auctionDto.positiveCommentPercent != null}" class="col s6">
+                            <div th:if="${auctionDto.sellerDto.positiveCommentPercent != null}" class="col s6">
                                 <label for="positivePercent" th:text="#{label.mark.seller}"></label>
-                                <div id="positivePercent" th:text="#{label.percent.comments(${auctionDto.positiveCommentPercent})}"></div>
+                                <div id="positivePercent" th:text="#{label.percent.comments(${auctionDto.sellerDto.positiveCommentPercent})}"></div>
                             </div>
-                            <div th:if="${auctionDto.positiveCommentPercent != null && auctionDto.descriptionAccordanceRatingAverage != null}"
+                            <div th:if="${auctionDto.sellerDto.positiveCommentPercent != null && auctionDto.sellerDto.descriptionAccordanceRatingAverage != null}"
                                  class="col s6 description-rating-wrapper">
                                 <label for="descriptionRatingDisplay" th:text="#{label.display.rating.description}"></label>
                                 <select id="descriptionRatingDisplay">
@@ -178,9 +185,10 @@
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                 </select>
-                                <input type="hidden" th:value="${auctionDto.descriptionAccordanceRatingAverage}" id="descriptionRatingHidden">
+                                <input type="hidden" th:value="${auctionDto.sellerDto.descriptionAccordanceRatingAverage}"
+                                       id="descriptionRatingHidden">
                             </div>
-                            <div th:if="${auctionDto.positiveCommentPercent == null && auctionDto.descriptionAccordanceRatingAverage != null}"
+                            <div th:if="${auctionDto.sellerDto.positiveCommentPercent == null && auctionDto.sellerDto.descriptionAccordanceRatingAverage != null}"
                                  class="col s6 offset-s6 description-rating-wrapper">
                                 <label for="descriptionRatingDisplay" th:text="#{label.display.rating.description}"></label>
                                 <select id="descriptionRatingDisplay">
@@ -190,7 +198,8 @@
                                     <option value="4">4</option>
                                     <option value="5">5</option>
                                 </select>
-                                <input type="hidden" th:value="${auctionDto.descriptionAccordanceRatingAverage}" id="descriptionRatingHidden">
+                                <input type="hidden" th:value="${auctionDto.sellerDto.descriptionAccordanceRatingAverage}"
+                                       id="descriptionRatingHidden">
                             </div>
                         </div>
                     </div>

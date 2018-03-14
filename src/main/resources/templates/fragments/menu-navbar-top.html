@@ -6,6 +6,8 @@
 <body>
 <div th:fragment="menu-navbar-top">
     <ul id="dropdown-menu" class="dropdown-content">
+        <li th:if="${currentLoggedInUsername != null}"><a th:href="@{/user/profile}" th:text="${currentLoggedInUsername}"></a></li>
+        <li th:if="${currentLoggedInUsername != null}" class="divider"></li>
         <li><a th:href="@{/auction/sell}" class="menu-dropdown-top-black" th:text="#{menu.label.auction.sell}"></a></li>
         <li class="divider"></li>
         <li><a th:href="@{/user/my-account}" class="menu-dropdown-top-black" th:text="#{menu.label.user.account}"></a></li>

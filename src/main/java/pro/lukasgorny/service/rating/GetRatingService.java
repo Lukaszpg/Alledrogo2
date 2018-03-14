@@ -10,6 +10,7 @@ import pro.lukasgorny.enums.RatingTypeEnum;
  */
 public interface GetRatingService {
     List<RatingResultDto> getReceivedRatingsForUser(String email);
+    List<RatingResultDto> getReceivedRatingsForUserById(String id);
     List<RatingResultDto> getIssuedRatingsForUser(String email);
     Integer getCommentCountByType(List<RatingResultDto> ratings, RatingTypeEnum ratingTypeEnum);
 }

@@ -1,6 +1,7 @@
 package pro.lukasgorny.service.user;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -8,8 +9,8 @@ import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,13 +20,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import pro.lukasgorny.dto.rating.RatingResultDto;
 import pro.lukasgorny.dto.user.*;
+import pro.lukasgorny.enums.RatingTypeEnum;
+import pro.lukasgorny.model.Auction;
 import pro.lukasgorny.model.Role;
 import pro.lukasgorny.model.User;
 import pro.lukasgorny.model.VerificationToken;
 import pro.lukasgorny.repository.UserRepository;
 import pro.lukasgorny.repository.VerificationTokenRepository;
 import pro.lukasgorny.service.hash.HashService;
+import pro.lukasgorny.service.rating.GetRatingService;
+import pro.lukasgorny.util.Urls;
 
 /**
  * Created by lukaszgo on 2017-05-25.
@@ -38,6 +44,7 @@ public class UserServiceImpl implements UserService {
     private final MessageSource messageSource;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final HashService hashService;
+    private final GetRatingService getRatingService;
 
     private static String QR_PREFIX = "https://chart.googleapis.com/chart?chs=200x200&chld=M%%7C0&cht=qr&chl=";
 
@@ -45,12 +52,13 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, MessageSource messageSource,
-            BCryptPasswordEncoder bCryptPasswordEncoder, HashService hashService) {
+            BCryptPasswordEncoder bCryptPasswordEncoder, HashService hashService, @Lazy GetRatingService getRatingService) {
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
         this.messageSource = messageSource;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.hashService = hashService;
+        this.getRatingService = getRatingService;
     }
 
     @Override
@@ -61,6 +69,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public UserResultDto getDtoByEmail(String email) {
+        return createDtoFromEntity(userRepository.findByEmail(email));
+    }
+
+    @Override
+    public UserResultDto getDtoById(String id) {
+        try {
+            User user = userRepository.findOne(hashService.decode(id));
+            return createDtoFromEntity(userRepository.findByEmail(user.getEmail()));
+        } catch(ArrayIndexOutOfBoundsException exception) {
+            return null;
+        }
     }
 
     @Override
@@ -82,6 +105,10 @@ public class UserServiceImpl implements UserService {
         userResultDto.setRegisteredSince(calculateAndFormatDateDifference(user));
         userResultDto.setUserExtendedDto(createExtendedDtoFromEntity(user));
         userResultDto.setUsing2fa(user.getUsing2FA());
+        userResultDto.setPositiveCommentPercent(calculatePositiveCommentPercent(user));
+        userResultDto.setShippingCostRatingAverage(calculateUserAverageShippingCostRating(user));
+        userResultDto.setShippingTimeRatingAverage(calculateUserAverageShippingTimeRating(user));
+        userResultDto.setDescriptionAccordanceRatingAverage(calculateUserDescriptionAccordanceRatingAverage(user));
         return userResultDto;
     }
 
@@ -132,7 +159,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(String id) {
-        return userRepository.findOne(hashService.decode(id));
+        try {
+            return userRepository.findOne(hashService.decode(id));
+        } catch(ArrayIndexOutOfBoundsException exception) {
+            return null;
+        }
     }
 
     @Override
@@ -209,5 +240,69 @@ public class UserServiceImpl implements UserService {
         stringJoiner.add(years.toString()).add(yearsMessage).add(months.toString()).add(monthsMessage).add(days.toString()).add(daysMessage);
 
         return stringJoiner.toString();
+    }
+
+    private Integer calculatePositiveCommentPercent(User user) {
+        List<RatingResultDto> allRatings = getRatingService.getReceivedRatingsForUser(user.getEmail());
+
+        if(allRatings.isEmpty()) {
+            return null;
+        }
+
+        List<RatingResultDto> positiveRatings = allRatings.stream().filter(rating -> RatingTypeEnum.POSITIVE.equals(RatingTypeEnum.valueOf(rating.getRatingType().toUpperCase()))).collect(
+                Collectors.toList());
+
+        return (positiveRatings.size() * 100) / allRatings.size();
+    }
+
+    private BigDecimal calculateUserAverageShippingCostRating(User user) {
+        List<RatingResultDto> receivedRatingsForUser = getRatingService.getReceivedRatingsForUser(user.getEmail());
+
+        if(receivedRatingsForUser == null || receivedRatingsForUser.isEmpty()) {
+            return null;
+        }
+
+        List<RatingResultDto> shippingCosts = receivedRatingsForUser.stream().filter(ratingResultDto -> ratingResultDto.getShipmentCostRating() != null).collect(
+                Collectors.toList());
+
+        if(shippingCosts != null && !shippingCosts.isEmpty()) {
+            return BigDecimal.valueOf(shippingCosts.stream().mapToInt(RatingResultDto::getShipmentCostRating).average().getAsDouble());
+        }
+
+        return null;
+    }
+
+    private BigDecimal calculateUserAverageShippingTimeRating(User user) {
+        List<RatingResultDto> receivedRatingsForUser = getRatingService.getReceivedRatingsForUser(user.getEmail());
+
+        if(receivedRatingsForUser == null || receivedRatingsForUser.isEmpty()) {
+            return null;
+        }
+
+        List<RatingResultDto> shippingTimes = receivedRatingsForUser.stream().filter(ratingResultDto -> ratingResultDto.getShippingTimeRating() != null).collect(
+                Collectors.toList());
+
+        if(shippingTimes != null && !shippingTimes.isEmpty()) {
+            return BigDecimal.valueOf(shippingTimes.stream().mapToInt(RatingResultDto::getShippingTimeRating).average().getAsDouble());
+        }
+
+        return null;
+    }
+
+    private BigDecimal calculateUserDescriptionAccordanceRatingAverage(User user) {
+        List<RatingResultDto> receivedRatingsForUser = getRatingService.getReceivedRatingsForUser(user.getEmail());
+
+        if(receivedRatingsForUser == null || receivedRatingsForUser.isEmpty()) {
+            return null;
+        }
+
+        List<RatingResultDto> accordanceRatings = receivedRatingsForUser.stream().filter(ratingResultDto -> ratingResultDto.getDescriptionAccordanceRating() != null).collect(
+                Collectors.toList());
+
+        if(accordanceRatings != null && !accordanceRatings.isEmpty()) {
+            return BigDecimal.valueOf(accordanceRatings.stream().mapToInt(RatingResultDto::getDescriptionAccordanceRating).average().getAsDouble());
+        }
+
+        return null;
     }
 }

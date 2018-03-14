@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/template :: headFragment(${userDto != null} ? #{title.user.profile(${userDto.email})} : #{title.user.not.found})">
+    <title>Index</title>
+    <meta charset="utf-8"/>
+</head>
+<body th:replace="layout/template :: bodyFragment">
+<div th:fragment="content">
+    <div th:if="${userDto != null}" class="row">
+        <div class="col s10 m12 l12">
+            <h4 th:text="#{page.title.user.profile(${userDto.email})}"></h4>
+        </div>
+        <div class="row">
+            <div th:if="${userDto.positiveCommentPercent != null}" class="col s3">
+                <div class="col s12 m12">
+                    <label for="positivePercent" th:text="#{label.mark.seller}"></label>
+                    <div id="positivePercent" th:text="#{label.percent.comments(${userDto.positiveCommentPercent})}"></div>
+                </div>
+            </div>
+            <div class="col s3">
+                <label for="registeredSince" th:text="#{label.registered.since}"></label>
+                <div id="registeredSince" th:text="${userDto.registeredSince}"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <div th:if="${userDto.shippingTimeRatingAverage != null}" class="col s2 m2 shipping-time-rating-wrapper">
+                    <label for="shippingTimeRatingDisplay" th:text="#{label.display.rating.ship.time}"></label>
+                    <select id="shippingTimeRatingDisplay">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <input type="hidden" th:value="${userDto.shippingTimeRatingAverage}" id="shippingTimeRatingHidden">
+                </div>
+                <div th:if="${userDto.shippingCostRatingAverage != null}" class="col s2 m2 shipping-cost-rating-wrapper">
+                    <label for="shippingCostRatingDisplay" th:text="#{label.display.rating.ship.cost}"></label>
+                    <select id="shippingCostRatingDisplay">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <input type="hidden" th:value="${userDto.shippingCostRatingAverage}" id="shippingCostRatingHidden">
+                </div>
+                <div th:if="${userDto.descriptionAccordanceRatingAverage != null}"
+                     class="col s2 m3 description-rating-wrapper">
+                    <label for="descriptionRatingDisplay" th:text="#{label.display.rating.description}"></label>
+                    <select id="descriptionRatingDisplay">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <input type="hidden" th:value="${userDto.descriptionAccordanceRatingAverage}" id="descriptionRatingHidden">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs">
+                    <li class="tab col s4 l3"><a href="#items" th:text="#{menu.label.items.user}"></a></li>
+                    <li class="tab col s4 l3"><a href="#comments" th:text="#{menu.label.user.comments}"></a></li>
+                </ul>
+            </div>
+        </div>
+        <div id="items">
+            <div class="row">
+                <table>
+                    <thead>
+                    <tr>
+                        <th th:text="#{label.auction.create.date}"></th>
+                        <th th:text="#{label.auction.end.date}"></th>
+                        <th th:text="#{label.observed.auction.title}"></th>
+                        <th th:text="#{label.price.buyout}"></th>
+                        <th th:text="#{label.bid.minimal.price}"></th>
+                        <th th:text="#{label.actual.price}"></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${!#lists.isEmpty(auctions)}" th:each="auction : ${auctions}">
+                        <td th:text="${auction?.createDate}"></td>
+                        <td th:text="${auction?.endDateDotFormat != null ? auction?.endDateDotFormat : '-'}"></td>
+                        <td th:text="${auction?.title}"></td>
+                        <td th:text="${auction?.price != null ? auction?.price : '-'}"></td>
+                        <td th:text="${auction?.bidMinimalPrice != null ? auction?.bidMinimalPrice : '-'}"></td>
+                        <td th:text="${auction?.winningBid != null ? auction?.winningBid.price : auction?.bidStartingPrice}"></td>
+                        <td><a th:href="@{'/auction/get/' + ${auction?.id}}" th:text="#{button.auction.goto}"></a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(auctions)}">
+                        <td th:text="#{label.no.auctions}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="comments">
+            <div class="row">
+                <table>
+                    <thead>
+                    <tr>
+                        <th th:text="#{label.rating.receive.date}"></th>
+                        <th th:text="#{label.observed.auction.title}"></th>
+                        <th th:text="#{label.rating.content}"></th>
+                        <th th:text="#{label.rating.type}"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${!#lists.isEmpty(receivedRatings)}" th:each="rating : ${receivedRatings}">
+                        <td th:text="${rating?.date}"></td>
+                        <td th:text="${rating?.auctionName}"></td>
+                        <td th:text="${rating?.content}"></td>
+                        <td>
+                            <i th:if="${rating?.ratingType == 'positive'}" data-position="right" data-delay="20"
+                               th:attr="data-tooltip=#{label.rating.type.positive}"
+                               class="tooltipped rating-type-positive icon-larger material-icons">sentiment_very_satisfied</i>
+                            <i th:if="${rating?.ratingType == 'neutral'}" data-position="right" data-delay="20"
+                               th:attr="data-tooltip=#{label.rating.type.neutral}"
+                               class="tooltipped material-icons icon-larger">sentiment_neutral</i>
+                            <i th:if="${rating?.ratingType == 'negative'}" data-position="right" data-delay="20"
+                               th:attr="data-tooltip=#{label.rating.type.negative}"
+                               class="tooltipped rating-type-negative icon-larger material-icons">sentiment_very_dissatisfied</i>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(receivedRatings)}">
+                        <td th:text="#{label.no.rating.to.display}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div th:if="${userDto == null}" class="row">
+        <div class="col s9 offset-s2">
+            <h2 th:text="#{page.title.user.not.found}"></h2>
+            <p th:text="#{text.user.not.found}"></p>
+            <a class="right btn waves-light waves-effect" th:text="#{button.home.goto}" th:href="@{/}"></a>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

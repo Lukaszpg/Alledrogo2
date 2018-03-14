@@ -54,6 +54,7 @@ public class Templates {
         public static final String SECURITY_QR_CODE = PREFIX + "security-change-success-qr-code";
         public static final String SECURITY_CHANGE_SUCCESS = PREFIX + "security-change-success";
         public static final String PAYMENTS = PREFIX + "payments";
+        public static final String PROFILE = PREFIX + "profile";
     }
 
     public class SearchTemplates {

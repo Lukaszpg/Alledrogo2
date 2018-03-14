@@ -35,11 +35,7 @@ public class AuctionResultDto {
     private Integer biddingUsersAmount;
     private Integer buyoutUsersAmount;
     private String mainImage;
-    private Integer positiveCommentPercent;
     private Boolean untilOufOfItems;
-    private BigDecimal shippingTimeRatingAverage;
-    private BigDecimal shippingCostRatingAverage;
-    private BigDecimal descriptionAccordanceRatingAverage;
 
     public String getTitle() {
         return title;
@@ -185,14 +181,6 @@ public class AuctionResultDto {
         this.mainImage = mainImage;
     }
 
-    public Integer getPositiveCommentPercent() {
-        return positiveCommentPercent;
-    }
-
-    public void setPositiveCommentPercent(Integer positiveCommentPercent) {
-        this.positiveCommentPercent = positiveCommentPercent;
-    }
-
     public Boolean getUntilOufOfItems() {
         return untilOufOfItems;
     }
@@ -207,30 +195,6 @@ public class AuctionResultDto {
 
     public void setBuyoutUsersAmount(Integer buyoutUsersAmount) {
         this.buyoutUsersAmount = buyoutUsersAmount;
-    }
-
-    public BigDecimal getShippingTimeRatingAverage() {
-        return shippingTimeRatingAverage;
-    }
-
-    public void setShippingTimeRatingAverage(BigDecimal shippingTimeRatingAverage) {
-        this.shippingTimeRatingAverage = shippingTimeRatingAverage;
-    }
-
-    public BigDecimal getShippingCostRatingAverage() {
-        return shippingCostRatingAverage;
-    }
-
-    public void setShippingCostRatingAverage(BigDecimal shippingCostRatingAverage) {
-        this.shippingCostRatingAverage = shippingCostRatingAverage;
-    }
-
-    public BigDecimal getDescriptionAccordanceRatingAverage() {
-        return descriptionAccordanceRatingAverage;
-    }
-
-    public void setDescriptionAccordanceRatingAverage(BigDecimal descriptionAccordanceRatingAverage) {
-        this.descriptionAccordanceRatingAverage = descriptionAccordanceRatingAverage;
     }
 
     public String getCreateDate() {

@@ -25,4 +25,6 @@ public interface UserService {
     String generateQRUrl(User user);
     void grantAuthorities(String email);
     void changeSecurity(SecurityDto securityDto);
+    UserResultDto getDtoByEmail(String email);
+    UserResultDto getDtoById(String id);
 }

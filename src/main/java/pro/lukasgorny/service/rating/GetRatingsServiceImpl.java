@@ -37,6 +37,17 @@ public class GetRatingsServiceImpl implements GetRatingService {
     }
 
     @Override
+    public List<RatingResultDto> getReceivedRatingsForUserById(String id) {
+        User user = userService.getById(id);
+
+        if(user != null) {
+            return getReceivedRatingsForUser(user.getEmail());
+        }
+
+        return null;
+    }
+
+    @Override
     public List<RatingResultDto> getIssuedRatingsForUser(String email) {
         User user = userService.getByEmail(email);
         return createDtoListFromEntityList(ratingRepository.findAllIssuedRatingsByUserId(user.getId()));

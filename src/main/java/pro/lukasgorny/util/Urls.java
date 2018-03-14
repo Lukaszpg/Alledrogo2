@@ -8,6 +8,7 @@ public class Urls {
     public static final String ERROR_405 = "/error/405";
     public static final String ERROR_500 = "/error/500";
     public static final String ERROR_403 = "/error/403";
+    public static final String ERROR_404_REDIRECT = "redirect:/error/404";
 
     public class Auction {
         public static final String PREFIX = "auction";
@@ -95,6 +96,8 @@ public class Urls {
         public static final String SECURITY_CHANGE_SUCCESS_QR_CODE = "/security-qr-code";
         public static final String SECURITY_CHANGE_SUCCESS = "/security-change-success";
         public static final String PAYMENTS = "/payments";
+        public static final String PROFILE_SELF = "/profile";
+        public static final String PROFILE_ID = "/profile/{id}";
 
     }
 

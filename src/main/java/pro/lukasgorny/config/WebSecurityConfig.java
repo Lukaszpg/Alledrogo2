@@ -81,6 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/change-email-success").permitAll()
                 .antMatchers("/user/security-change-success").permitAll()
                 .antMatchers("/user/security-qr-code").permitAll()
+                .antMatchers("/user/profile/**").permitAll()
                 .antMatchers("/photo/get-all/**").permitAll()
                 .antMatchers("/category-rest/**").permitAll()
                 .antMatchers("/auction/get/**").permitAll()

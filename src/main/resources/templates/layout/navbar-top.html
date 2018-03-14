@@ -43,11 +43,10 @@
                     <span th:attr="data-tooltip=#{tooltip.message.new}" data-position="bottom" th:if="${newMessagesCount != 0 && newMessagesCount != null}" class="tooltipped message-badge new badge" th:text="${newMessagesCount}" data-badge-caption=""></span>
                     <a class="message-center-button btn-flat tooltipped right"
                        th:attr="data-tooltip=#{menu.label.user.finance}" th:href="@{/user/payments}"><i class="message-center-icon material-icons">monetization_on</i></a>
-                    <ul class="right menu-top right">
+                    <ul class="right menu-top right hide-on-med-and-down">
                         <li><a class="dropdown-button menu-top-link" href="#!"
-                               data-activates="dropdown-menu">
-                            <th:block th:if="${currentLoggedInUsername == null}" th:text="#{menu.top.text}"/>
-                            <th:block th:if="${currentLoggedInUsername != null}" th:text="${currentLoggedInUsername}"/>
+                               data-activates="dropdown-menu" data-constrainwidth="false">
+                            <th:block th:text="#{menu.top.text}"/>
                             <i class="material-icons right">menu</i></a></li>
                     </ul>
                 </div>

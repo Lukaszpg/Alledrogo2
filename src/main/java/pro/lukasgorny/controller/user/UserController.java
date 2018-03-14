@@ -1,5 +1,8 @@
 package pro.lukasgorny.controller.user;
 
+import java.security.Principal;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -8,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import pro.lukasgorny.controller.user.validator.UserExtendedDtoValidator;
 import pro.lukasgorny.dto.rating.RatingSaveDto;
 import pro.lukasgorny.dto.user.*;
@@ -22,10 +26,6 @@ import pro.lukasgorny.service.rating.GetRatingService;
 import pro.lukasgorny.service.user.UserService;
 import pro.lukasgorny.util.Templates;
 import pro.lukasgorny.util.Urls;
-
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
-import java.security.Principal;
 
 /**
  * Created by Łukasz on 25.10.2017.
@@ -140,7 +140,6 @@ public class UserController {
         modelAndView.addObject("transactions", getTransactionService.getAllBiddingItemsByUserEmail(principal.getName()));
         return modelAndView;
     }
-
 
     @GetMapping(Urls.User.MY_RATINGS)
     public ModelAndView getUserRatings(Principal principal) {
@@ -282,7 +281,7 @@ public class UserController {
 
         userService.changeSecurity(securityDto);
 
-        if(securityDto.getUsing2fa()) {
+        if (securityDto.getUsing2fa()) {
             User user = userService.getByEmail(principal.getName());
             ModelMap modelMap = new ModelMap();
             modelMap.addAttribute("qr", userService.generateQRUrl(user));
@@ -357,10 +356,32 @@ public class UserController {
     }
 
     @GetMapping(Urls.User.PAYMENTS)
-    public ModelAndView payments(Principal principal){
+    public ModelAndView payments(Principal principal) {
         ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.PAYMENTS);
         modelAndView.addObject("receivedPayments", getPaycheckService.getFinishedByReceiverEmail(principal.getName()));
         modelAndView.addObject("myPayments", getPaycheckService.getByPayerEmail(principal.getName()));
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.PROFILE_SELF)
+    public ModelAndView profileSelf(Principal principal) {
+        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.PROFILE);
+
+        if(principal != null) {
+            modelAndView.addObject("userDto", userService.getDtoByEmail(principal.getName()));
+            modelAndView.addObject("auctions", getAuctionService.getNotEndedAuctionsForUser(principal.getName()));
+            modelAndView.addObject("receivedRatings", getRatingService.getReceivedRatingsForUser(principal.getName()));
+        }
+
+        return modelAndView;
+    }
+
+    @GetMapping(Urls.User.PROFILE_ID)
+    public ModelAndView profileId(@PathVariable("id") String id) {
+        ModelAndView modelAndView = new ModelAndView(Templates.UserTemplates.PROFILE);
+        modelAndView.addObject("userDto", userService.getDtoById(id));
+        modelAndView.addObject("auctions", getAuctionService.getNotEndedAuctionsForUserById(id));
+        modelAndView.addObject("receivedRatings", getRatingService.getReceivedRatingsForUserById(id));
         return modelAndView;
     }
 }

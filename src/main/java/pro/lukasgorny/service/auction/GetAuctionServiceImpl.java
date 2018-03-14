@@ -119,6 +119,17 @@ public class GetAuctionServiceImpl implements GetAuctionService {
     }
 
     @Override
+    public List<AuctionResultDto> getNotEndedAuctionsForUserById(String id) {
+        User user = userService.getById(id);
+
+        if(user != null) {
+            return getNotEndedAuctionsForUser(user.getEmail());
+        }
+
+        return null;
+    }
+
+    @Override
     public Boolean auctionExists(String id) {
         return getOne(id) != null;
     }
@@ -170,50 +181,16 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         auctionResultDto.setBidMinimalPrice(auction.getBidMinimalPrice());
         auctionResultDto.setCreateDate(DateFormatter.formatDateToHourMinuteFormat(auction.getCreateDate()));
         auctionResultDto.setEndDate(formatEndDateIfNotUntilOutOfItems(auction));
-        auctionResultDto.setEndDateDotFormat(DateFormatter.formatDateToHourMinuteFormat(auction.getEndDate()));
+        auctionResultDto.setEndDateDotFormat(formatAuctionEndDate(auction.getEndDate()));
         auctionResultDto.setSellerDto(userService.createDtoFromEntity(auction.getSeller()));
         auctionResultDto.setWinningBid(getWinningBid(auctionResultDto.getId()));
         auctionResultDto.setHasEnded(auction.getHasEnded());
         auctionResultDto.setCurrentAmount(auction.getCurrentAmount());
         auctionResultDto.setBiddingUsersAmount(calculateBiddingUserAmount(auction));
         auctionResultDto.setMainImage(getMainImage(auction));
-        auctionResultDto.setPositiveCommentPercent(calculatePositiveCommentPercent(auction));
         auctionResultDto.setUntilOufOfItems(auction.getUntilOutOfItems());
         auctionResultDto.setBuyoutUsersAmount(calculateBuyoutUserAmount(auction));
-        auctionResultDto.setShippingCostRatingAverage(calculateUserAverageShippingCostRating(auction.getSeller()));
-        auctionResultDto.setShippingTimeRatingAverage(calculateUserAverageShippingTimeRating(auction.getSeller()));
-        auctionResultDto.setDescriptionAccordanceRatingAverage(calculateUserDescriptionAccordanceRatingAverage(auction.getSeller()));
         return auctionResultDto;
-    }
-
-    private BigDecimal calculateUserAverageShippingCostRating(User user) {
-        List<RatingResultDto> receivedRatingsForUser = getRatingService.getReceivedRatingsForUser(user.getEmail());
-
-        if(receivedRatingsForUser == null || receivedRatingsForUser.isEmpty()) {
-            return null;
-        }
-
-        return BigDecimal.valueOf(receivedRatingsForUser.stream().mapToInt(RatingResultDto::getShipmentCostRating).average().getAsDouble());
-    }
-
-    private BigDecimal calculateUserAverageShippingTimeRating(User user) {
-        List<RatingResultDto> receivedRatingsForUser = getRatingService.getReceivedRatingsForUser(user.getEmail());
-
-        if(receivedRatingsForUser == null || receivedRatingsForUser.isEmpty()) {
-            return null;
-        }
-
-        return BigDecimal.valueOf(receivedRatingsForUser.stream().mapToInt(RatingResultDto::getShippingTimeRating).average().getAsDouble());
-    }
-
-    private BigDecimal calculateUserDescriptionAccordanceRatingAverage(User user) {
-        List<RatingResultDto> receivedRatingsForUser = getRatingService.getReceivedRatingsForUser(user.getEmail());
-
-        if(receivedRatingsForUser == null || receivedRatingsForUser.isEmpty()) {
-            return null;
-        }
-
-        return BigDecimal.valueOf(receivedRatingsForUser.stream().mapToInt(RatingResultDto::getDescriptionAccordanceRating).average().getAsDouble());
     }
 
     private String formatEndDateIfNotUntilOutOfItems(Auction auction) {
@@ -222,19 +199,6 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         }
 
         return null;
-    }
-
-    private Integer calculatePositiveCommentPercent(Auction auction) {
-        List<RatingResultDto> allRatings = getRatingService.getReceivedRatingsForUser(auction.getSeller().getEmail());
-
-        if(allRatings.isEmpty()) {
-            return null;
-        }
-
-        List<RatingResultDto> positiveRatings = allRatings.stream().filter(rating -> RatingTypeEnum.POSITIVE.equals(RatingTypeEnum.valueOf(rating.getRatingType().toUpperCase()))).collect(
-                Collectors.toList());
-
-        return (positiveRatings.size() * 100) / allRatings.size();
     }
 
     private String getMainImage(Auction auction) {
@@ -269,5 +233,9 @@ public class GetAuctionServiceImpl implements GetAuctionService {
         List<Transaction> distinctBuyouts = buyouts.stream().filter(CollectionHelper.distinctByKey(a -> a.getUser().getId()))
                                              .collect(Collectors.toList());
         return distinctBuyouts.size();
+    }
+
+    private String formatAuctionEndDate(LocalDateTime endDate) {
+        return endDate != null ? DateFormatter.formatDateToHourMinuteFormat(endDate) : null;
     }
 }

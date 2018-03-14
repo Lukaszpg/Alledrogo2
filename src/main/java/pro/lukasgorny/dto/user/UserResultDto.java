@@ -1,5 +1,7 @@
 package pro.lukasgorny.dto.user;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Łukasz on 15.12.2017.
  */
@@ -10,6 +12,10 @@ public class UserResultDto {
     private String lastLogin;
     private UserExtendedDto userExtendedDto;
     private Boolean using2fa;
+    private Integer positiveCommentPercent;
+    private BigDecimal shippingTimeRatingAverage;
+    private BigDecimal shippingCostRatingAverage;
+    private BigDecimal descriptionAccordanceRatingAverage;
 
     public String getEmail() {
         return email;
@@ -57,5 +63,37 @@ public class UserResultDto {
 
     public void setUsing2fa(Boolean using2fa) {
         this.using2fa = using2fa;
+    }
+
+    public Integer getPositiveCommentPercent() {
+        return positiveCommentPercent;
+    }
+
+    public void setPositiveCommentPercent(Integer positiveCommentPercent) {
+        this.positiveCommentPercent = positiveCommentPercent;
+    }
+
+    public BigDecimal getShippingTimeRatingAverage() {
+        return shippingTimeRatingAverage;
+    }
+
+    public void setShippingTimeRatingAverage(BigDecimal shippingTimeRatingAverage) {
+        this.shippingTimeRatingAverage = shippingTimeRatingAverage;
+    }
+
+    public BigDecimal getShippingCostRatingAverage() {
+        return shippingCostRatingAverage;
+    }
+
+    public void setShippingCostRatingAverage(BigDecimal shippingCostRatingAverage) {
+        this.shippingCostRatingAverage = shippingCostRatingAverage;
+    }
+
+    public BigDecimal getDescriptionAccordanceRatingAverage() {
+        return descriptionAccordanceRatingAverage;
+    }
+
+    public void setDescriptionAccordanceRatingAverage(BigDecimal descriptionAccordanceRatingAverage) {
+        this.descriptionAccordanceRatingAverage = descriptionAccordanceRatingAverage;
     }
 }
